@@ -135,6 +135,9 @@
             </div>
             <h3 class="card-name">The Reading Together</h3>
             <div class="spread-row">${tiles}</div>
+            <div class="section"><h4 class="section-label">Intention</h4><p>${entry.intention ? escapeHtml(entry.intention) : '<em style="opacity:.7">What was this reading about? (add when you remember)</em>'}</p></div>
+            ${entry.summary ? `<div class="section"><h4 class="section-label">Summary · the reading as a whole</h4><p style="white-space:pre-wrap">${escapeHtml(entry.summary)}</p></div>` : ""}
+            ${entry.connections ? `<div class="section"><h4 class="section-label">How the cards connect</h4><ul class="connections">${entry.connections.split("\n").filter((x) => x.trim()).map((x) => `<li>${escapeHtml(x)}</li>`).join("")}</ul></div>` : ""}
             <div class="section">
               <h4 class="section-label">Cards in this reading</h4>
               <p>${entry.cards.map((c) => escapeHtml(c.name) + ((c.orientation || "").toLowerCase() === "reversed" ? " (reversed)" : "")).join(" · ")}</p>

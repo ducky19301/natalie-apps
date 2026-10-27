@@ -598,3 +598,5 @@ body {
 .spread-card img{width:100%;height:auto;display:block}
 .spread-card figcaption{font-size:.8rem;margin-top:.4rem;display:flex;flex-direction:column}
 .spread-pos,.spread-orient{font-size:.7rem;opacity:.7;text-transform:uppercase;letter-spacing:.05em}
+.connections{margin:.3rem 0 0 1.1rem;padding:0}.connections li{margin:.3rem 0;line-height:1.45}
+.connections li{font-size:.9rem;opacity:.9}

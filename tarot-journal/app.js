@@ -101,6 +101,11 @@
                 : ""
             }
             ${
+              entry.myNotes && entry.cards.length < 2 && i === entry.cards.length - 1
+                ? `<div class="section day-notes"><h4 class="section-label">My notes</h4><p style="white-space:pre-wrap">${escapeHtml(entry.myNotes)}</p></div>`
+                : ""
+            }
+            ${
               showNotes
                 ? `<div class="section day-notes">
                     <h4 class="section-label">Day notes</h4>
@@ -135,6 +140,7 @@
               <p>${entry.cards.map((c) => escapeHtml(c.name) + ((c.orientation || "").toLowerCase() === "reversed" ? " (reversed)" : "")).join(" · ")}</p>
             </div>
             ${entry.notes ? `<div class="section day-notes"><h4 class="section-label">Reading notes · how they speak together</h4><p>${escapeHtml(entry.notes)}</p></div>` : ""}
+            ${entry.myNotes ? `<div class="section day-notes"><h4 class="section-label">My notes</h4><p style="white-space:pre-wrap">${escapeHtml(entry.myNotes)}</p></div>` : ""}
           `,
         });
       }

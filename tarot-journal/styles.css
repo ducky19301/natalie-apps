@@ -591,3 +591,10 @@ body {
     height: 36px;
   }
 }
+
+.spread-row{display:flex;gap:.6rem;justify-content:center;flex-wrap:wrap;margin:1rem 0}
+.spread-card{flex:1 1 0;max-width:32%;margin:0;text-align:center}
+.spread-card .card-frame{width:100%;max-width:none}
+.spread-card img{width:100%;height:auto;display:block}
+.spread-card figcaption{font-size:.8rem;margin-top:.4rem;display:flex;flex-direction:column}
+.spread-pos,.spread-orient{font-size:.7rem;opacity:.7;text-transform:uppercase;letter-spacing:.05em}

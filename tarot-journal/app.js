@@ -66,7 +66,7 @@
         const isUnknown = (card.orientation || "").toLowerCase() === "unknown";
         const badgeClass = isReversed ? "badge reversed" : isUnknown ? "badge unknown" : "badge";
         const orientLabel = isReversed ? "Reversed" : isUnknown ? "Orientation not recorded" : "Upright";
-        const showNotes = i === entry.cards.length - 1 && entry.notes;
+        const showNotes = i === entry.cards.length - 1 && entry.notes && entry.cards.length < 2;
 
         list.push({
           type: "card",
@@ -111,6 +111,33 @@
           `,
         });
       });
+      if (entry.cards.length > 1) {
+        const tiles = entry.cards.map((card, i) => {
+          const rev = (card.orientation || "").toLowerCase() === "reversed";
+          return `<figure class="spread-card">
+              <div class="card-frame ${rev ? "reversed" : ""}"><img src="${escapeHtml(card.img)}" alt="${escapeHtml(card.name)}" loading="lazy" /></div>
+              <figcaption><span class="spread-pos">Card ${i + 1}</span>${escapeHtml(card.name)}<span class="spread-orient">${rev ? "Reversed" : "Upright"}</span></figcaption>
+            </figure>`;
+        }).join("");
+        list.push({
+          type: "spread",
+          date: entry.date,
+          cardName: "Full reading",
+          html: `
+            <div class="page-header">
+              <span class="page-date">${escapeHtml(formatDate(entry.date))}</span>
+              <span class="badge">${entry.cards.length}-card reading</span>
+            </div>
+            <h3 class="card-name">The Reading Together</h3>
+            <div class="spread-row">${tiles}</div>
+            <div class="section">
+              <h4 class="section-label">Cards in this reading</h4>
+              <p>${entry.cards.map((c) => escapeHtml(c.name) + ((c.orientation || "").toLowerCase() === "reversed" ? " (reversed)" : "")).join(" · ")}</p>
+            </div>
+            ${entry.notes ? `<div class="section day-notes"><h4 class="section-label">Reading notes · how they speak together</h4><p>${escapeHtml(entry.notes)}</p></div>` : ""}
+          `,
+        });
+      }
     }
 
     return list;

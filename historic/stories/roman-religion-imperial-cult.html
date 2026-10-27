@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="theme-color" content="#100e0c">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-title" content="Historic">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<link rel="manifest" href="../manifest.webmanifest">
+<link rel="apple-touch-icon" href="../icons/icon-180.png">
+<title>Roman Religion &amp; the Imperial Cult — Historic</title>
+<meta name="description" content="Romans sought the peace of the gods through precise ritual. Emperors entered that system as honored, then divine, figures — a political theology that Jews and Christians ">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,600;1,400&family=IM+Fell+English:ital@0;1&family=Source+Sans+3:wght@300;400;500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../assets/topic.css">
+</head>
+<body>
+  <nav class="topbar">
+    <a class="brand" href="../index.html">Histor<em>ic</em></a>
+    <a class="back-link" href="../index.html">Library</a>
+  </nav>
+  <header class="hero">
+    <div class="hero-era">Republic → High Empire</div>
+    <h1>Roman Religion &amp; the Imperial Cult</h1>
+    <p class="hero-place">Pax deorum · household gods · emperor worship</p>
+    <p class="hero-lede">Romans sought the peace of the gods through precise ritual. Emperors entered that system as honored, then divine, figures — a political theology that Jews and Christians sometimes refused at high cost.</p>
+    <p style="margin-top:1rem;font-size:0.85rem;color:rgba(240,230,212,0.45)">Shelves: <a href="../categories/ancient-rome.html">Ancient Rome</a> · <a href="../categories/religions.html">Religions &amp; traditions</a></p>
+  </header>
+  <div class="progress-dots" role="navigation" aria-label="Chapters"><button class="dot" type="button" data-target="ch1" aria-label="Chapter 1"></button><button class="dot" type="button" data-target="ch2" aria-label="Chapter 2"></button><button class="dot" type="button" data-target="ch3" aria-label="Chapter 3"></button><button class="dot" type="button" data-target="ch4" aria-label="Chapter 4"></button></div>
+  <main class="chapters"><section class="chapter" id="ch1" data-chapter="1"><div class="chapter-num">Chapter 1 of 4</div><h2>Ritual correctness over dogma</h2><p>Pontiffs, augurs, and Vestal Virgins guarded calendars and signs. A flubbed prayer might be restarted; belief statements mattered less than getting the ceremony right.</p><p>Lares, Penates, and genius of the household made religion domestic and daily.</p></section><section class="chapter" id="ch2" data-chapter="2"><div class="chapter-num">Chapter 2 of 4</div><h2>Importing gods</h2><p>Rome officially invited foreign cults (Cybele in the Hannibalic war) and unofficially welcomed Isis, Mithras, and others. Syncretism was governance as much as spirituality.</p><p>Suppression happened when groups seemed politically dangerous — Bacchanalia crackdown, later Christian persecutions in waves.</p></section><section class="chapter" id="ch3" data-chapter="3"><div class="chapter-num">Chapter 3 of 4</div><h2>The emperor as ritual focus</h2><p>Divus Julius, living emperors’ genius, provincial temples to Rome and Augustus — loyalty language in religious dress. Participation could mean incense, oath, or festival attendance.</p><p>Refusal looked like treason to officials and idolatry to monotheists — a tragic mutual misreading at times.</p></section><section class="chapter" id="ch4" data-chapter="4"><div class="chapter-num">Chapter 4 of 4</div><h2>After the temples</h2><p>Constantine’s century redirects imperial favor; older cults fade unevenly. The vocabulary of sacrifice and victory persists in Christian empire.</p><p>Why it still matters: civic religion’s blend of piety and patriotism never fully left politics.</p></section></main>
+  <aside class="further">
+    <h3>Further reading vibe</h3>
+    <p>Beard/North/Price on Roman religions; Gradel on emperor worship; Rüpke on lived ancient religion.</p>
+  </aside>
+  <div class="footer-nav">
+    <a href="../index.html">← All stories</a>
+    <a href="../categories/ancient-rome.html">Rome shelf →</a>
+  </div>
+<script>
+(function(){
+  var chapters = [].slice.call(document.querySelectorAll('.chapter'));
+  var dots = [].slice.call(document.querySelectorAll('.dot'));
+  var io = new IntersectionObserver(function(entries){
+    entries.forEach(function(e){
+      if (e.isIntersecting) {
+        e.target.classList.add('in-view');
+        var id = e.target.id;
+        dots.forEach(function(d){ d.classList.toggle('active', d.getAttribute('data-target')===id); });
+      }
+    });
+  }, { threshold: 0.45 });
+  chapters.forEach(function(c){ io.observe(c); });
+  if (chapters[0]) chapters[0].classList.add('in-view');
+  dots.forEach(function(d){
+    d.addEventListener('click', function(){
+      var t = document.getElementById(d.getAttribute('data-target'));
+      if (t) t.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    });
+  });
+  if ('serviceWorker' in navigator) {
+    window.addEventListener('load', function(){ navigator.serviceWorker.register('../sw.js').catch(function(){}); });
+  }
+})();
+</script>
+<script src="../js/monetization.js" defer></script>
+<script src="../js/shell.js" defer></script>
+</body>
+</html>

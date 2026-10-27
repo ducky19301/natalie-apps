@@ -1,0 +1,1215 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="theme-color" content="#100e0c">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-title" content="Historic">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<link rel="manifest" href="../manifest.webmanifest">
+<link rel="apple-touch-icon" href="../icons/icon-180.png">
+<title>Cospaia — The Republic That Shouldn't Exist</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,600;0,700;1,400;1,600&family=IM+Fell+English:ital@0;1&family=Source+Sans+3:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --parchment: #f3e6d0;
+    --parchment-deep: #e8d4b0;
+    --ink: #2a1f14;
+    --ink-soft: #4a3a28;
+    --ink-faint: #7a6548;
+    --gold: #c9a227;
+    --gold-bright: #e8c547;
+    --terracotta: #a65d3f;
+    --sage: #5a6b4a;
+    --river: #4a7c8c;
+    --river-light: #6a9cac;
+    --smoke: #8a7a68;
+    --shadow: rgba(42, 31, 20, 0.45);
+    --vignette: rgba(42, 31, 20, 0.55);
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  html, body {
+    height: 100%;
+    background: #1a120c;
+    color: var(--ink);
+    font-family: 'Source Sans 3', system-ui, sans-serif;
+    overflow: hidden;
+    -webkit-font-smoothing: antialiased;
+  }
+
+  .app {
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 12px;
+    gap: 12px;
+  }
+
+  .stage-wrap {
+    width: min(100%, 1100px);
+    aspect-ratio: 16 / 9;
+    max-height: calc(100vh - 100px);
+    position: relative;
+    border-radius: 8px;
+    overflow: hidden;
+    box-shadow:
+      0 0 0 1px rgba(201, 162, 39, 0.25),
+      0 20px 60px rgba(0,0,0,0.55),
+      inset 0 0 80px rgba(42, 31, 20, 0.15);
+    background: var(--parchment);
+  }
+
+  .stage {
+    position: absolute;
+    inset: 0;
+    overflow: hidden;
+  }
+
+  .scene {
+    position: absolute;
+    inset: 0;
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.9s ease, transform 1.1s ease;
+    transform: scale(1.03);
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-end;
+    padding: clamp(1.2rem, 4vw, 2.5rem);
+  }
+
+  .scene.active {
+    opacity: 1;
+    pointer-events: auto;
+    transform: scale(1);
+    z-index: 2;
+  }
+
+  .scene.leaving {
+    opacity: 0;
+    transform: scale(0.97);
+    z-index: 1;
+  }
+
+  /* Parchment texture overlay */
+  .stage::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    z-index: 10;
+    pointer-events: none;
+    background:
+      radial-gradient(ellipse at center, transparent 40%, var(--vignette) 100%),
+      url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.04'/%3E%3C/svg%3E");
+    mix-blend-mode: multiply;
+  }
+
+  .scene-bg {
+    position: absolute;
+    inset: 0;
+    z-index: 0;
+  }
+
+  .scene-content {
+    position: relative;
+    z-index: 3;
+    max-width: min(540px, 92%);
+  }
+
+  .scene-year {
+    font-family: 'Cormorant Garamond', Georgia, serif;
+    font-size: clamp(0.75rem, 1.5vw, 0.95rem);
+    letter-spacing: 0.28em;
+    text-transform: uppercase;
+    color: var(--gold);
+    margin-bottom: 0.45rem;
+    opacity: 0;
+    transform: translateY(12px);
+  }
+
+  .scene-title {
+    font-family: 'IM Fell English', 'Cormorant Garamond', Georgia, serif;
+    font-size: clamp(1.55rem, 3.8vw, 2.6rem);
+    font-weight: 400;
+    line-height: 1.15;
+    color: var(--ink);
+    margin-bottom: 0.65rem;
+    opacity: 0;
+    transform: translateY(16px);
+  }
+
+  .scene-body {
+    font-size: clamp(0.85rem, 1.55vw, 1.05rem);
+    line-height: 1.55;
+    color: var(--ink-soft);
+    font-weight: 400;
+    opacity: 0;
+    transform: translateY(16px);
+  }
+
+  .scene.active .scene-year { animation: riseIn 0.7s 0.25s ease forwards; }
+  .scene.active .scene-title { animation: riseIn 0.8s 0.45s ease forwards; }
+  .scene.active .scene-body { animation: riseIn 0.8s 0.7s ease forwards; }
+
+  @keyframes riseIn {
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  /* ——— SCENE 0: Title ——— */
+  .s0 .scene-bg {
+    background:
+      radial-gradient(ellipse at 30% 40%, #f7ebd6 0%, transparent 55%),
+      radial-gradient(ellipse at 70% 70%, #dfc9a0 0%, transparent 50%),
+      linear-gradient(160deg, #f5e8d2 0%, #dcc9a4 55%, #c9b088 100%);
+  }
+
+  .title-card {
+    position: absolute;
+    inset: 0;
+    z-index: 3;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    padding: 2rem;
+  }
+
+  .title-ornament {
+    width: 80px;
+    height: 1px;
+    background: linear-gradient(90deg, transparent, var(--gold), transparent);
+    margin: 1rem 0;
+    opacity: 0;
+    animation: fadeWide 1.4s 0.9s ease forwards;
+  }
+
+  @keyframes fadeWide {
+    from { opacity: 0; width: 20px; }
+    to { opacity: 1; width: 100px; }
+  }
+
+  .title-eyebrow {
+    font-family: 'Cormorant Garamond', serif;
+    letter-spacing: 0.35em;
+    text-transform: uppercase;
+    font-size: clamp(0.7rem, 1.4vw, 0.85rem);
+    color: var(--ink-faint);
+    opacity: 0;
+    animation: riseIn 1s 0.3s ease forwards;
+  }
+
+  .title-main {
+    font-family: 'IM Fell English', Georgia, serif;
+    font-size: clamp(2rem, 5.5vw, 3.8rem);
+    color: var(--ink);
+    line-height: 1.1;
+    max-width: 14ch;
+    opacity: 0;
+    animation: riseIn 1.1s 0.55s ease forwards;
+  }
+
+  .title-sub {
+    font-family: 'Cormorant Garamond', serif;
+    font-style: italic;
+    font-size: clamp(1rem, 2.2vw, 1.35rem);
+    color: var(--ink-soft);
+    opacity: 0;
+    animation: riseIn 1s 1.1s ease forwards;
+  }
+
+  .title-hint {
+    position: absolute;
+    bottom: 1.5rem;
+    font-size: 0.75rem;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--ink-faint);
+    opacity: 0;
+    animation: pulseHint 2.5s 2s ease infinite;
+  }
+
+  @keyframes pulseHint {
+    0%, 100% { opacity: 0.35; }
+    50% { opacity: 0.8; }
+  }
+
+  .ink-blot {
+    position: absolute;
+    border-radius: 50%;
+    background: radial-gradient(circle, rgba(42,31,20,0.08) 0%, transparent 70%);
+    pointer-events: none;
+  }
+
+  /* Floating map fragments on title */
+  .map-frag {
+    position: absolute;
+    border: 1px solid rgba(74, 58, 40, 0.2);
+    background: rgba(232, 212, 176, 0.5);
+    opacity: 0;
+    animation: driftFrag 18s linear infinite;
+  }
+
+  @keyframes driftFrag {
+    0% { opacity: 0; transform: translateY(20px) rotate(var(--r)); }
+    10% { opacity: 0.45; }
+    90% { opacity: 0.35; }
+    100% { opacity: 0; transform: translateY(-40px) rotate(calc(var(--r) + 8deg)); }
+  }
+
+  /* ——— SCENE 1: The Debt ——— */
+  .s1 .scene-bg {
+    background:
+      linear-gradient(135deg, #ebe0c8 0%, #d9c4a0 100%);
+  }
+
+  .scroll-seal {
+    position: absolute;
+    right: 8%;
+    top: 18%;
+    width: min(220px, 28vw);
+    height: min(280px, 42vh);
+    opacity: 0;
+  }
+
+  .s1.active .scroll-seal {
+    animation: sealIn 1.4s 0.4s ease forwards;
+  }
+
+  @keyframes sealIn {
+    from { opacity: 0; transform: translateY(30px) rotate(-6deg); }
+    to { opacity: 1; transform: translateY(0) rotate(-3deg); }
+  }
+
+  .florin-stack {
+    position: absolute;
+    left: 10%;
+    top: 22%;
+    width: min(160px, 22vw);
+    opacity: 0;
+  }
+
+  .s1.active .florin-stack {
+    animation: sealIn 1.2s 0.7s ease forwards;
+  }
+
+  /* ——— SCENE 2: Two Rivers ——— */
+  .s2 .scene-bg {
+    background: linear-gradient(180deg, #d8c9a8 0%, #c9b896 40%, #b8a882 100%);
+  }
+
+  .map-stage {
+    position: absolute;
+    inset: 8% 5% 28% 5%;
+    z-index: 1;
+  }
+
+  .river-path {
+    fill: none;
+    stroke: var(--river);
+    stroke-width: 4;
+    stroke-linecap: round;
+    stroke-dasharray: 800;
+    stroke-dashoffset: 800;
+    opacity: 0.85;
+  }
+
+  .s2.active .river-a { animation: drawRiver 2s 0.5s ease forwards; }
+  .s2.active .river-b { animation: drawRiver 2s 1.2s ease forwards; }
+
+  @keyframes drawRiver {
+    to { stroke-dashoffset: 0; }
+  }
+
+  .gap-band {
+    fill: rgba(201, 162, 39, 0.35);
+    opacity: 0;
+  }
+
+  .s2.active .gap-band {
+    animation: gapReveal 1.2s 2.8s ease forwards;
+  }
+
+  @keyframes gapReveal {
+    from { opacity: 0; }
+    to { opacity: 1; }
+  }
+
+  .map-label {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 14px;
+    fill: var(--ink-soft);
+    opacity: 0;
+  }
+
+  .s2.active .label-a { animation: riseIn 0.6s 1.5s ease forwards; }
+  .s2.active .label-b { animation: riseIn 0.6s 2.2s ease forwards; }
+  .s2.active .label-gap { animation: riseIn 0.8s 3.2s ease forwards; }
+
+  .village-dot {
+    fill: var(--terracotta);
+    opacity: 0;
+  }
+
+  .s2.active .village-dot {
+    animation: pulseDot 1.5s 3.4s ease forwards;
+  }
+
+  @keyframes pulseDot {
+    0% { opacity: 0; r: 0; }
+    60% { opacity: 1; r: 8; }
+    100% { opacity: 1; r: 6; }
+  }
+
+  /* ——— SCENE 3: Liberty ——— */
+  .s3 .scene-bg {
+    background:
+      radial-gradient(ellipse at 50% 30%, #f0e2c4 0%, transparent 60%),
+      linear-gradient(180deg, #e6d5b5 0%, #cfc0a0 100%);
+  }
+
+  .motto-reveal {
+    position: absolute;
+    top: 18%;
+    left: 50%;
+    transform: translateX(-50%);
+    text-align: center;
+    z-index: 2;
+    width: 90%;
+  }
+
+  .motto-latin {
+    font-family: 'IM Fell English', Georgia, serif;
+    font-size: clamp(1.4rem, 4vw, 2.8rem);
+    color: var(--ink);
+    letter-spacing: 0.06em;
+    opacity: 0;
+  }
+
+  .motto-eng {
+    font-family: 'Cormorant Garamond', serif;
+    font-style: italic;
+    font-size: clamp(0.95rem, 2vw, 1.25rem);
+    color: var(--ink-faint);
+    margin-top: 0.5rem;
+    opacity: 0;
+  }
+
+  .s3.active .motto-latin { animation: mottoIn 1.4s 0.4s ease forwards; }
+  .s3.active .motto-eng { animation: riseIn 1s 1.3s ease forwards; }
+
+  @keyframes mottoIn {
+    from { opacity: 0; letter-spacing: 0.3em; filter: blur(4px); }
+    to { opacity: 1; letter-spacing: 0.06em; filter: blur(0); }
+  }
+
+  .stat-chips {
+    position: absolute;
+    top: 48%;
+    left: 50%;
+    transform: translateX(-50%);
+    display: flex;
+    gap: clamp(0.6rem, 2vw, 1.4rem);
+    flex-wrap: wrap;
+    justify-content: center;
+    z-index: 2;
+    width: 90%;
+  }
+
+  .chip {
+    background: rgba(243, 230, 208, 0.75);
+    border: 1px solid rgba(74, 58, 40, 0.18);
+    border-radius: 4px;
+    padding: 0.55rem 0.9rem;
+    text-align: center;
+    opacity: 0;
+    transform: translateY(20px);
+    backdrop-filter: blur(4px);
+  }
+
+  .s3.active .chip:nth-child(1) { animation: riseIn 0.7s 1.8s ease forwards; }
+  .s3.active .chip:nth-child(2) { animation: riseIn 0.7s 2.05s ease forwards; }
+  .s3.active .chip:nth-child(3) { animation: riseIn 0.7s 2.3s ease forwards; }
+  .s3.active .chip:nth-child(4) { animation: riseIn 0.7s 2.55s ease forwards; }
+
+  .chip-val {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: clamp(1.1rem, 2.5vw, 1.5rem);
+    color: var(--terracotta);
+    font-weight: 600;
+  }
+
+  .chip-lbl {
+    font-size: 0.7rem;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--ink-faint);
+    margin-top: 0.15rem;
+  }
+
+  /* ——— SCENE 4: Tobacco ——— */
+  .s4 .scene-bg {
+    background:
+      radial-gradient(ellipse at 70% 40%, rgba(201, 162, 39, 0.35) 0%, transparent 50%),
+      linear-gradient(160deg, #e4d2b0 0%, #c9a878 55%, #a88858 100%);
+  }
+
+  .leaf-field {
+    position: absolute;
+    inset: 0;
+    overflow: hidden;
+    z-index: 1;
+  }
+
+  .leaf {
+    position: absolute;
+    width: clamp(40px, 8vw, 70px);
+    height: clamp(60px, 12vw, 110px);
+    opacity: 0;
+  }
+
+  .s4.active .leaf {
+    animation: leafFloat 4s ease forwards;
+  }
+
+  .s4.active .leaf:nth-child(1) { left: 8%; top: 15%; animation-delay: 0.3s; }
+  .s4.active .leaf:nth-child(2) { left: 22%; top: 35%; animation-delay: 0.6s; }
+  .s4.active .leaf:nth-child(3) { left: 55%; top: 12%; animation-delay: 0.45s; }
+  .s4.active .leaf:nth-child(4) { left: 72%; top: 28%; animation-delay: 0.9s; }
+  .s4.active .leaf:nth-child(5) { left: 85%; top: 45%; animation-delay: 1.1s; }
+  .s4.active .leaf:nth-child(6) { left: 40%; top: 20%; animation-delay: 0.75s; }
+
+  @keyframes leafFloat {
+    0% { opacity: 0; transform: translateY(40px) rotate(-20deg) scale(0.7); }
+    40% { opacity: 0.9; }
+    100% { opacity: 0.75; transform: translateY(0) rotate(var(--rot, 12deg)) scale(1); }
+  }
+
+  .ban-stamp {
+    position: absolute;
+    right: 10%;
+    top: 20%;
+    width: min(140px, 20vw);
+    height: min(140px, 20vw);
+    border: 3px solid rgba(166, 93, 63, 0.7);
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transform: rotate(-18deg) scale(0);
+    opacity: 0;
+    z-index: 2;
+  }
+
+  .ban-stamp span {
+    font-family: 'IM Fell English', serif;
+    font-size: clamp(0.7rem, 1.5vw, 0.95rem);
+    color: var(--terracotta);
+    text-align: center;
+    line-height: 1.3;
+    letter-spacing: 0.04em;
+    padding: 0.5rem;
+  }
+
+  .s4.active .ban-stamp {
+    animation: stampIn 0.6s 2s cubic-bezier(0.2, 1.4, 0.4, 1) forwards;
+  }
+
+  @keyframes stampIn {
+    from { opacity: 0; transform: rotate(-18deg) scale(1.6); }
+    to { opacity: 0.85; transform: rotate(-18deg) scale(1); }
+  }
+
+  /* ——— SCENE 5: Smugglers / Free zone ——— */
+  .s5 .scene-bg {
+    background:
+      radial-gradient(ellipse at 40% 60%, rgba(90, 107, 74, 0.2) 0%, transparent 50%),
+      linear-gradient(200deg, #d4c4a4 0%, #b8a888 100%);
+  }
+
+  .night-path {
+    position: absolute;
+    inset: 0;
+    z-index: 1;
+  }
+
+  .lantern {
+    position: absolute;
+    width: 12px;
+    height: 12px;
+    border-radius: 50%;
+    background: var(--gold-bright);
+    box-shadow: 0 0 20px 8px rgba(232, 197, 71, 0.45);
+    opacity: 0;
+  }
+
+  .s5.active .lantern {
+    animation: lanternWalk 8s linear infinite;
+  }
+
+  .s5.active .lantern:nth-child(1) { animation-delay: 0.5s; }
+  .s5.active .lantern:nth-child(2) { animation-delay: 2.2s; }
+  .s5.active .lantern:nth-child(3) { animation-delay: 4s; }
+
+  @keyframes lanternWalk {
+    0% { opacity: 0; left: 5%; top: 55%; }
+    10% { opacity: 0.9; }
+    50% { left: 48%; top: 40%; opacity: 1; }
+    90% { opacity: 0.7; }
+    100% { opacity: 0; left: 90%; top: 50%; }
+  }
+
+  .border-lines {
+    position: absolute;
+    inset: 15% 10% 35% 10%;
+    border: 1.5px dashed rgba(74, 58, 40, 0.25);
+    border-radius: 8px;
+    opacity: 0;
+  }
+
+  .s5.active .border-lines {
+    animation: riseIn 1.2s 0.4s ease forwards;
+  }
+
+  .buffer-label {
+    position: absolute;
+    top: 22%;
+    left: 50%;
+    transform: translateX(-50%);
+    font-family: 'Cormorant Garamond', serif;
+    font-size: clamp(0.8rem, 1.6vw, 1rem);
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--sage);
+    opacity: 0;
+    z-index: 2;
+  }
+
+  .s5.active .buffer-label {
+    animation: riseIn 1s 1s ease forwards;
+  }
+
+  /* ——— SCENE 6: Ending ——— */
+  .s6 .scene-bg {
+    background:
+      radial-gradient(ellipse at 50% 45%, #f0e4cc 0%, transparent 55%),
+      linear-gradient(180deg, #e0d0b0 0%, #c4b090 100%);
+  }
+
+  .coin {
+    position: absolute;
+    left: 50%;
+    top: 28%;
+    transform: translateX(-50%);
+    width: min(120px, 18vw);
+    height: min(120px, 18vw);
+    z-index: 2;
+    opacity: 0;
+  }
+
+  .s6.active .coin {
+    animation: coinDrop 1.6s 0.5s cubic-bezier(0.2, 0.8, 0.3, 1) forwards;
+  }
+
+  @keyframes coinDrop {
+    0% { opacity: 0; transform: translateX(-50%) translateY(-60px) rotateY(0deg) scale(0.6); }
+    50% { opacity: 1; transform: translateX(-50%) translateY(8px) rotateY(180deg) scale(1.05); }
+    70% { transform: translateX(-50%) translateY(-4px) rotateY(270deg) scale(1); }
+    100% { opacity: 1; transform: translateX(-50%) translateY(0) rotateY(360deg) scale(1); }
+  }
+
+  .coin-shine {
+    position: absolute;
+    inset: 0;
+    border-radius: 50%;
+    background: linear-gradient(135deg, rgba(255,255,255,0.35) 0%, transparent 45%);
+    pointer-events: none;
+  }
+
+  .end-note {
+    position: absolute;
+    top: 52%;
+    left: 50%;
+    transform: translateX(-50%);
+    text-align: center;
+    width: 85%;
+    z-index: 2;
+  }
+
+  .end-years {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: clamp(1.1rem, 2.5vw, 1.6rem);
+    color: var(--gold);
+    letter-spacing: 0.15em;
+    opacity: 0;
+  }
+
+  .end-epigraph {
+    font-family: 'IM Fell English', Georgia, serif;
+    font-style: italic;
+    font-size: clamp(0.95rem, 2vw, 1.2rem);
+    color: var(--ink-soft);
+    margin-top: 0.6rem;
+    opacity: 0;
+  }
+
+  .s6.active .end-years { animation: riseIn 1s 1.6s ease forwards; }
+  .s6.active .end-epigraph { animation: riseIn 1s 2.1s ease forwards; }
+
+  /* ——— Controls ——— */
+  .controls {
+    width: min(100%, 1100px);
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 8px 4px;
+    flex-wrap: wrap;
+    justify-content: center;
+  }
+
+  .btn {
+    appearance: none;
+    border: 1px solid rgba(201, 162, 39, 0.35);
+    background: rgba(42, 31, 20, 0.85);
+    color: var(--parchment);
+    font-family: 'Source Sans 3', sans-serif;
+    font-size: 0.8rem;
+    letter-spacing: 0.06em;
+    padding: 0.55rem 0.95rem;
+    border-radius: 6px;
+    cursor: pointer;
+    transition: background 0.2s, border-color 0.2s, transform 0.15s;
+    display: inline-flex;
+    align-items: center;
+    gap: 0.4rem;
+  }
+
+  .btn:hover {
+    background: rgba(74, 58, 40, 0.95);
+    border-color: var(--gold);
+  }
+
+  .btn:active { transform: scale(0.97); }
+
+  .btn.primary {
+    background: linear-gradient(180deg, #c9a227, #a88820);
+    color: #1a120c;
+    border-color: #e8c547;
+    font-weight: 600;
+  }
+
+  .btn.primary:hover {
+    background: linear-gradient(180deg, #e8c547, #c9a227);
+  }
+
+  .btn:disabled {
+    opacity: 0.35;
+    cursor: not-allowed;
+    transform: none;
+  }
+
+  .dots {
+    display: flex;
+    gap: 8px;
+    align-items: center;
+    padding: 0 8px;
+  }
+
+  .dot {
+    width: 10px;
+    height: 10px;
+    border-radius: 50%;
+    border: 1.5px solid rgba(201, 162, 39, 0.5);
+    background: transparent;
+    cursor: pointer;
+    padding: 0;
+    transition: background 0.25s, transform 0.2s, border-color 0.2s;
+  }
+
+  .dot:hover { border-color: var(--gold-bright); transform: scale(1.15); }
+  .dot.active {
+    background: var(--gold);
+    border-color: var(--gold-bright);
+    box-shadow: 0 0 8px rgba(201, 162, 39, 0.5);
+  }
+  .dot.played { background: rgba(201, 162, 39, 0.35); }
+
+  .progress-track {
+    flex: 1;
+    min-width: 80px;
+    max-width: 220px;
+    height: 4px;
+    background: rgba(201, 162, 39, 0.15);
+    border-radius: 2px;
+    overflow: hidden;
+    cursor: pointer;
+  }
+
+  .progress-fill {
+    height: 100%;
+    width: 0%;
+    background: linear-gradient(90deg, var(--gold), var(--gold-bright));
+    border-radius: 2px;
+    transition: width 0.15s linear;
+  }
+
+  .scene-label {
+    font-size: 0.7rem;
+    color: rgba(243, 230, 208, 0.55);
+    letter-spacing: 0.08em;
+    min-width: 70px;
+    text-align: center;
+  }
+
+  .kbd-hint {
+    font-size: 0.65rem;
+    color: rgba(243, 230, 208, 0.35);
+    letter-spacing: 0.04em;
+    width: 100%;
+    text-align: center;
+    margin-top: -4px;
+  }
+
+  @media (max-width: 640px) {
+    .app { padding: 8px; gap: 8px; }
+    .stage-wrap { max-height: calc(100vh - 130px); border-radius: 6px; }
+    .scene { padding: 1rem; justify-content: flex-end; }
+    .scene-content { max-width: 100%; }
+    .s3 .scene-content, .s6 .scene-content { display: none; }
+    .stat-chips { top: 55%; }
+    .motto-reveal { top: 12%; }
+    .end-note { top: 55%; }
+    .coin { top: 18%; }
+    .kbd-hint { display: none; }
+    .btn { padding: 0.5rem 0.7rem; font-size: 0.75rem; }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    *, *::before, *::after {
+      animation-duration: 0.01ms !important;
+      animation-iteration-count: 1 !important;
+      transition-duration: 0.01ms !important;
+    }
+    .scene { opacity: 0; transform: none; }
+    .scene.active { opacity: 1; }
+  }
+
+  .historic-back {
+    position: fixed;
+    top: 10px;
+    left: 10px;
+    z-index: 100;
+    font-family: 'Source Sans 3', system-ui, sans-serif;
+    font-size: 0.75rem;
+    letter-spacing: 0.06em;
+    text-decoration: none;
+    color: #e8dcc8;
+    background: rgba(16,14,12,0.72);
+    border: 1px solid rgba(166,124,74,0.4);
+    padding: 0.4rem 0.75rem;
+    border-radius: 6px;
+    backdrop-filter: blur(6px);
+    transition: background 0.2s, border-color 0.2s;
+  }
+  .historic-back:hover {
+    background: rgba(166,124,74,0.35);
+    border-color: #c9a06a;
+  }
+  @media (max-width: 640px) {
+    .historic-back { top: 6px; left: 6px; font-size: 0.7rem; padding: 0.35rem 0.6rem; }
+  }
+
+  /* iOS / touch polish — large targets, no hover-only UI */
+  .btn, .historic-back, .hub-back, .dot {
+    min-height: 44px;
+    min-width: 44px;
+    touch-action: manipulation;
+    -webkit-tap-highlight-color: transparent;
+  }
+  .dot { min-width: 44px; }
+  @media (hover: none) {
+    .btn:hover:not(:disabled),
+    .btn.primary:hover:not(:disabled),
+    .historic-back:hover,
+    .hub-back:hover,
+    .dot:hover { transform: none; }
+    .btn:active:not(:disabled),
+    .historic-back:active,
+    .hub-back:active { opacity: 0.9; }
+  }
+
+</style>
+</head>
+<body>
+<a class="historic-back" href="../index.html">← Library</a>
+
+  <div class="app">
+    <div class="stage-wrap" role="region" aria-label="Cospaia animated history">
+      <div class="stage" id="stage">
+
+        <!-- SCENE 0: Title -->
+        <section class="scene s0 active" data-scene="0" aria-label="Title">
+          <div class="scene-bg"></div>
+          <div class="ink-blot" style="width:180px;height:180px;top:10%;left:5%;"></div>
+          <div class="ink-blot" style="width:120px;height:120px;bottom:15%;right:10%;"></div>
+          <div class="map-frag" style="--r:-8deg;width:60px;height:40px;top:18%;left:12%;animation-delay:0s;"></div>
+          <div class="map-frag" style="--r:12deg;width:45px;height:55px;top:60%;right:15%;animation-delay:3s;"></div>
+          <div class="map-frag" style="--r:-4deg;width:70px;height:30px;top:30%;right:20%;animation-delay:7s;"></div>
+          <div class="title-card">
+            <div class="title-eyebrow">A forgotten microstate · 1440–1826</div>
+            <div class="title-ornament"></div>
+            <h1 class="title-main">The Republic That Shouldn't Exist</h1>
+            <div class="title-ornament"></div>
+            <p class="title-sub">Cospaia — a country born from a map mistake</p>
+            <p class="title-hint">Press play to begin</p>
+          </div>
+        </section>
+
+        <!-- SCENE 1: The Debt -->
+        <section class="scene s1" data-scene="1" aria-label="The Debt">
+          <div class="scene-bg"></div>
+          <svg class="florin-stack" viewBox="0 0 120 140" aria-hidden="true">
+            <ellipse cx="60" cy="118" rx="42" ry="10" fill="rgba(42,31,20,0.15)"/>
+            <g>
+              <ellipse cx="60" cy="100" rx="38" ry="12" fill="#c9a227" stroke="#8a7020" stroke-width="1"/>
+              <ellipse cx="60" cy="88" rx="38" ry="12" fill="#d4b030" stroke="#8a7020" stroke-width="1"/>
+              <ellipse cx="60" cy="76" rx="38" ry="12" fill="#c9a227" stroke="#8a7020" stroke-width="1"/>
+              <ellipse cx="60" cy="64" rx="38" ry="12" fill="#e8c547" stroke="#8a7020" stroke-width="1"/>
+              <text x="60" y="68" text-anchor="middle" font-family="Georgia" font-size="11" fill="#5a4810">ƒ</text>
+            </g>
+            <text x="60" y="130" text-anchor="middle" font-family="Georgia" font-size="9" fill="#7a6548">~25,000 florins</text>
+          </svg>
+          <svg class="scroll-seal" viewBox="0 0 160 200" aria-hidden="true">
+            <rect x="20" y="20" width="120" height="150" rx="4" fill="#f3e6d0" stroke="#8a7048" stroke-width="1.5"/>
+            <rect x="28" y="28" width="104" height="134" rx="2" fill="none" stroke="#c9b088" stroke-width="0.75"/>
+            <line x1="40" y1="50" x2="120" y2="50" stroke="#a89068" stroke-width="1"/>
+            <line x1="40" y1="65" x2="110" y2="65" stroke="#c9b088" stroke-width="1"/>
+            <line x1="40" y1="80" x2="115" y2="80" stroke="#c9b088" stroke-width="1"/>
+            <line x1="40" y1="95" x2="100" y2="95" stroke="#c9b088" stroke-width="1"/>
+            <line x1="40" y1="110" x2="112" y2="110" stroke="#c9b088" stroke-width="1"/>
+            <circle cx="80" cy="155" r="18" fill="#a65d3f"/>
+            <circle cx="80" cy="155" r="12" fill="none" stroke="#f3e6d0" stroke-width="1.5"/>
+            <text x="80" y="158" text-anchor="middle" font-family="Georgia" font-size="8" fill="#f3e6d0">IV</text>
+            <text x="80" y="195" text-anchor="middle" font-family="Georgia" font-size="9" fill="#7a6548">Eugene IV</text>
+          </svg>
+          <div class="scene-content">
+            <div class="scene-year">1440 — 1441</div>
+            <h2 class="scene-title">A Pope's Debt</h2>
+            <p class="scene-body">Pope Eugene IV owed Florence roughly 25,000 florins. As pledge, he offered the town of Sansepolcro. A stream called the Rio would mark the new border between the Papal States and Florentine territory.</p>
+          </div>
+        </section>
+
+        <!-- SCENE 2: Two Rivers -->
+        <section class="scene s2" data-scene="2" aria-label="The Map Mistake">
+          <div class="scene-bg"></div>
+          <div class="map-stage">
+            <svg viewBox="0 0 700 320" width="100%" height="100%" preserveAspectRatio="xMidYMid meet" aria-hidden="true">
+              <!-- Terrain wash -->
+              <rect x="0" y="0" width="700" height="320" fill="rgba(232,212,176,0.3)"/>
+              <!-- Gap band between rivers -->
+              <path class="gap-band" d="M80,130 Q200,115 350,125 Q500,135 620,120 L620,195 Q500,210 350,200 Q200,190 80,205 Z"/>
+              <!-- River A (northern Rio) -->
+              <path class="river-path river-a" d="M40,110 C120,95 200,130 300,115 C400,100 500,125 660,105"/>
+              <!-- River B (southern Rio) ~500m apart -->
+              <path class="river-path river-b" d="M40,210 C130,225 220,190 340,205 C460,220 540,195 660,215"/>
+              <!-- Labels -->
+              <text class="map-label label-a" x="300" y="95">Rio (claimed north)</text>
+              <text class="map-label label-b" x="300" y="245">Rio (claimed south)</text>
+              <text class="map-label label-gap" x="350" y="165" text-anchor="middle" font-size="16" font-style="italic" fill="#8a6020">~500 meters of no-man's-land</text>
+              <!-- Cospaia village -->
+              <circle class="village-dot" cx="380" cy="162" r="6"/>
+              <text class="map-label label-gap" x="400" y="166" font-size="13" fill="#a65d3f">Cospaia</text>
+              <!-- Side labels -->
+              <text class="map-label label-a" x="40" y="50" font-size="12" letter-spacing="2">FLORENCE</text>
+              <text class="map-label label-b" x="40" y="290" font-size="12" letter-spacing="2">PAPAL STATES</text>
+            </svg>
+          </div>
+          <div class="scene-content">
+            <div class="scene-year">The Mistake</div>
+            <h2 class="scene-title">Two Streams, One Name</h2>
+            <p class="scene-body">Both sides agreed the Rio would be the border — but two streams shared that name, about 500 meters apart. The strip between them, including the village of Cospaia, belonged to neither power.</p>
+          </div>
+        </section>
+
+        <!-- SCENE 3: Liberty -->
+        <section class="scene s3" data-scene="3" aria-label="Independence">
+          <div class="scene-bg"></div>
+          <div class="motto-reveal">
+            <div class="motto-latin">Perpetua et firma libertas</div>
+            <div class="motto-eng">“Perpetual and secure liberty”</div>
+          </div>
+          <div class="stat-chips">
+            <div class="chip"><div class="chip-val">~330 ha</div><div class="chip-lbl">Territory</div></div>
+            <div class="chip"><div class="chip-val">~250</div><div class="chip-lbl">Inhabitants</div></div>
+            <div class="chip"><div class="chip-val">No army</div><div class="chip-lbl">No prisons</div></div>
+            <div class="chip"><div class="chip-val">1484</div><div class="chip-lbl">Buffer recognized</div></div>
+          </div>
+          <div class="scene-content">
+            <div class="scene-year">Independence</div>
+            <h2 class="scene-title">A Republic by Accident</h2>
+            <p class="scene-body">Locals declared independence. A council of heads of household governed the tiny free zone — tax-free, unarmed, and, by the 1480s, quietly useful as a buffer between greater powers.</p>
+          </div>
+        </section>
+
+        <!-- SCENE 4: Tobacco -->
+        <section class="scene s4" data-scene="4" aria-label="Tobacco">
+          <div class="scene-bg"></div>
+          <div class="leaf-field">
+            <svg class="leaf" style="--rot:15deg" viewBox="0 0 60 100"><ellipse cx="30" cy="50" rx="22" ry="45" fill="#5a6b4a"/><ellipse cx="30" cy="50" rx="16" ry="38" fill="#6a7d58"/><path d="M30,8 Q32,50 30,92" stroke="#3a4a2a" stroke-width="1.5" fill="none"/><path d="M30,30 Q18,40 14,48" stroke="#3a4a2a" stroke-width="0.8" fill="none"/><path d="M30,45 Q42,52 46,60" stroke="#3a4a2a" stroke-width="0.8" fill="none"/></svg>
+            <svg class="leaf" style="--rot:-10deg" viewBox="0 0 60 100"><ellipse cx="30" cy="50" rx="22" ry="45" fill="#6a7d58"/><ellipse cx="30" cy="50" rx="16" ry="38" fill="#7a8d68"/><path d="M30,8 Q32,50 30,92" stroke="#3a4a2a" stroke-width="1.5" fill="none"/></svg>
+            <svg class="leaf" style="--rot:22deg" viewBox="0 0 60 100"><ellipse cx="30" cy="50" rx="22" ry="45" fill="#8a9a48"/><ellipse cx="30" cy="50" rx="16" ry="38" fill="#9aaa58"/><path d="M30,8 Q32,50 30,92" stroke="#4a5a2a" stroke-width="1.5" fill="none"/></svg>
+            <svg class="leaf" style="--rot:-18deg" viewBox="0 0 60 100"><ellipse cx="30" cy="50" rx="22" ry="45" fill="#5a6b4a"/><path d="M30,8 Q32,50 30,92" stroke="#3a4a2a" stroke-width="1.5" fill="none"/></svg>
+            <svg class="leaf" style="--rot:8deg" viewBox="0 0 60 100"><ellipse cx="30" cy="50" rx="22" ry="45" fill="#c9a227" opacity="0.85"/><ellipse cx="30" cy="50" rx="14" ry="35" fill="#d4b030" opacity="0.7"/><path d="M30,8 Q32,50 30,92" stroke="#8a7020" stroke-width="1.5" fill="none"/></svg>
+            <svg class="leaf" style="--rot:-5deg" viewBox="0 0 60 100"><ellipse cx="30" cy="50" rx="22" ry="45" fill="#6a7d58"/><path d="M30,8 Q32,50 30,92" stroke="#3a4a2a" stroke-width="1.5" fill="none"/></svg>
+          </div>
+          <div class="ban-stamp"><span>Papal<br>Ban</span></div>
+          <div class="scene-content">
+            <div class="scene-year">1574 onward</div>
+            <h2 class="scene-title">The Golden Leaf</h2>
+            <p class="scene-body">Tobacco seeds — the “Tornabuoni herb” — arrived via Alfonso Tornabuoni and Niccolò. Cospaia became an early Italian tobacco center. Papal bans and excommunication elsewhere handed the little republic a monopoly advantage.</p>
+          </div>
+        </section>
+
+        <!-- SCENE 5: Free zone / smugglers -->
+        <section class="scene s5" data-scene="5" aria-label="Free Zone">
+          <div class="scene-bg"></div>
+          <div class="border-lines"></div>
+          <div class="buffer-label">Tax-free buffer · Smugglers' haven</div>
+          <div class="night-path">
+            <div class="lantern"></div>
+            <div class="lantern"></div>
+            <div class="lantern"></div>
+          </div>
+          <div class="scene-content">
+            <div class="scene-year">The Free Zone</div>
+            <h2 class="scene-title">Neither Pope nor Prince</h2>
+            <p class="scene-body">Untaxed and unpoliced, Cospaia thrived as a trading crossroads — and later as a smugglers' haven. For centuries, its peculiar freedom endured precisely because neither neighbor wanted the other to claim it.</p>
+          </div>
+        </section>
+
+        <!-- SCENE 6: Ending -->
+        <section class="scene s6" data-scene="6" aria-label="The End">
+          <div class="scene-bg"></div>
+          <div class="coin">
+            <svg viewBox="0 0 120 120" width="100%" height="100%" aria-hidden="true">
+              <defs>
+                <radialGradient id="silverGrad" cx="35%" cy="30%" r="65%">
+                  <stop offset="0%" stop-color="#f0ece4"/>
+                  <stop offset="40%" stop-color="#c8c4bc"/>
+                  <stop offset="100%" stop-color="#8a8680"/>
+                </radialGradient>
+              </defs>
+              <circle cx="60" cy="60" r="54" fill="url(#silverGrad)" stroke="#6a6660" stroke-width="2"/>
+              <circle cx="60" cy="60" r="46" fill="none" stroke="#a8a49c" stroke-width="1.5"/>
+              <circle cx="60" cy="60" r="38" fill="none" stroke="#8a8680" stroke-width="0.75" stroke-dasharray="2 3"/>
+              <text x="60" y="55" text-anchor="middle" font-family="Georgia" font-size="11" fill="#4a4840">COSPAIA</text>
+              <text x="60" y="72" text-anchor="middle" font-family="Georgia" font-size="9" fill="#6a6660">1826</text>
+            </svg>
+            <div class="coin-shine"></div>
+          </div>
+          <div class="end-note">
+            <div class="end-years">1440 — 1826 · nearly four centuries</div>
+            <div class="end-epigraph">A silver coin each — and leave to keep growing tobacco.</div>
+          </div>
+          <div class="scene-content">
+            <div class="scene-year">1826</div>
+            <h2 class="scene-title">A Quiet Ending</h2>
+            <p class="scene-body">Fourteen representatives submitted. The republic was divided between the Papal States and Tuscany. Each inhabitant received a silver coin — and permission to keep growing tobacco.</p>
+          </div>
+        </section>
+
+      </div>
+    </div>
+
+    <div class="controls" role="toolbar" aria-label="Playback controls">
+      <button class="btn" id="btnPrev" aria-label="Previous scene" title="Previous (←)">‹ Prev</button>
+      <button class="btn primary" id="btnPlay" aria-label="Play or pause" title="Play/Pause (Space)">▶ Play</button>
+      <button class="btn" id="btnNext" aria-label="Next scene" title="Next (→)">Next ›</button>
+      <div class="dots" id="dots" role="tablist" aria-label="Scenes"></div>
+      <div class="progress-track" id="progressTrack" title="Scene progress" role="slider" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0">
+        <div class="progress-fill" id="progressFill"></div>
+      </div>
+      <span class="scene-label" id="sceneLabel">1 / 7</span>
+    </div>
+    <p class="kbd-hint">Space play/pause · ← → scenes · click dots to jump</p>
+  </div>
+
+<script>
+(function () {
+  const SCENES = 7;
+  const DURATIONS = [5500, 8000, 9000, 9000, 9000, 8000, 10000]; // ms per scene when autoplaying
+  const titles = [
+    'Title',
+    'A Pope\'s Debt',
+    'Two Streams',
+    'Independence',
+    'Golden Leaf',
+    'Free Zone',
+    'Quiet Ending'
+  ];
+
+  let current = 0;
+  let playing = false;
+  let raf = null;
+  let sceneStart = 0;
+  let elapsedInScene = 0;
+  let pausedAt = 0;
+
+  const scenes = [...document.querySelectorAll('.scene')];
+  const btnPlay = document.getElementById('btnPlay');
+  const btnPrev = document.getElementById('btnPrev');
+  const btnNext = document.getElementById('btnNext');
+  const dotsEl = document.getElementById('dots');
+  const progressFill = document.getElementById('progressFill');
+  const progressTrack = document.getElementById('progressTrack');
+  const sceneLabel = document.getElementById('sceneLabel');
+
+  // Build dots
+  for (let i = 0; i < SCENES; i++) {
+    const d = document.createElement('button');
+    d.className = 'dot' + (i === 0 ? ' active' : '');
+    d.setAttribute('role', 'tab');
+    d.setAttribute('aria-label', 'Scene ' + (i + 1) + ': ' + titles[i]);
+    d.dataset.index = i;
+    d.addEventListener('click', () => goTo(i, true));
+    dotsEl.appendChild(d);
+  }
+  const dots = [...dotsEl.querySelectorAll('.dot')];
+
+  function goTo(index, userJump) {
+    if (index < 0 || index >= SCENES) return;
+    const prev = current;
+    if (prev === index && !userJump) return;
+
+    scenes[prev].classList.remove('active');
+    if (prev !== index) scenes[prev].classList.add('leaving');
+    setTimeout(() => scenes[prev].classList.remove('leaving'), 900);
+
+    current = index;
+    // Restart animations by reflow
+    const el = scenes[current];
+    el.classList.remove('active');
+    void el.offsetWidth;
+    el.classList.add('active');
+
+    dots.forEach((d, i) => {
+      d.classList.toggle('active', i === current);
+      d.classList.toggle('played', i < current);
+    });
+
+    sceneLabel.textContent = (current + 1) + ' / ' + SCENES;
+    btnPrev.disabled = current === 0;
+    btnNext.disabled = current === SCENES - 1;
+
+    elapsedInScene = 0;
+    sceneStart = performance.now();
+    updateProgress(0);
+
+    if (userJump && playing) {
+      // keep playing from start of new scene
+      sceneStart = performance.now();
+    }
+  }
+
+  function updateProgress(pct) {
+    progressFill.style.width = pct + '%';
+    progressTrack.setAttribute('aria-valuenow', Math.round(pct));
+  }
+
+  function tick(now) {
+    if (!playing) return;
+    const dur = DURATIONS[current];
+    elapsedInScene = now - sceneStart;
+    const pct = Math.min(100, (elapsedInScene / dur) * 100);
+    updateProgress(pct);
+
+    if (elapsedInScene >= dur) {
+      if (current < SCENES - 1) {
+        goTo(current + 1, false);
+        sceneStart = performance.now();
+      } else {
+        // End — stop on last scene
+        pause();
+        updateProgress(100);
+        return;
+      }
+    }
+    raf = requestAnimationFrame(tick);
+  }
+
+  function play() {
+    playing = true;
+    btnPlay.innerHTML = '❚❚ Pause';
+    btnPlay.setAttribute('aria-label', 'Pause');
+    sceneStart = performance.now() - elapsedInScene;
+    raf = requestAnimationFrame(tick);
+  }
+
+  function pause() {
+    playing = false;
+    btnPlay.innerHTML = '▶ Play';
+    btnPlay.setAttribute('aria-label', 'Play');
+    if (raf) cancelAnimationFrame(raf);
+    raf = null;
+  }
+
+  function togglePlay() {
+    if (playing) pause();
+    else {
+      // If on last scene at end, restart from beginning
+      if (current === SCENES - 1 && elapsedInScene >= DURATIONS[current] - 50) {
+        goTo(0, true);
+      }
+      play();
+    }
+  }
+
+  btnPlay.addEventListener('click', togglePlay);
+  btnPrev.addEventListener('click', () => { goTo(current - 1, true); });
+  btnNext.addEventListener('click', () => { goTo(current + 1, true); });
+
+  progressTrack.addEventListener('click', (e) => {
+    const rect = progressTrack.getBoundingClientRect();
+    const pct = Math.max(0, Math.min(1, (e.clientX - rect.left) / rect.width));
+    elapsedInScene = pct * DURATIONS[current];
+    sceneStart = performance.now() - elapsedInScene;
+    updateProgress(pct * 100);
+  });
+
+  document.addEventListener('keydown', (e) => {
+    if (e.target.matches('input, textarea, button') && e.key !== ' ' && e.code !== 'Space') {
+      // allow buttons but still handle space globally for play
+    }
+    if (e.code === 'Space') {
+      e.preventDefault();
+      togglePlay();
+    } else if (e.key === 'ArrowRight') {
+      e.preventDefault();
+      goTo(current + 1, true);
+    } else if (e.key === 'ArrowLeft') {
+      e.preventDefault();
+      goTo(current - 1, true);
+    } else if (e.key === 'Home') {
+      goTo(0, true);
+    } else if (e.key === 'End') {
+      goTo(SCENES - 1, true);
+    }
+  });
+
+  // Init
+  goTo(0, true);
+  pause();
+})();
+</script>
+<script src="../js/monetization.js" defer></script>
+<script src="../js/shell.js" defer></script>
+</body>
+</html>

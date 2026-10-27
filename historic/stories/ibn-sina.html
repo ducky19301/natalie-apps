@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="theme-color" content="#100e0c">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-title" content="Historic">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<link rel="manifest" href="../manifest.webmanifest">
+<link rel="apple-touch-icon" href="../icons/icon-180.png">
+<title>Ibn Sīnā — Historic</title>
+<meta name="description" content="Philosopher-physician whose medical encyclopedia trained Europe and the Middle East for centuries.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,600;1,400&family=IM+Fell+English:ital@0;1&family=Source+Sans+3:wght@300;400;500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../assets/topic.css">
+</head>
+<body>
+  <nav class="topbar">
+    <a class="brand" href="../index.html">Histor<em>ic</em></a>
+    <a class="back-link" href="../index.html">Library</a>
+  </nav>
+  <header class="hero">
+    <div class="hero-era">980–1037 CE</div>
+    <h1>Ibn Sīnā</h1>
+    <p class="hero-place">Persianate world · Bukhara to Hamadan · Avicenna and the Canon of Medicine</p>
+    <p class="hero-lede">Abū ʿAlī ibn Sīnā (Avicenna) wrote philosophy and medicine that shaped curricula from Isfahan to Montpellier. The Canon of Medicine organized diagnosis and pharmacology so effectively that Latin Europe kept teaching it into the early modern era.</p>
+    <p style="margin-top:1rem;font-size:0.85rem;color:rgba(240,230,212,0.45)">Categories: <a href="../categories/thinkers.html">Thinkers</a> · <a href="../categories/science-invention.html">Science &amp; invention</a></p>
+  </header>
+  <div class="progress-dots" role="navigation" aria-label="Chapters"><button class="dot" type="button" data-target="ch1" aria-label="Chapter 1"></button><button class="dot" type="button" data-target="ch2" aria-label="Chapter 2"></button><button class="dot" type="button" data-target="ch3" aria-label="Chapter 3"></button><button class="dot" type="button" data-target="ch4" aria-label="Chapter 4"></button><button class="dot" type="button" data-target="ch5" aria-label="Chapter 5"></button><button class="dot" type="button" data-target="ch6" aria-label="Chapter 6"></button></div>
+  <main class="chapters"><section class="chapter" id="ch1" data-chapter="1"><div class="chapter-num">Chapter 1 of 6</div><h2>Polymath youth</h2><p>Born near Bukhara, he claimed vast early reading in logic, metaphysics, and medicine. Court service and restless travel followed political upheavals.</p></section><section class="chapter" id="ch2" data-chapter="2"><div class="chapter-num">Chapter 2 of 6</div><h2>The Canon</h2><p>Al-Qānūn fī al-Ṭibb synthesized Galenic tradition with clinical observation — anatomy, diseases, compound drugs — in a teachable structure.</p></section><section class="chapter" id="ch3" data-chapter="3"><div class="chapter-num">Chapter 3 of 6</div><h2>Philosophy</h2><p>His metaphysics and psychology influenced Islamic falsafa and, through Latin translation, medieval Christian scholasticism — sometimes as a sparring partner.</p></section><section class="chapter" id="ch4" data-chapter="4"><div class="chapter-num">Chapter 4 of 6</div><h2>Clinic and experiment</h2><p>Stories of bedside skill abound; more important is his insistence on testing remedies and describing contagious disease carefully for his time.</p></section><section class="chapter" id="ch5" data-chapter="5"><div class="chapter-num">Chapter 5 of 6</div><h2>Latin afterlife</h2><p>Translated Avicenna became a university staple. European medicine’s Arab authorities were often Persian and Andalusian scholars writing in Arabic.</p></section><section class="chapter" id="ch6" data-chapter="6"><div class="chapter-num">Chapter 6 of 6</div><h2>Why it still matters</h2><p>Ibn Sīnā embodies a cosmopolitan scientific culture that Europe inherited rather than invented from nothing.</p><p class="pull">Why it still matters — not as nostalgia, but as unfinished argument.</p></section></main>
+  <aside class="further">
+    <h3>Further reading vibe</h3>
+    <p>Canon translations/excerpts; Gutas on Avicenna; museum exhibits on Islamic medicine.</p>
+  </aside>
+  <div class="footer-nav">
+    <a href="../index.html">← All stories</a>
+    <a href="../categories/thinkers.html">More in this shelf →</a>
+  </div>
+<script>
+(function(){
+  var chapters = [].slice.call(document.querySelectorAll('.chapter'));
+  var dots = [].slice.call(document.querySelectorAll('.dot'));
+  var io = new IntersectionObserver(function(entries){
+    entries.forEach(function(e){
+      if (e.isIntersecting) {
+        e.target.classList.add('in-view');
+        var id = e.target.id;
+        dots.forEach(function(d){ d.classList.toggle('active', d.getAttribute('data-target')===id); });
+      }
+    });
+  }, { threshold: 0.45 });
+  chapters.forEach(function(c){ io.observe(c); });
+  if (chapters[0]) chapters[0].classList.add('in-view');
+  dots.forEach(function(d){
+    d.addEventListener('click', function(){
+      var t = document.getElementById(d.getAttribute('data-target'));
+      if (t) t.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    });
+  });
+  if ('serviceWorker' in navigator) {
+    window.addEventListener('load', function(){ navigator.serviceWorker.register('../sw.js').catch(function(){}); });
+  }
+})();
+</script>
+<script src="../js/monetization.js" defer></script>
+<script src="../js/shell.js" defer></script>
+</body>
+</html>

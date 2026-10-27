@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="theme-color" content="#100e0c">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-title" content="Historic">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<link rel="manifest" href="../manifest.webmanifest">
+<link rel="apple-touch-icon" href="../icons/icon-180.png">
+<title>What People Mean by “Ages” — Historic</title>
+<meta name="description" content="“Age” is a word that does too many jobs. Geologists mean rock-and-fossil time; archaeologists mean tool packages; historians mean political eras; astrologers mean symboli">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,600;1,400&family=IM+Fell+English:ital@0;1&family=Source+Sans+3:wght@300;400;500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../assets/topic.css">
+</head>
+<body>
+  <nav class="topbar">
+    <a class="brand" href="../index.html">Histor<em>ic</em></a>
+    <a class="back-link" href="../index.html">Library</a>
+  </nav>
+  <header class="hero">
+    <div class="hero-era">Frameworks · deep time → now</div>
+    <h1>What People Mean by “Ages”</h1>
+    <p class="hero-place">Geological · archaeological · historical · astrological (interpretive)</p>
+    <p class="hero-lede">“Age” is a word that does too many jobs. Geologists mean rock-and-fossil time; archaeologists mean tool packages; historians mean political eras; astrologers mean symbolic sky-epochs. This page maps the vocabularies so later chapters do not smuggle one kind of age into another.</p>
+    <p style="margin-top:1rem;font-size:0.85rem;color:rgba(240,230,212,0.45)">Shelves: <a href="../categories/ages-eras.html">Ages &amp; eras</a> · <a href="../ages/overview.html">Ages hub</a></p>
+  </header>
+  <div class="progress-dots" role="navigation" aria-label="Chapters"><button class="dot" type="button" data-target="ch1" aria-label="Chapter 1"></button><button class="dot" type="button" data-target="ch2" aria-label="Chapter 2"></button><button class="dot" type="button" data-target="ch3" aria-label="Chapter 3"></button><button class="dot" type="button" data-target="ch4" aria-label="Chapter 4"></button><button class="dot" type="button" data-target="ch5" aria-label="Chapter 5"></button></div>
+  <main class="chapters"><section class="chapter" id="ch1" data-chapter="1"><div class="chapter-num">Chapter 1 of 5</div><h2>Deep time is not culture time</h2><p>Geological ages (Eocene, Pleistocene, Holocene) are defined by earth-system evidence — fossils, ice cores, isotope ratios. They are not “meanings” societies lived under; they are scientific labels for intervals vastly longer than kingdoms.</p><p>The proposed Anthropocene is a geological debate about whether human impact has left a permanent stratigraphic signal. Calling the present the Anthropocene is a scientific claim under review, not an astrological or moral slogan — though activists and artists freely borrow the word.</p></section><section class="chapter" id="ch2" data-chapter="2"><div class="chapter-num">Chapter 2 of 5</div><h2>Archaeological packages</h2><p>Paleolithic, Neolithic, Bronze Age, Iron Age began as European museum categories for tools and metals. They travel poorly: bronze arrives at different times in different regions; some societies skip stages; others keep stone tools while neighbors cast metal.</p><p>Use them as rough comparative scaffolds, not ladders of progress. A Neolithic village can be spiritually intricate; an Iron Age empire can be brutal and brilliant in the same century.</p></section><section class="chapter" id="ch3" data-chapter="3"><div class="chapter-num">Chapter 3 of 5</div><h2>Historical periodization</h2><p>Classical antiquity, late antiquity, medieval, early modern, industrial — these are historian’s tools, often Eurocentric in origin, later adapted or rejected by global history. “Medieval” India or “medieval” West Africa is a borrowed metaphor that sometimes helps and sometimes erases.</p><p>Period labels organize syllabi; they do not prove destiny. The same century can be “golden” for one network and catastrophic for another.</p></section><section class="chapter" id="ch4" data-chapter="4"><div class="chapter-num">Chapter 4 of 5</div><h2>Astrological ages as tradition</h2><p>Astrological ages (Aries, Pisces, Aquarius) rest on the astronomical fact of axial precession — the slow wobble that shifts which constellation rises at the spring equinox over roughly 25,700–26,000 years. That astronomy is real; the cultural meanings assigned to each “age” are interpretive traditions, not scientific periodization.</p><p>Dating the cusps (especially Pisces → Aquarius) is disputed among astrologers themselves. Treat Age-of-Aquarius talk as history of ideas and popular culture, not as a calendar science can verify.</p><p class="pull">Label the frame before you trust the story.</p></section><section class="chapter" id="ch5" data-chapter="5"><div class="chapter-num">Chapter 5 of 5</div><h2>How this shelf uses the word</h2><p>Pages that follow keep geological, archaeological, historical, and astrological “ages” in separate drawers. When a tradition claims we are “entering Aquarius,” we quote the tradition and note scholarly astronomy’s silence on moral epochs.</p><p>Why it still matters: shared words without shared definitions are how myths of progress, decline, and destiny get smuggled into conversation.</p></section></main>
+  <aside class="further">
+    <h3>Further reading vibe</h3>
+    <p>Stratigraphic charts for deep time; Trigger/Renfrew for archaeological periodization; Jaspers (critically) for Axial Age; Campion for astrology’s ages. Always ask: who named this age, and for what purpose?</p>
+  </aside>
+  <div class="footer-nav">
+    <a href="../index.html">← All stories</a>
+    <a href="../categories/ages-eras.html">Ages &amp; eras shelf →</a>
+  </div>
+<script>
+(function(){
+  var chapters = [].slice.call(document.querySelectorAll('.chapter'));
+  var dots = [].slice.call(document.querySelectorAll('.dot'));
+  var io = new IntersectionObserver(function(entries){
+    entries.forEach(function(e){
+      if (e.isIntersecting) {
+        e.target.classList.add('in-view');
+        var id = e.target.id;
+        dots.forEach(function(d){ d.classList.toggle('active', d.getAttribute('data-target')===id); });
+      }
+    });
+  }, { threshold: 0.45 });
+  chapters.forEach(function(c){ io.observe(c); });
+  if (chapters[0]) chapters[0].classList.add('in-view');
+  dots.forEach(function(d){
+    d.addEventListener('click', function(){
+      var t = document.getElementById(d.getAttribute('data-target'));
+      if (t) t.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    });
+  });
+  if ('serviceWorker' in navigator) {
+    window.addEventListener('load', function(){ navigator.serviceWorker.register('../sw.js').catch(function(){}); });
+  }
+})();
+</script>
+<script src="../js/monetization.js" defer></script>
+<script src="../js/shell.js" defer></script>
+</body>
+</html>

@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="theme-color" content="#100e0c">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-title" content="Historic">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<link rel="manifest" href="../manifest.webmanifest">
+<link rel="apple-touch-icon" href="../icons/icon-180.png">
+<title>Timbuktu Manuscripts — Historic</title>
+<meta name="description" content="Hundreds of thousands of Arabic and Ajami pages — law, astronomy, poetry — proving West Africa’s deep written traditions.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,600;1,400&family=IM+Fell+English:ital@0;1&family=Source+Sans+3:wght@300;400;500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../assets/topic.css">
+</head>
+<body>
+  <nav class="topbar">
+    <a class="brand" href="../index.html">Histor<em>ic</em></a>
+    <a class="back-link" href="../index.html">Library</a>
+  </nav>
+  <header class="hero">
+    <div class="hero-era">c. 13th–19th centuries (collections)</div>
+    <h1>Timbuktu Manuscripts</h1>
+    <p class="hero-place">Timbuktu · Mali · Niger Bend · Libraries of the Sahara’s scholarly city</p>
+    <p class="hero-lede">Timbuktu’s private libraries hold manuscripts copied and composed across centuries of Mali and Songhai learning. When crisis threatened them in the 2010s, families and librarians smuggled pages to safety — continuing a long habit of guarding books.</p>
+    <p style="margin-top:1rem;font-size:0.85rem;color:rgba(240,230,212,0.45)">Categories: <a href="../categories/africa-diaspora.html">Africa &amp; diaspora</a> · <a href="../categories/thinkers.html">Thinkers</a></p>
+  </header>
+  <div class="progress-dots" role="navigation" aria-label="Chapters"><button class="dot" type="button" data-target="ch1" aria-label="Chapter 1"></button><button class="dot" type="button" data-target="ch2" aria-label="Chapter 2"></button><button class="dot" type="button" data-target="ch3" aria-label="Chapter 3"></button><button class="dot" type="button" data-target="ch4" aria-label="Chapter 4"></button><button class="dot" type="button" data-target="ch5" aria-label="Chapter 5"></button><button class="dot" type="button" data-target="ch6" aria-label="Chapter 6"></button></div>
+  <main class="chapters"><section class="chapter" id="ch1" data-chapter="1"><div class="chapter-num">Chapter 1 of 6</div><h2>City of scholars</h2><p>Under Mali and later Songhai, Timbuktu drew students to Sankore and other circles. Gold-salt trade funded a literate elite writing in Arabic and local languages in Ajami script.</p></section><section class="chapter" id="ch2" data-chapter="2"><div class="chapter-num">Chapter 2 of 6</div><h2>What the pages hold</h2><p>Fiqh, Qur’anic commentary, astronomy, medicine, commercial contracts, poetry, and chronicles such as the Tarikh traditions. These are working libraries, not museum props.</p></section><section class="chapter" id="ch3" data-chapter="3"><div class="chapter-num">Chapter 3 of 6</div><h2>Family vaults</h2><p>Many collections stayed in family hands for generations — a distributed archive. Cataloguing projects in recent decades revealed the scale: estimates run to hundreds of thousands of folios across Mali.</p></section><section class="chapter" id="ch4" data-chapter="4"><div class="chapter-num">Chapter 4 of 6</div><h2>Threat and rescue</h2><p>Conflict in 2012–13 endangered manuscripts in Timbuktu. A celebrated evacuation moved many south to Bamako; some were damaged or lost, most survived through local courage.</p></section><section class="chapter" id="ch5" data-chapter="5"><div class="chapter-num">Chapter 5 of 6</div><h2>Beyond the romance</h2><p>Orientalist myths of a mysterious desert city miss the point: this was ordinary excellence — teachers, copyists, patrons — in a Sahel intellectual economy.</p></section><section class="chapter" id="ch6" data-chapter="6"><div class="chapter-num">Chapter 6 of 6</div><h2>Why it still matters</h2><p>The manuscripts refute claims that complex African thought waited for colonial schools. Digitization and conservation are ongoing unfinished work.</p><p class="pull">Why it still matters — not as nostalgia, but as unfinished argument.</p></section></main>
+  <aside class="further">
+    <h3>Further reading vibe</h3>
+    <p>SAVAMA-DCI and related library projects; Hunwick’s Arabic literature of Africa; UNESCO and Malian catalogues.</p>
+  </aside>
+  <div class="footer-nav">
+    <a href="../index.html">← All stories</a>
+    <a href="../categories/africa-diaspora.html">More in this shelf →</a>
+  </div>
+<script>
+(function(){
+  var chapters = [].slice.call(document.querySelectorAll('.chapter'));
+  var dots = [].slice.call(document.querySelectorAll('.dot'));
+  var io = new IntersectionObserver(function(entries){
+    entries.forEach(function(e){
+      if (e.isIntersecting) {
+        e.target.classList.add('in-view');
+        var id = e.target.id;
+        dots.forEach(function(d){ d.classList.toggle('active', d.getAttribute('data-target')===id); });
+      }
+    });
+  }, { threshold: 0.45 });
+  chapters.forEach(function(c){ io.observe(c); });
+  if (chapters[0]) chapters[0].classList.add('in-view');
+  dots.forEach(function(d){
+    d.addEventListener('click', function(){
+      var t = document.getElementById(d.getAttribute('data-target'));
+      if (t) t.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    });
+  });
+  if ('serviceWorker' in navigator) {
+    window.addEventListener('load', function(){ navigator.serviceWorker.register('../sw.js').catch(function(){}); });
+  }
+})();
+</script>
+<script src="../js/monetization.js" defer></script>
+<script src="../js/shell.js" defer></script>
+</body>
+</html>

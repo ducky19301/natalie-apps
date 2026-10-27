@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="theme-color" content="#100e0c">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-title" content="Historic">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<link rel="manifest" href="../manifest.webmanifest">
+<link rel="apple-touch-icon" href="../icons/icon-180.png">
+<title>World Philosophies — A Hub Essay — Historic</title>
+<meta name="description" content="Philosophy did not happen only in Athens. This hub sketches several classical families of argument — not to flatten them into one “wisdom tradition,” but to invite cross-">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,600;1,400&family=IM+Fell+English:ital@0;1&family=Source+Sans+3:wght@300;400;500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../assets/topic.css">
+</head>
+<body>
+  <nav class="topbar">
+    <a class="brand" href="../index.html">Histor<em>ic</em></a>
+    <a class="back-link" href="../index.html">Library</a>
+  </nav>
+  <header class="hero">
+    <div class="hero-era">Comparative overview</div>
+    <h1>World Philosophies — A Hub Essay</h1>
+    <p class="hero-place">Greek · Indian darśanas · Chinese · Islamic golden age</p>
+    <p class="hero-lede">Philosophy did not happen only in Athens. This hub sketches several classical families of argument — not to flatten them into one “wisdom tradition,” but to invite cross-reading without a European finish line.</p>
+    <p style="margin-top:1rem;font-size:0.85rem;color:rgba(240,230,212,0.45)">Shelves: <a href="../categories/philosophy.html">Philosophy</a> · <a href="../categories/thinkers.html">Thinkers</a></p>
+  </header>
+  <div class="progress-dots" role="navigation" aria-label="Chapters"><button class="dot" type="button" data-target="ch1" aria-label="Chapter 1"></button><button class="dot" type="button" data-target="ch2" aria-label="Chapter 2"></button><button class="dot" type="button" data-target="ch3" aria-label="Chapter 3"></button><button class="dot" type="button" data-target="ch4" aria-label="Chapter 4"></button><button class="dot" type="button" data-target="ch5" aria-label="Chapter 5"></button></div>
+  <main class="chapters"><section class="chapter" id="ch1" data-chapter="1"><div class="chapter-num">Chapter 1 of 5</div><h2>Greek habits of definition</h2><p>From Pre-Socratics through Hellenistic schools (Stoic, Epicurean, Skeptic), Greek philosophy prizes public argument, logic, and ethics under civic pressure.</p><p>Its prestige in later Europe is historical fact — not proof of monopoly.</p></section><section class="chapter" id="ch2" data-chapter="2"><div class="chapter-num">Chapter 2 of 5</div><h2>Indian darśanas (overview)</h2><p>Classical “viewpoints” include Nyāya (logic), Vaiśeṣika (categories), Sāṃkhya, Yoga, Mīmāṃsā, Vedānta, plus Buddhist and Jain systems often counted alongside. Debate culture (vāda) is rigorous and technical.</p><p>Sanskrit and Prakrit texts treat knowledge, self, liberation, and language with centuries of commentary — peer to any Mediterranean archive.</p></section><section class="chapter" id="ch3" data-chapter="3"><div class="chapter-num">Chapter 3 of 5</div><h2>Chinese argument and self-cultivation</h2><p>Confucian, Daoist, Mohist, and Legalist teachings contest ritual, government, and the Way. Later Neo-Confucian synthesis meets Buddhist challenge.</p><p>Philosophy here is often inseparable from governance and moral psychology — a feature, not a lack of “pure reason.”</p></section><section class="chapter" id="ch4" data-chapter="4"><div class="chapter-num">Chapter 4 of 5</div><h2>Islamic golden age philosophy</h2><p>Falsafa engages Aristotle and Plato through Arabic; kalām develops theology-as-argument; figures like Ibn Sīnā, Ibn Rushd, and al-Fārābī travel into Latin Europe.</p><p>Persian and Andalusian contexts matter; so do critiques of falsafa from within Islamic thought.</p><p class="pull">Comparison without ranking is a discipline.</p></section><section class="chapter" id="ch5" data-chapter="5"><div class="chapter-num">Chapter 5 of 5</div><h2>How to use this shelf</h2><p>Follow links to Plato’s Academy legacy, Pyrrhonian skepticism, Confucian/Daoist/Buddhist overview, and African philosophical traditions.</p><p>Why it still matters: a library that only shelves Greece teaches a province as if it were the planet.</p></section></main>
+  <aside class="further">
+    <h3>Further reading vibe</h3>
+    <p>Van Norden on taking Chinese philosophy seriously; Ganeri on Indian philosophy; Adamson’s History of Philosophy Without Any Gaps; Nasr / Gutas on Islamic philosophy.</p>
+  </aside>
+  <div class="footer-nav">
+    <a href="../index.html">← All stories</a>
+    <a href="../categories/philosophy.html">Philosophy shelf →</a>
+  </div>
+<script>
+(function(){
+  var chapters = [].slice.call(document.querySelectorAll('.chapter'));
+  var dots = [].slice.call(document.querySelectorAll('.dot'));
+  var io = new IntersectionObserver(function(entries){
+    entries.forEach(function(e){
+      if (e.isIntersecting) {
+        e.target.classList.add('in-view');
+        var id = e.target.id;
+        dots.forEach(function(d){ d.classList.toggle('active', d.getAttribute('data-target')===id); });
+      }
+    });
+  }, { threshold: 0.45 });
+  chapters.forEach(function(c){ io.observe(c); });
+  if (chapters[0]) chapters[0].classList.add('in-view');
+  dots.forEach(function(d){
+    d.addEventListener('click', function(){
+      var t = document.getElementById(d.getAttribute('data-target'));
+      if (t) t.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    });
+  });
+  if ('serviceWorker' in navigator) {
+    window.addEventListener('load', function(){ navigator.serviceWorker.register('../sw.js').catch(function(){}); });
+  }
+})();
+</script>
+<script src="../js/monetization.js" defer></script>
+<script src="../js/shell.js" defer></script>
+</body>
+</html>

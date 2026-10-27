@@ -1,0 +1,555 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="theme-color" content="#0b0f24">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<title>Meditation Bot Tones</title>
+<style>
+:root{
+  --bg0:#070a1c;--bg1:#0b1030;--card:rgba(28,32,74,.55);--card2:rgba(38,40,96,.7);
+  --line:rgba(170,160,255,.16);--text:#e9e7ff;--muted:#a3a2cf;--dim:#6f6fa3;
+  --violet:#b69cff;--violet2:#8f7cf7;--moon:#f3eeda;--glow:rgba(182,156,255,.35);
+  --r:20px;
+}
+*{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+html,body{margin:0;min-height:100%}
+body{
+  font-family:-apple-system,BlinkMacSystemFont,"SF Pro Text","Segoe UI",Roboto,system-ui,sans-serif;
+  color:var(--text);line-height:1.45;
+  background:radial-gradient(120% 70% at 50% -10%,#2a2470 0%,#141845 38%,var(--bg1) 62%,var(--bg0) 100%) fixed,var(--bg0);
+  padding:env(safe-area-inset-top) env(safe-area-inset-right) env(safe-area-inset-bottom) env(safe-area-inset-left);
+  overflow-x:hidden;
+}
+.stars{position:fixed;inset:0;pointer-events:none;z-index:0;opacity:.7;
+  background-image:
+   radial-gradient(1px 1px at 12% 18%,#fff9 50%,transparent 51%),
+   radial-gradient(1px 1px at 78% 12%,#fff8 50%,transparent 51%),
+   radial-gradient(1.5px 1.5px at 42% 8%,#fffa 50%,transparent 51%),
+   radial-gradient(1px 1px at 88% 34%,#fff6 50%,transparent 51%),
+   radial-gradient(1px 1px at 22% 46%,#fff5 50%,transparent 51%),
+   radial-gradient(1.2px 1.2px at 64% 26%,#fff7 50%,transparent 51%),
+   radial-gradient(1px 1px at 6% 72%,#fff4 50%,transparent 51%),
+   radial-gradient(1px 1px at 94% 66%,#fff5 50%,transparent 51%),
+   radial-gradient(1px 1px at 52% 58%,#fff3 50%,transparent 51%),
+   radial-gradient(1.3px 1.3px at 32% 86%,#fff5 50%,transparent 51%),
+   radial-gradient(1px 1px at 72% 90%,#fff4 50%,transparent 51%);
+  animation:twinkle 9s ease-in-out infinite alternate}
+@keyframes twinkle{from{opacity:.45}to{opacity:.85}}
+.wrap{position:relative;z-index:1;max-width:560px;margin:0 auto;padding:22px 18px 56px}
+header{text-align:center;margin-bottom:18px}
+.moon{width:50px;height:50px;margin:2px auto 12px;border-radius:50%;
+  background:radial-gradient(circle at 36% 34%,#fffbea 0%,var(--moon) 45%,#cfc6a8 100%);
+  box-shadow:0 0 28px 6px rgba(243,238,218,.22),0 0 90px 20px rgba(182,156,255,.18);position:relative}
+.moon:after{content:"";position:absolute;inset:0;border-radius:50%;
+  background:radial-gradient(circle at 70% 40%,transparent 0 44%,rgba(11,16,48,.0) 45%),
+  radial-gradient(circle at 62% 62%,rgba(160,150,120,.35) 0 7%,transparent 8%),
+  radial-gradient(circle at 34% 60%,rgba(160,150,120,.25) 0 5%,transparent 6%),
+  radial-gradient(circle at 55% 28%,rgba(160,150,120,.25) 0 4%,transparent 5%)}
+h1{margin:0;font-weight:600;font-size:1.7rem;letter-spacing:.02em}
+.sub{margin:6px 0 0;color:var(--muted);font-size:.95rem}
+.hp{margin:10px auto 0;display:inline-block;font-size:.8rem;color:var(--violet);
+  border:1px solid var(--line);border-radius:999px;padding:4px 12px;background:rgba(182,156,255,.07)}
+
+/* player */
+.player{background:linear-gradient(160deg,rgba(52,46,120,.65),rgba(20,24,64,.75));
+  border:1px solid var(--line);border-radius:26px;padding:20px 18px 18px;
+  box-shadow:0 20px 60px rgba(0,0,0,.45),inset 0 1px 0 rgba(255,255,255,.06);
+  backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px);margin-bottom:22px}
+.now{text-align:center}
+.now .lbl{font-size:.72rem;letter-spacing:.16em;text-transform:uppercase;color:var(--dim)}
+.now .name{font-size:1.25rem;font-weight:600;margin-top:2px}
+.now .freq{font-size:.85rem;color:var(--violet);margin-top:2px;font-variant-numeric:tabular-nums;min-height:1.2em}
+.ringbox{position:relative;width:184px;height:184px;margin:12px auto 6px}
+.ringbox svg{width:100%;height:100%;transform:rotate(-90deg)}
+.ring-bg{fill:none;stroke:rgba(182,156,255,.12);stroke-width:6}
+.ring-fg{fill:none;stroke:url(#rg);stroke-width:6;stroke-linecap:round;transition:stroke-dashoffset .4s linear}
+.orb{position:absolute;inset:26px;border-radius:50%;
+  background:radial-gradient(circle at 50% 40%,rgba(182,156,255,.28),rgba(60,50,150,.12) 60%,transparent 72%);
+  transform:scale(.92);transition:transform 1s ease}
+.playing .orb{animation:breathe 10s ease-in-out infinite}
+@keyframes breathe{0%,100%{transform:scale(.9);opacity:.7}50%{transform:scale(1.04);opacity:1}}
+.time{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center}
+.time .t{font-size:2.4rem;font-weight:300;letter-spacing:.03em;font-variant-numeric:tabular-nums}
+.time .s{font-size:.75rem;color:var(--muted);letter-spacing:.12em;text-transform:uppercase}
+.play{display:flex;align-items:center;justify-content:center;gap:10px;width:100%;min-height:62px;margin-top:10px;
+  border:0;border-radius:18px;font-size:1.1rem;font-weight:600;letter-spacing:.03em;color:#140f33;cursor:pointer;
+  background:linear-gradient(135deg,#d8ccff,#a58cff 55%,#8a78f0);
+  box-shadow:0 10px 30px rgba(143,124,247,.35);transition:transform .15s ease,filter .2s}
+.play:active{transform:scale(.98)}
+.playing .play{background:linear-gradient(135deg,#3a3480,#2b2766);color:var(--text);box-shadow:inset 0 0 0 1px var(--line)}
+.play svg{width:20px;height:20px}
+.row{margin-top:18px}
+.row h3{margin:0 0 8px;font-size:.72rem;letter-spacing:.16em;text-transform:uppercase;color:var(--dim);font-weight:600}
+.chips{display:flex;gap:8px}
+.chip{flex:1;min-height:48px;border-radius:14px;border:1px solid var(--line);background:rgba(255,255,255,.03);
+  color:var(--text);font-size:1rem;font-weight:500;cursor:pointer;font-variant-numeric:tabular-nums}
+.chip small{font-size:.7rem;color:var(--muted);margin-left:1px}
+.chip[aria-pressed=true]{background:rgba(182,156,255,.2);border-color:rgba(182,156,255,.6);box-shadow:0 0 18px rgba(182,156,255,.18)}
+.slider{display:flex;align-items:center;gap:12px;min-height:48px}
+.slider label{width:66px;font-size:.9rem;color:var(--muted)}
+.slider output{width:40px;text-align:right;font-size:.85rem;color:var(--muted);font-variant-numeric:tabular-nums}
+input[type=range]{flex:1;-webkit-appearance:none;appearance:none;height:36px;background:transparent;margin:0}
+input[type=range]::-webkit-slider-runnable-track{height:6px;border-radius:6px;background:linear-gradient(90deg,var(--violet2) var(--p,15%),rgba(182,156,255,.16) var(--p,15%))}
+input[type=range]::-moz-range-track{height:6px;border-radius:6px;background:rgba(182,156,255,.16)}
+input[type=range]::-moz-range-progress{height:6px;border-radius:6px;background:var(--violet2)}
+input[type=range]::-webkit-slider-thumb{-webkit-appearance:none;width:28px;height:28px;margin-top:-11px;border-radius:50%;background:#efeaff;box-shadow:0 2px 10px rgba(0,0,0,.4),0 0 0 4px rgba(182,156,255,.25)}
+input[type=range]::-moz-range-thumb{width:26px;height:26px;border:0;border-radius:50%;background:#efeaff;box-shadow:0 0 0 4px rgba(182,156,255,.25)}
+.seg{display:flex;gap:6px;margin-left:4px}
+.seg button{min-height:40px;min-width:58px;border-radius:12px;border:1px solid var(--line);background:transparent;color:var(--muted);font-size:.85rem;cursor:pointer}
+.seg button[aria-pressed=true]{color:var(--text);background:rgba(182,156,255,.16);border-color:rgba(182,156,255,.5)}
+.note{margin:12px 0 0;text-align:center;font-size:.75rem;color:var(--dim)}
+
+/* presets */
+.sect{margin:26px 4px 10px;font-size:.72rem;letter-spacing:.16em;text-transform:uppercase;color:var(--dim);font-weight:600}
+.grid{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.card{position:relative;text-align:left;min-height:120px;padding:14px 14px 13px;border-radius:var(--r);cursor:pointer;
+  border:1px solid var(--line);background:var(--card);color:var(--text);font:inherit;
+  transition:transform .15s ease,border-color .2s,background .2s}
+.card:active{transform:scale(.985)}
+.card .n{font-weight:600;font-size:1rem}
+.card .f{font-size:.8rem;color:var(--violet);margin-top:2px;font-variant-numeric:tabular-nums}
+.card .d{font-size:.8rem;color:var(--muted);margin-top:6px;line-height:1.35}
+.card .tag{display:block;margin-bottom:4px;font-size:.62rem;letter-spacing:.12em;text-transform:uppercase;color:var(--dim)}
+.card[aria-pressed=true]{background:var(--card2);border-color:rgba(182,156,255,.65);box-shadow:0 0 0 1px rgba(182,156,255,.25),0 10px 30px rgba(143,124,247,.18)}
+.card.sig{grid-column:1/-1;min-height:128px;padding:18px 18px 16px;overflow:hidden;
+  background:linear-gradient(135deg,rgba(90,70,190,.55),rgba(30,30,90,.65) 60%,rgba(20,26,70,.7));
+  border-color:rgba(214,196,255,.35)}
+.card.sig:before{content:"";position:absolute;pointer-events:none;right:-40px;top:-40px;width:150px;height:150px;border-radius:50%;
+  background:radial-gradient(circle,rgba(243,238,218,.22),transparent 65%)}
+.card.sig .n{font-size:1.2rem;letter-spacing:.01em}
+.card.sig .d{font-size:.86rem;color:#cfc9f2;max-width:92%}
+.card.sig .tag{color:var(--moon);opacity:.8}
+footer{margin-top:28px;text-align:center;font-size:.72rem;color:var(--dim)}
+@media (min-width:520px){.grid{grid-template-columns:1fr 1fr 1fr}.card.sig{grid-column:1/-1}}
+@media (prefers-reduced-motion:reduce){.stars,.playing .orb{animation:none}}
+</style>
+</head>
+<body>
+<div class="stars" aria-hidden="true"></div>
+<main class="wrap" id="app">
+  <header>
+    <div class="moon" aria-hidden="true"></div>
+    <h1>Meditation Bot Tones</h1>
+    <p class="sub">Live tones for Natalie, made in your browser</p>
+    <span class="hp">Headphones on for binaural presets.</span>
+  </header>
+
+  <section class="player" id="player" aria-label="Player">
+    <div class="now">
+      <div class="lbl">Now selected</div>
+      <div class="name" id="nowName">Natalie's Tone</div>
+      <div class="freq" id="nowFreq">&nbsp;</div>
+    </div>
+    <div class="ringbox">
+      <div class="orb"></div>
+      <svg viewBox="0 0 120 120" aria-hidden="true">
+        <defs><linearGradient id="rg" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#e6dcff"/><stop offset="1" stop-color="#8f7cf7"/></linearGradient></defs>
+        <circle class="ring-bg" cx="60" cy="60" r="54"/>
+        <circle class="ring-fg" id="ring" cx="60" cy="60" r="54" stroke-dasharray="339.29" stroke-dashoffset="0"/>
+      </svg>
+      <div class="time"><div class="t" id="clock">10:00</div><div class="s" id="clockSub">ready</div></div>
+    </div>
+    <button class="play" id="playBtn" type="button" aria-label="Begin session">
+      <svg viewBox="0 0 24 24" id="playIcon" fill="currentColor"><path d="M7 4.5v15a1 1 0 0 0 1.5.86l12-7.5a1 1 0 0 0 0-1.72l-12-7.5A1 1 0 0 0 7 4.5z"/></svg>
+      <span id="playTxt">Begin</span>
+    </button>
+
+    <div class="row">
+      <h3>Session</h3>
+      <div class="chips" id="timerChips">
+        <button class="chip" data-min="5" aria-pressed="false">5<small>m</small></button>
+        <button class="chip" data-min="10" aria-pressed="true">10<small>m</small></button>
+        <button class="chip" data-min="15" aria-pressed="false">15<small>m</small></button>
+        <button class="chip" data-min="20" aria-pressed="false">20<small>m</small></button>
+        <button class="chip" data-min="30" aria-pressed="false">30<small>m</small></button>
+      </div>
+    </div>
+
+    <div class="row">
+      <div class="slider"><label for="vol">Volume</label><input id="vol" type="range" min="0" max="1" step="0.01" value="0.15"><output id="volOut">15</output></div>
+      <div class="slider"><label for="noise">Noise</label><input id="noise" type="range" min="0" max="1" step="0.01" value="0.35"><output id="noiseOut">35</output></div>
+      <div class="slider"><label>Colour</label>
+        <div class="seg" id="noiseSeg"><button data-n="brown" aria-pressed="true">Brown</button><button data-n="pink" aria-pressed="false">Pink</button></div>
+      </div>
+    </div>
+    <p class="note">Tap Begin to start sound. On iPhone, if it is silent, flip the ringer switch on.</p>
+  </section>
+
+  <div class="sect">Presets</div>
+  <div class="grid" id="grid"></div>
+
+  <footer>Everything is generated live with Web Audio. Works offline. Start low and go gently.</footer>
+</main>
+
+<script>
+(function () {
+  "use strict";
+
+  var PRESETS = [
+    { id: "natalie", name: "Natalie's Tone", tag: "Signature", kind: "bin", carrier: 432, beat: 10, beatEnd: 8,
+      noise: "brown", noiseLvl: 0.35, swell: true, sig: true,
+      desc: "A 432 Hz carrier with a 10 Hz alpha beat that slowly settles to 8 Hz, over a soft breathing brown-noise hush." },
+    { id: "alpha", name: "Alpha", tag: "Binaural", kind: "bin", carrier: 220, beat: 10, noise: "pink", noiseLvl: 0,
+      desc: "10 Hz beat for relaxed focus and calm." },
+    { id: "theta", name: "Theta", tag: "Binaural", kind: "bin", carrier: 180, beat: 6, noise: "brown", noiseLvl: 0,
+      desc: "6 Hz beat for deep calm and inward drift." },
+    { id: "delta", name: "Delta", tag: "Binaural", kind: "bin", carrier: 120, beat: 2, noise: "brown", noiseLvl: 0.2,
+      desc: "2 Hz beat, low and slow, for sleep." },
+    { id: "silva", name: "Silva Alpha Level", tag: "Binaural", kind: "bin", carrier: 200, beat: 10, noise: "pink", noiseLvl: 0,
+      desc: "10 Hz alpha for the Silva 3-to-1 and 10-to-1 countdown." },
+    { id: "s174", name: "Solfeggio 174", tag: "Pure tone", kind: "mono", freq: 174, noise: "pink", noiseLvl: 0,
+      desc: "Grounding, soothing low tone." },
+    { id: "s396", name: "Solfeggio 396", tag: "Pure tone", kind: "mono", freq: 396, noise: "pink", noiseLvl: 0,
+      desc: "Letting go, release." },
+    { id: "s432", name: "Pure 432", tag: "Pure tone", kind: "mono", freq: 432, noise: "pink", noiseLvl: 0,
+      desc: "Warm, centred, natural tuning." },
+    { id: "s528", name: "Solfeggio 528", tag: "Pure tone", kind: "mono", freq: 528, noise: "pink", noiseLvl: 0,
+      desc: "Bright, open, heart-centred." }
+  ];
+
+  var FADE_IN = 4, FADE_OUT = 7, SWITCH_FADE = 1.6, TONE_LVL = 0.5, NOISE_MAX = 0.55;
+
+  var $ = function (id) { return document.getElementById(id); };
+  var ctx = null, master = null, noiseGain = null, bellBus = null;
+  var noiseBufs = {}, noiseSrc = null, noiseType = "brown";
+  var voice = null;            // current tone voice
+  var current = PRESETS[0];
+  var minutes = 10;
+  var playing = false, sessStart = 0, sessEnd = 0, tickId = 0, unlockEl = null;
+
+  /* ---------- UI build ---------- */
+  function freqLabel(p) {
+    if (p.kind === "mono") return p.freq + " Hz pure sine";
+    if (p.beatEnd) return p.carrier + " Hz carrier \u00b7 " + p.beat + " \u2192 " + p.beatEnd + " Hz beat";
+    return p.carrier + " Hz carrier \u00b7 " + p.beat + " Hz beat";
+  }
+  var grid = $("grid");
+  PRESETS.forEach(function (p) {
+    var b = document.createElement("button");
+    b.type = "button";
+    b.className = "card" + (p.sig ? " sig" : "");
+    b.setAttribute("aria-pressed", p === current ? "true" : "false");
+    b.dataset.id = p.id;
+    b.innerHTML = '<span class="tag"></span><div class="n"></div><div class="f"></div><div class="d"></div>';
+    b.querySelector(".tag").textContent = p.tag;
+    b.querySelector(".n").textContent = p.name;
+    b.querySelector(".f").textContent = freqLabel(p);
+    b.querySelector(".d").textContent = p.desc;
+    b.addEventListener("click", function () { selectPreset(p); });
+    grid.appendChild(b);
+  });
+
+  function setPressed(container, el) {
+    Array.prototype.forEach.call(container.children, function (c) { c.setAttribute("aria-pressed", c === el ? "true" : "false"); });
+  }
+  function paintRange(r) { r.style.setProperty("--p", (r.value * 100) + "%"); }
+  function fmt(s) { s = Math.max(0, Math.ceil(s)); var m = Math.floor(s / 60), x = s % 60; return m + ":" + (x < 10 ? "0" : "") + x; }
+
+  /* ---------- audio helpers ---------- */
+  function rampTo(param, v, secs, t0) {
+    var t = t0 || ctx.currentTime;
+    param.cancelScheduledValues(t);
+    param.setValueAtTime(param.value, t);
+    param.linearRampToValueAtTime(v, t + secs);
+  }
+  function smooth(param, v) { if (ctx) param.setTargetAtTime(v, ctx.currentTime, 0.08); }
+
+  function makeNoise(type) {
+    var sr = ctx.sampleRate, L = Math.floor(sr * 6), F = Math.floor(sr * 0.5);
+    var buf = ctx.createBuffer(2, L, sr);
+    for (var ch = 0; ch < 2; ch++) {
+      var tmp = new Float32Array(L + F), i, w, peak = 0;
+      if (type === "brown") {
+        var last = 0;
+        for (i = 0; i < L + F; i++) { w = Math.random() * 2 - 1; last = (last + 0.02 * w) / 1.02; tmp[i] = last; }
+      } else {
+        var b0 = 0, b1 = 0, b2 = 0, b3 = 0, b4 = 0, b5 = 0, b6 = 0;
+        for (i = 0; i < L + F; i++) {
+          w = Math.random() * 2 - 1;
+          b0 = 0.99886 * b0 + w * 0.0555179; b1 = 0.99332 * b1 + w * 0.0750759;
+          b2 = 0.96900 * b2 + w * 0.1538520; b3 = 0.86650 * b3 + w * 0.3104856;
+          b4 = 0.55000 * b4 + w * 0.5329522; b5 = -0.7616 * b5 - w * 0.0168980;
+          tmp[i] = b0 + b1 + b2 + b3 + b4 + b5 + b6 + w * 0.5362; b6 = w * 0.115926;
+        }
+      }
+      // remove DC, crossfade tail into head for a seamless loop
+      var mean = 0; for (i = 0; i < L + F; i++) mean += tmp[i]; mean /= (L + F);
+      var out = buf.getChannelData(ch);
+      for (i = 0; i < L; i++) out[i] = tmp[i] - mean;
+      for (i = 0; i < F; i++) { var a = i / F; out[i] = out[i] * Math.sqrt(a) + (tmp[L + i] - mean) * Math.sqrt(1 - a); }
+      for (i = 0; i < L; i++) { var v = Math.abs(out[i]); if (v > peak) peak = v; }
+      var k = 0.9 / (peak || 1); for (i = 0; i < L; i++) out[i] *= k;
+    }
+    return buf;
+  }
+
+  function startNoise(type, t, fadeIn) {
+    if (!noiseBufs[type]) noiseBufs[type] = makeNoise(type);
+    var src = ctx.createBufferSource(), g = ctx.createGain();
+    src.buffer = noiseBufs[type]; src.loop = true;
+    g.gain.setValueAtTime(0, t); g.gain.linearRampToValueAtTime(1, t + fadeIn);
+    src.connect(g); g.connect(noiseGain);
+    src.start(t);
+    return { src: src, g: g };
+  }
+  function stopNoise(n, secs) {
+    if (!n) return;
+    var t = ctx.currentTime;
+    rampTo(n.g.gain, 0, secs, t);
+    try { n.src.stop(t + secs + 0.1); } catch (e) {}
+  }
+
+  function initAudio() {
+    if (ctx) return;
+    var AC = window.AudioContext || window.webkitAudioContext;
+    ctx = new AC({ latencyHint: "playback" });
+    master = ctx.createGain(); master.gain.value = +$("vol").value;
+    var comp = ctx.createDynamicsCompressor();
+    comp.threshold.value = -10; comp.knee.value = 10; comp.ratio.value = 4; comp.attack.value = 0.01; comp.release.value = 0.3;
+    master.connect(comp); comp.connect(ctx.destination);
+    noiseGain = ctx.createGain(); noiseGain.gain.value = +$("noise").value * NOISE_MAX; noiseGain.connect(master);
+    bellBus = ctx.createGain(); bellBus.connect(master);
+    ctx.onstatechange = function () { if (ctx.state !== "running" && playing) $("clockSub").textContent = "tap to resume"; };
+  }
+
+  // iOS: let Web Audio play even with the ringer switch off
+  function unlockIOS() {
+    try { if (navigator.audioSession) navigator.audioSession.type = "playback"; } catch (e) {}
+    if (unlockEl) { unlockEl.play().catch(function () {}); return; }
+    try {
+      var sr = 8000, n = sr / 2, bytes = new ArrayBuffer(44 + n * 2), d = new DataView(bytes);
+      var ws = function (o, s) { for (var i = 0; i < s.length; i++) d.setUint8(o + i, s.charCodeAt(i)); };
+      ws(0, "RIFF"); d.setUint32(4, 36 + n * 2, true); ws(8, "WAVEfmt "); d.setUint32(16, 16, true);
+      d.setUint16(20, 1, true); d.setUint16(22, 1, true); d.setUint32(24, sr, true); d.setUint32(28, sr * 2, true);
+      d.setUint16(32, 2, true); d.setUint16(34, 16, true); ws(36, "data"); d.setUint32(40, n * 2, true);
+      unlockEl = document.createElement("audio");
+      unlockEl.setAttribute("playsinline", ""); unlockEl.setAttribute("x-webkit-airplay", "deny");
+      unlockEl.loop = true; unlockEl.preload = "auto";
+      unlockEl.src = URL.createObjectURL(new Blob([bytes], { type: "audio/wav" }));
+      unlockEl.play().catch(function () {});
+    } catch (e) {}
+  }
+
+  /* ---------- tone voices ---------- */
+  function buildVoice(p, t, endT, fadeIn) {
+    var out = ctx.createGain(), swellG = ctx.createGain(), nodes = [];
+    out.gain.setValueAtTime(0, t);
+    out.gain.linearRampToValueAtTime(1, t + fadeIn);
+    // scheduled end-of-session fade (audio clock, survives throttled timers)
+    if (endT - FADE_OUT > t + fadeIn) {
+      out.gain.setValueAtTime(1, endT - FADE_OUT);
+      out.gain.linearRampToValueAtTime(0, endT);
+    }
+    swellG.connect(out); out.connect(master);
+    var merger = ctx.createChannelMerger(2);
+    merger.connect(swellG);
+
+    if (p.kind === "mono") {
+      var o = ctx.createOscillator(), g = ctx.createGain();
+      o.type = "sine"; o.frequency.value = p.freq; g.gain.value = TONE_LVL * 0.9;
+      o.connect(g); g.connect(merger, 0, 0); g.connect(merger, 0, 1);
+      nodes.push(o);
+    } else {
+      var oL = ctx.createOscillator(), oR = ctx.createOscillator(), gL = ctx.createGain(), gR = ctx.createGain();
+      oL.type = oR.type = "sine";
+      oL.frequency.value = p.carrier;
+      oR.frequency.setValueAtTime(p.carrier + p.beat, t);
+      if (p.beatEnd) {
+        // slow drift of the beat over ~85% of the remaining session, then hold
+        var driftEnd = t + Math.max(30, (endT - t) * 0.85);
+        oR.frequency.linearRampToValueAtTime(p.carrier + p.beatEnd, driftEnd);
+      }
+      gL.gain.value = gR.gain.value = TONE_LVL;
+      oL.connect(gL); oR.connect(gR);
+      gL.connect(merger, 0, 0); gR.connect(merger, 0, 1);
+      nodes.push(oL, oR);
+    }
+    if (p.swell) {
+      // very subtle slow swell: +/-7% over a ~70 s breath
+      swellG.gain.value = 0.93;
+      var lfo = ctx.createOscillator(), depth = ctx.createGain();
+      lfo.frequency.value = 1 / 70; depth.gain.value = 0.07;
+      lfo.connect(depth); depth.connect(swellG.gain);
+      nodes.push(lfo);
+    }
+    nodes.forEach(function (n) { n.start(t); n.stop(endT + 0.5); });
+    return { out: out, nodes: nodes, noise: null, preset: p };
+  }
+  function killVoice(v, secs) {
+    if (!v) return;
+    var t = ctx.currentTime;
+    rampTo(v.out.gain, 0, secs, t);
+    v.nodes.forEach(function (n) { try { n.stop(t + secs + 0.1); } catch (e) {} });
+    stopNoise(v.noise, secs);
+  }
+
+  /* ---------- bell ---------- */
+  function bell(t, base, level, dest) {
+    var bus = ctx.createGain(); bus.gain.value = level || 0.32; bus.connect(dest || bellBus);
+    var parts = [[1, 1, 7], [2.0, 0.42, 5], [2.76, 0.32, 4], [4.07, 0.16, 2.6], [5.43, 0.1, 1.8], [8.93, 0.04, 1]];
+    parts.forEach(function (pp, i) {
+      var o = ctx.createOscillator(), g = ctx.createGain();
+      o.type = "sine"; o.frequency.value = base * pp[0] * (1 + (i % 2 ? 0.0015 : -0.001));
+      g.gain.setValueAtTime(0.0001, t);
+      g.gain.exponentialRampToValueAtTime(pp[1], t + 0.012);
+      g.gain.exponentialRampToValueAtTime(0.0001, t + pp[2]);
+      o.connect(g); g.connect(bus);
+      o.start(t); o.stop(t + pp[2] + 0.1);
+    });
+  }
+
+  /* ---------- session control ---------- */
+  var endBell = null;   // per-session gain node carrying the scheduled closing bell
+  function resumeCtx(cb) {
+    var r = null;
+    try { r = ctx.state !== "running" && ctx.resume ? ctx.resume() : null; } catch (e) {}
+    if (r && r.then) r.then(cb, cb); else cb();
+  }
+  function cancelEndBell() {
+    if (!endBell) return;
+    var eb = endBell; endBell = null;
+    rampTo(eb.gain, 0, 0.4);
+    setTimeout(function () { try { eb.disconnect(); } catch (e) {} }, 800);
+  }
+  function begin(opts) {
+    opts = opts || {};
+    var t = ctx.currentTime + 0.06;
+    sessStart = t; sessEnd = t + minutes * 60;
+    if (!opts.quiet) bell(t, 264, 0.3, bellBus);
+    voice = buildVoice(current, t + (opts.quiet ? 0 : 0.4), sessEnd, opts.quiet ? SWITCH_FADE : FADE_IN);
+    applyNoise(t + (opts.quiet ? 0 : 0.4), opts.quiet ? SWITCH_FADE : FADE_IN);
+    endBell = ctx.createGain(); endBell.connect(master);
+    bell(sessEnd - 0.2, 264, 0.32, endBell);   // closing bell, scheduled on the audio clock
+    playing = true; setUI();
+    clearInterval(tickId); tickId = setInterval(tick, 250); tick();
+  }
+  function start() {
+    initAudio();
+    unlockIOS();
+    try { // older iOS: play one silent sample inside the tap to unlock output
+      var sb = ctx.createBufferSource(); sb.buffer = ctx.createBuffer(1, 1, 22050); sb.connect(ctx.destination); sb.start(0);
+    } catch (e) {}
+    resumeCtx(function () { if (!playing) begin(); });
+  }
+  function stop(fromEnd) {
+    if (!ctx) return;
+    playing = false;
+    if (!fromEnd) { cancelEndBell(); killVoice(voice, 1.8); }
+    else endBell = null;
+    voice = null;
+    clearInterval(tickId);
+    setUI(fromEnd);
+  }
+  function restartSession() {
+    // new session length while playing: crossfade, no opening bell
+    cancelEndBell();
+    killVoice(voice, SWITCH_FADE);
+    voice = null;
+    begin({ quiet: true });
+  }
+  function applyNoise(t, fadeIn) {
+    // noise bed follows the voice; restart when colour changes
+    if (!voice) return;
+    if (voice.noise && voice.noise.type === noiseType) return;
+    if (voice.noise) stopNoise(voice.noise, 1.2);
+    var n = startNoise(noiseType, t || ctx.currentTime, fadeIn || FADE_IN);
+    n.type = noiseType;
+    // end-of-session fade on the noise too
+    if (sessEnd - FADE_OUT > (t || ctx.currentTime) + (fadeIn || FADE_IN)) {
+      n.g.gain.setValueAtTime(1, sessEnd - FADE_OUT);
+      n.g.gain.linearRampToValueAtTime(0, sessEnd);
+    }
+    n.src.stop(sessEnd + 0.5);
+    voice.noise = n;
+  }
+
+  function selectPreset(p) {
+    current = p;
+    setPressed(grid, grid.querySelector('[data-id="' + p.id + '"]'));
+    $("noise").value = p.noiseLvl; paintRange($("noise")); $("noiseOut").textContent = Math.round(p.noiseLvl * 100);
+    if (p.noise !== noiseType) { noiseType = p.noise; setPressed($("noiseSeg"), $("noiseSeg").querySelector('[data-n="' + noiseType + '"]')); }
+    if (ctx) smooth(noiseGain.gain, p.noiseLvl * NOISE_MAX);
+    if (playing && ctx) {
+      var old = voice;
+      var t = ctx.currentTime + 0.05;
+      voice = buildVoice(p, t, sessEnd, SWITCH_FADE);
+      if (old) { killVoice({ out: old.out, nodes: old.nodes, noise: null }, SWITCH_FADE); voice.noise = old.noise; }
+      applyNoise(t, SWITCH_FADE);
+    }
+    updateNow();
+    try { window.scrollTo({ top: 0, behavior: "smooth" }); } catch (e) { window.scrollTo(0, 0); }
+  }
+
+  function tick() {
+    if (!playing || !ctx) return;
+    var now = ctx.currentTime, left = sessEnd - now, total = sessEnd - sessStart;
+    $("clock").textContent = fmt(left);
+    if (ctx.state === "running") $("clockSub").textContent = left < FADE_OUT ? "settling" : "remaining";
+    $("ring").setAttribute("stroke-dashoffset", (339.29 * (1 - Math.max(0, left) / total)).toFixed(2));
+    if (current.beatEnd && voice) {
+      var dEnd = Math.max(30, total * 0.85), el = Math.min(1, (now - sessStart) / dEnd);
+      var b = current.beat + (current.beatEnd - current.beat) * el;
+      $("nowFreq").textContent = current.carrier + " Hz carrier \u00b7 " + b.toFixed(1) + " Hz beat";
+    }
+    if (left <= -1.5) stop(true);
+  }
+
+  function updateNow() {
+    $("nowName").textContent = current.name;
+    $("nowFreq").textContent = freqLabel(current);
+  }
+  function setUI(ended) {
+    var pl = $("player");
+    pl.classList.toggle("playing", playing);
+    document.body.classList.toggle("playing", playing);
+    $("playTxt").textContent = playing ? "End session" : "Begin";
+    $("playBtn").setAttribute("aria-label", playing ? "End session" : "Begin session");
+    $("playIcon").innerHTML = playing
+      ? '<rect x="6" y="6" width="12" height="12" rx="2.5"/>'
+      : '<path d="M7 4.5v15a1 1 0 0 0 1.5.86l12-7.5a1 1 0 0 0 0-1.72l-12-7.5A1 1 0 0 0 7 4.5z"/>';
+    if (!playing) {
+      $("clock").textContent = fmt(minutes * 60);
+      $("clockSub").textContent = ended ? "complete" : "ready";
+      $("ring").setAttribute("stroke-dashoffset", "0");
+      updateNow();
+    }
+  }
+
+  /* ---------- events ---------- */
+  $("playBtn").addEventListener("click", function () {
+    if (playing) stop(false); else start();
+  });
+  $("timerChips").addEventListener("click", function (e) {
+    var b = e.target.closest(".chip"); if (!b) return;
+    minutes = +b.dataset.min; setPressed(this, b);
+    if (!playing) { $("clock").textContent = fmt(minutes * 60); }
+    else restartSession();   // new length from now, sound keeps going
+  });
+  $("vol").addEventListener("input", function () {
+    paintRange(this); $("volOut").textContent = Math.round(this.value * 100);
+    if (master) smooth(master.gain, +this.value);
+  });
+  $("noise").addEventListener("input", function () {
+    paintRange(this); $("noiseOut").textContent = Math.round(this.value * 100);
+    if (noiseGain) smooth(noiseGain.gain, +this.value * NOISE_MAX);
+  });
+  $("noiseSeg").addEventListener("click", function (e) {
+    var b = e.target.closest("button"); if (!b) return;
+    noiseType = b.dataset.n; setPressed(this, b);
+    if (playing) applyNoise();
+  });
+  // resume audio after returning to the tab / unlocking the phone
+  var wake = function () { if (ctx && playing && ctx.state !== "running") resumeCtx(tick); };
+  document.addEventListener("visibilitychange", function () { if (!document.hidden) wake(); });
+  document.addEventListener("touchend", wake, { passive: true });
+  document.addEventListener("click", wake);
+
+  paintRange($("vol")); paintRange($("noise"));
+  updateNow();
+})();
+</script>
+</body>
+</html>

@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="theme-color" content="#100e0c">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-title" content="Historic">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<link rel="manifest" href="../manifest.webmanifest">
+<link rel="apple-touch-icon" href="../icons/icon-180.png">
+<title>The Contemporary Age — Meanings of “Now” — Historic</title>
+<meta name="description" content="People name the present to gain moral leverage: Information Age, Atomic Age, Anthropocene, Age of Aquarius, end-times. This page separates measurable trends from symbolic">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,600;1,400&family=IM+Fell+English:ital@0;1&family=Source+Sans+3:wght@300;400;500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../assets/topic.css">
+</head>
+<body>
+  <nav class="topbar">
+    <a class="brand" href="../index.html">Histor<em>ic</em></a>
+    <a class="back-link" href="../index.html">Library</a>
+  </nav>
+  <header class="hero">
+    <div class="hero-era">20th–21st centuries · contested labels</div>
+    <h1>The Contemporary Age — Meanings of “Now”</h1>
+    <p class="hero-place">Information age · Anthropocene · Aquarius claims · millennialisms</p>
+    <p class="hero-lede">People name the present to gain moral leverage: Information Age, Atomic Age, Anthropocene, Age of Aquarius, end-times. This page separates measurable trends from symbolic branding — especially where astrology and prophecy speak in the voice of destiny.</p>
+    <p style="margin-top:1rem;font-size:0.85rem;color:rgba(240,230,212,0.45)">Shelves: <a href="../categories/ages-eras.html">Ages &amp; eras</a> · <a href="../categories/sky-lore.html">Sky lore &amp; astrology</a></p>
+  </header>
+  <div class="progress-dots" role="navigation" aria-label="Chapters"><button class="dot" type="button" data-target="ch1" aria-label="Chapter 1"></button><button class="dot" type="button" data-target="ch2" aria-label="Chapter 2"></button><button class="dot" type="button" data-target="ch3" aria-label="Chapter 3"></button><button class="dot" type="button" data-target="ch4" aria-label="Chapter 4"></button><button class="dot" type="button" data-target="ch5" aria-label="Chapter 5"></button></div>
+  <main class="chapters"><section class="chapter" id="ch1" data-chapter="1"><div class="chapter-num">Chapter 1 of 5</div><h2>Information and platform power</h2><p>Digitization, packet networks, and platform firms reorganize work, war, and intimacy. “Information Age” describes infrastructure — not automatic wisdom.</p><p>Access remains stratified; offline worlds still govern most daily calories and votes.</p></section><section class="chapter" id="ch2" data-chapter="2"><div class="chapter-num">Chapter 2 of 5</div><h2>Anthropocene as scientific argument</h2><p>Geologists debate a formal epoch marker (plastics, radionuclides, chicken bones). Climate science on warming is robust; the epoch name is a classification fight.</p><p>Cultural uses of “Anthropocene” as guilt or manifesto are interpretive — label them as such.</p></section><section class="chapter" id="ch3" data-chapter="3"><div class="chapter-num">Chapter 3 of 5</div><h2>Age of Aquarius as pop-eschatology</h2><p>From Theosophy through 1960s counterculture to wellness marketing, Aquarius has meant brotherhood, tech utopia, or spiritual upgrade. Astrologers disagree on whether the age has begun — estimates range across centuries.</p><p>Astronomy confirms precession; it does not confirm that Aquarius “rules” culture. Treat Aquarian rhetoric as modern myth-making with older sky vocabulary.</p><p class="pull">A constellation is not a constitution.</p></section><section class="chapter" id="ch4" data-chapter="4"><div class="chapter-num">Chapter 4 of 5</div><h2>Millennialisms old and new</h2><p>Expectation of radical endings or renewals — Christian, Islamic, secular revolutionary, UFO, climate fatalist — recur when institutions feel brittle.</p><p>Studying them comparatively reduces panic without mocking sincere fear.</p></section><section class="chapter" id="ch5" data-chapter="5"><div class="chapter-num">Chapter 5 of 5</div><h2>Living without a single name</h2><p>You can accept climate data, critique platforms, and enjoy natal charts as art — if you keep the categories untangled.</p><p>Why it still matters: whoever names the age tries to own the plot of the future.</p></section></main>
+  <aside class="further">
+    <h3>Further reading vibe</h3>
+    <p>Crutzen/Stoermer on Anthropocene (debate ongoing); Castells on network society; Campion on New Age astrology; keep apocalyptic texts in historical context.</p>
+  </aside>
+  <div class="footer-nav">
+    <a href="../index.html">← All stories</a>
+    <a href="../categories/ages-eras.html">Ages &amp; eras shelf →</a>
+  </div>
+<script>
+(function(){
+  var chapters = [].slice.call(document.querySelectorAll('.chapter'));
+  var dots = [].slice.call(document.querySelectorAll('.dot'));
+  var io = new IntersectionObserver(function(entries){
+    entries.forEach(function(e){
+      if (e.isIntersecting) {
+        e.target.classList.add('in-view');
+        var id = e.target.id;
+        dots.forEach(function(d){ d.classList.toggle('active', d.getAttribute('data-target')===id); });
+      }
+    });
+  }, { threshold: 0.45 });
+  chapters.forEach(function(c){ io.observe(c); });
+  if (chapters[0]) chapters[0].classList.add('in-view');
+  dots.forEach(function(d){
+    d.addEventListener('click', function(){
+      var t = document.getElementById(d.getAttribute('data-target'));
+      if (t) t.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    });
+  });
+  if ('serviceWorker' in navigator) {
+    window.addEventListener('load', function(){ navigator.serviceWorker.register('../sw.js').catch(function(){}); });
+  }
+})();
+</script>
+<script src="../js/monetization.js" defer></script>
+<script src="../js/shell.js" defer></script>
+</body>
+</html>

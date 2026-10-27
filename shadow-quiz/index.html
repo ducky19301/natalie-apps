@@ -1,0 +1,429 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Shadow Click Quiz</title>
+<style>
+  :root {
+    --bg: #0f1218;
+    --card: #1a2030;
+    --text: #e8ecf4;
+    --muted: #9aa3b5;
+    --accent: #7eb8ff;
+    --accent2: #c4a5ff;
+    --border: #2a3348;
+    --good: #8fd4a8;
+  }
+  * { box-sizing: border-box; }
+  body {
+    margin: 0;
+    min-height: 100vh;
+    font-family: "Segoe UI", system-ui, -apple-system, sans-serif;
+    background: radial-gradient(1200px 600px at 10% -10%, #1c2740, var(--bg));
+    color: var(--text);
+    display: flex;
+    justify-content: center;
+    padding: 24px 16px 48px;
+  }
+  .wrap { width: 100%; max-width: 640px; }
+  h1 {
+    font-size: 1.55rem;
+    font-weight: 650;
+    margin: 0 0 6px;
+    letter-spacing: -0.02em;
+  }
+  .sub { color: var(--muted); font-size: 0.95rem; line-height: 1.45; margin: 0 0 22px; }
+  .card {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 16px;
+    padding: 22px;
+    box-shadow: 0 12px 40px rgba(0,0,0,.35);
+  }
+  .progress {
+    height: 6px;
+    background: #101522;
+    border-radius: 99px;
+    overflow: hidden;
+    margin-bottom: 14px;
+  }
+  .bar {
+    height: 100%;
+    width: 0%;
+    background: linear-gradient(90deg, var(--accent), var(--accent2));
+    transition: width .25s ease;
+  }
+  .meta { display: flex; justify-content: space-between; color: var(--muted); font-size: .85rem; margin-bottom: 12px; }
+  .q { font-size: 1.15rem; line-height: 1.4; margin: 0 0 18px; font-weight: 560; }
+  .opts { display: grid; gap: 10px; }
+  button.opt {
+    text-align: left;
+    border: 1px solid var(--border);
+    background: #121826;
+    color: var(--text);
+    border-radius: 12px;
+    padding: 14px 16px;
+    font-size: 0.98rem;
+    line-height: 1.35;
+    cursor: pointer;
+    transition: border-color .15s, background .15s, transform .08s;
+  }
+  button.opt:hover { border-color: var(--accent); background: #162036; }
+  button.opt:active { transform: scale(.99); }
+  .hidden { display: none; }
+  .result h2 { margin: 0 0 8px; font-size: 1.3rem; }
+  .pill {
+    display: inline-block;
+    background: #24304a;
+    color: var(--accent);
+    border-radius: 999px;
+    padding: 4px 10px;
+    font-size: .8rem;
+    margin-bottom: 14px;
+  }
+  .theme {
+    border-top: 1px solid var(--border);
+    padding: 14px 0;
+  }
+  .theme strong { color: var(--accent2); }
+  .theme p { margin: 6px 0 0; color: var(--muted); font-size: .95rem; line-height: 1.45; }
+  .scoreline {
+    display: flex; align-items: center; gap: 10px; margin: 8px 0;
+    font-size: .9rem;
+  }
+  .scoreline .label { width: 110px; color: var(--text); }
+  .track { flex: 1; height: 8px; background: #101522; border-radius: 99px; overflow: hidden; }
+  .fill { height: 100%; background: linear-gradient(90deg, var(--accent), var(--accent2)); }
+  .actions { display: flex; gap: 10px; flex-wrap: wrap; margin-top: 18px; }
+  .btn {
+    border: 0; border-radius: 10px; padding: 11px 16px; cursor: pointer; font-weight: 600;
+  }
+  .btn.primary { background: linear-gradient(90deg, var(--accent), var(--accent2)); color: #0b1020; }
+  .btn.ghost { background: transparent; color: var(--muted); border: 1px solid var(--border); }
+  .note { margin-top: 16px; font-size: .82rem; color: var(--muted); line-height: 1.4; }
+  #copyBox {
+    width: 100%; min-height: 90px; margin-top: 12px; border-radius: 10px;
+    border: 1px solid var(--border); background: #101522; color: var(--text);
+    padding: 10px; font-family: ui-monospace, monospace; font-size: .8rem;
+  }
+</style>
+</head>
+<body>
+  <div class="wrap">
+    <h1>Shadow Click Quiz</h1>
+    <p class="sub">15 questions. Tap what feels truest — gut, not ideal. Takes about 4 minutes. Educational only, not a diagnosis.</p>
+
+    <div class="card" id="startCard">
+      <p class="q" style="margin-bottom:10px">Ready?</p>
+      <p class="sub" style="margin-bottom:18px">You’ll get a short map of your loudest shadow doors (projection, persona, golden shadow, etc.) and a one-line next step.</p>
+      <button class="btn primary" id="startBtn">Start</button>
+    </div>
+
+    <div class="card hidden" id="quizCard">
+      <div class="progress"><div class="bar" id="bar"></div></div>
+      <div class="meta"><span id="count"></span><span>tap one</span></div>
+      <p class="q" id="question"></p>
+      <div class="opts" id="options"></div>
+    </div>
+
+    <div class="card result hidden" id="resultCard">
+      <span class="pill">Your shadow map</span>
+      <h2 id="headline"></h2>
+      <p class="sub" id="summary"></p>
+      <div id="bars"></div>
+      <div id="themes"></div>
+      <p class="note">Jung’s shadow isn’t a type forever — it’s what’s loud <em>now</em>. Highest bars = best doors to walk through first.</p>
+      <label class="sub" for="copyBox">Paste this to Jungbot for a deeper read:</label>
+      <textarea id="copyBox" readonly></textarea>
+      <div class="actions">
+        <button class="btn primary" id="copyBtn">Copy results</button>
+        <button class="btn ghost" id="retryBtn">Retake</button>
+      </div>
+    </div>
+  </div>
+
+<script>
+const themes = {
+  judge: {
+    name: "The Judge",
+    blurb: "Heat shows up as contempt, moral certainty, or diagnosing others. Often hides envy, softness, or a fear of being ‘wrong’ yourself."
+  },
+  pleaser: {
+    name: "The Pleaser / Martyr",
+    blurb: "Shadow of need and resentment under niceness. Helpfulness can be a mask for unspoken hunger, anger, or fear of abandonment."
+  },
+  controller: {
+    name: "The Controller",
+    blurb: "Anxiety dressed as competence. Control keeps chaos (and vulnerability) out — until it leaks as rigidity, micromanaging, or collapse."
+  },
+  performer: {
+    name: "The Performer",
+    blurb: "Persona is polished; private self feels like a secret. Fear of being ‘found out’ keeps the costume on."
+  },
+  avoider: {
+    name: "The Avoider",
+    blurb: "Conflict, desire, or intensity gets sidestepped. Shadow hides in numbness, delay, irony, or disappearing."
+  },
+  golden: {
+    name: "Golden Shadow",
+    blurb: "Gifts you admire in others but won’t claim — power, creativity, sensuality, boldness, visibility. Not darkness; unlived light."
+  }
+};
+
+// Each option adds points to theme keys
+const questions = [
+  {
+    q: "Someone near you is being loudly needy. Your first inner move is…",
+    options: [
+      { t: "Cringe / contempt — get it together", s: { judge: 2 } },
+      { t: "Jump in to soothe or fix them", s: { pleaser: 2 } },
+      { t: "Take charge of the situation", s: { controller: 2 } },
+      { t: "Mentally check out or leave", s: { avoider: 2 } }
+    ]
+  },
+  {
+    q: "When someone gets the win you wanted, you mostly feel…",
+    options: [
+      { t: "Cold analysis of why they didn’t deserve it", s: { judge: 2 } },
+      { t: "Happy for them, weirdly empty later", s: { pleaser: 1, golden: 1 } },
+      { t: "A surge to work harder / take control", s: { controller: 2 } },
+      { t: "A secret ache of ‘I wish I could be like that’", s: { golden: 2 } }
+    ]
+  },
+  {
+    q: "Your public self vs private self feels…",
+    options: [
+      { t: "Pretty aligned", s: { performer: 0 } },
+      { t: "Slightly curated", s: { performer: 1 } },
+      { t: "A real costume — they’d be surprised", s: { performer: 2 } },
+      { t: "Exhausting to maintain", s: { performer: 3, pleaser: 1 } }
+    ]
+  },
+  {
+    q: "The trait you’d least want in a headline about you is…",
+    options: [
+      { t: "Weak / needy", s: { controller: 1, judge: 1 } },
+      { t: "Selfish / cold", s: { pleaser: 2 } },
+      { t: "Fake / performative", s: { performer: 2 } },
+      { t: "Out of control / messy", s: { controller: 2, avoider: 1 } }
+    ]
+  },
+  {
+    q: "In conflict, you usually…",
+    options: [
+      { t: "Go sharp — correct, argue, win", s: { judge: 2, controller: 1 } },
+      { t: "Smooth it over, even if you’re hurt", s: { pleaser: 2 } },
+      { t: "Shut down or vanish", s: { avoider: 2 } },
+      { t: "Perform calm competence", s: { performer: 2, controller: 1 } }
+    ]
+  },
+  {
+    q: "Pick the sentence that hits hardest:",
+    options: [
+      { t: "People are so lazy / sloppy / entitled", s: { judge: 2 } },
+      { t: "If I don’t hold it together, everything falls", s: { controller: 2 } },
+      { t: "I can’t afford to need anyone that much", s: { avoider: 1, controller: 1 } },
+      { t: "I want more — power, art, desire, spotlight — than I admit", s: { golden: 2 } }
+    ]
+  },
+  {
+    q: "Helpfulness for you is mostly…",
+    options: [
+      { t: "Genuine and easy", s: { pleaser: 0 } },
+      { t: "How I stay liked / safe", s: { pleaser: 2 } },
+      { t: "How I stay useful and in control", s: { controller: 2 } },
+      { t: "Something I resent after the fact", s: { pleaser: 2, judge: 1 } }
+    ]
+  },
+  {
+    q: "A person who owns confidence / beauty / boldness without apology makes you…",
+    options: [
+      { t: "Irritated — they’re full of themselves", s: { judge: 2, golden: 1 } },
+      { t: "Quietly hungry — I want that", s: { golden: 2 } },
+      { t: "Inspired, then I shrink back", s: { golden: 2, avoider: 1 } },
+      { t: "Competitive — I’ll outdo them", s: { controller: 1, performer: 1 } }
+    ]
+  },
+  {
+    q: "When you’re alone, the version of you that appears is…",
+    options: [
+      { t: "Softer / needier than anyone knows", s: { pleaser: 1, golden: 1 } },
+      { t: "Harsher / more judgmental", s: { judge: 2 } },
+      { t: "More chaotic or indulgent", s: { avoider: 1, performer: 1 } },
+      { t: "Still ‘on’ — hard to drop the role", s: { performer: 2, controller: 1 } }
+    ]
+  },
+  {
+    q: "Your repeating life pattern sounds closest to…",
+    options: [
+      { t: "I over-give, then feel unseen", s: { pleaser: 2 } },
+      { t: "I take charge, then burn out or get resisted", s: { controller: 2 } },
+      { t: "I stay above it, then feel lonely / stuck", s: { avoider: 2, judge: 1 } },
+      { t: "I impress people, then feel fake", s: { performer: 2 } }
+    ]
+  },
+  {
+    q: "Anger for you is…",
+    options: [
+      { t: "Easy — I know when I’m pissed", s: { judge: 1 } },
+      { t: "Hard — it comes out sideways or late", s: { pleaser: 2, avoider: 1 } },
+      { t: "Mostly turned into criticism of others", s: { judge: 2 } },
+      { t: "Mostly turned into self-pressure", s: { controller: 2, performer: 1 } }
+    ]
+  },
+  {
+    q: "‘I’d rather die than be seen as ____.’ Closest fill-in:",
+    options: [
+      { t: "Incompetent / chaotic", s: { controller: 2, performer: 1 } },
+      { t: "Selfish / mean", s: { pleaser: 2 } },
+      { t: "Weak / desperate", s: { avoider: 1, controller: 1, judge: 1 } },
+      { t: "Ordinary / invisible", s: { golden: 2, performer: 1 } }
+    ]
+  },
+  {
+    q: "Dreams, fantasies, or ‘bad’ thoughts often feature…",
+    options: [
+      { t: "Power, revenge, or saying the forbidden thing", s: { judge: 1, golden: 1 } },
+      { t: "Being chosen, held, or rescued", s: { pleaser: 1, golden: 1 } },
+      { t: "Escape, anonymity, or disappearing", s: { avoider: 2 } },
+      { t: "Being dazzling / desired / unstoppable", s: { golden: 2, performer: 1 } }
+    ]
+  },
+  {
+    q: "Your relationship to rest / play is…",
+    options: [
+      { t: "Guilty — I should be productive", s: { controller: 2, performer: 1 } },
+      { t: "Fine if others are okay first", s: { pleaser: 2 } },
+      { t: "I check out hard (scroll, numb, vanish)", s: { avoider: 2 } },
+      { t: "I want wilder rest/play than I allow", s: { golden: 2 } }
+    ]
+  },
+  {
+    q: "If a cartoonist mocked your shadow, the poster would say…",
+    options: [
+      { t: "‘Actually, I’m better than you’", s: { judge: 2 } },
+      { t: "‘Please need me (but don’t)’", s: { pleaser: 2 } },
+      { t: "‘I’ve got this (panic inside)’", s: { controller: 2, performer: 1 } },
+      { t: "‘Don’t look at the real me’", s: { performer: 2, avoider: 1 } }
+    ]
+  }
+];
+
+let i = 0;
+const scores = { judge:0, pleaser:0, controller:0, performer:0, avoider:0, golden:0 };
+
+const startCard = document.getElementById('startCard');
+const quizCard = document.getElementById('quizCard');
+const resultCard = document.getElementById('resultCard');
+const questionEl = document.getElementById('question');
+const optionsEl = document.getElementById('options');
+const countEl = document.getElementById('count');
+const barEl = document.getElementById('bar');
+
+document.getElementById('startBtn').onclick = () => {
+  startCard.classList.add('hidden');
+  quizCard.classList.remove('hidden');
+  render();
+};
+
+function render() {
+  const item = questions[i];
+  countEl.textContent = `${i + 1} / ${questions.length}`;
+  barEl.style.width = `${(i / questions.length) * 100}%`;
+  questionEl.textContent = item.q;
+  optionsEl.innerHTML = '';
+  item.options.forEach((opt, idx) => {
+    const b = document.createElement('button');
+    b.className = 'opt';
+    b.textContent = opt.t;
+    b.onclick = () => choose(opt.s);
+    optionsEl.appendChild(b);
+  });
+}
+
+function choose(s) {
+  Object.keys(s).forEach(k => scores[k] += s[k]);
+  i++;
+  if (i >= questions.length) showResults();
+  else render();
+}
+
+function showResults() {
+  quizCard.classList.add('hidden');
+  resultCard.classList.remove('hidden');
+  barEl.style.width = '100%';
+
+  const ranked = Object.keys(scores).sort((a,b) => scores[b] - scores[a]);
+  const top = ranked[0];
+  const second = ranked[1];
+  const max = Math.max(...Object.values(scores), 1);
+
+  document.getElementById('headline').textContent = `${themes[top].name} (loudest)`;
+  document.getElementById('summary').textContent =
+    `Secondary door: ${themes[second].name}. ${themes[top].blurb}`;
+
+  const bars = document.getElementById('bars');
+  bars.innerHTML = '';
+  ranked.forEach(k => {
+    const row = document.createElement('div');
+    row.className = 'scoreline';
+    row.innerHTML = `<span class="label">${themes[k].name}</span>
+      <div class="track"><div class="fill" style="width:${Math.round(scores[k]/max*100)}%"></div></div>
+      <span>${scores[k]}</span>`;
+    bars.appendChild(row);
+  });
+
+  const themesEl = document.getElementById('themes');
+  themesEl.innerHTML = '';
+  [top, second].forEach(k => {
+    const d = document.createElement('div');
+    d.className = 'theme';
+    d.innerHTML = `<strong>${themes[k].name}</strong><p>${themes[k].blurb}</p>`;
+    themesEl.appendChild(d);
+  });
+
+  const nextStep = {
+    judge: "This week: when contempt rises, name the trait in them — then write one sentence on where a drop of it lives in you.",
+    pleaser: "This week: say one honest need out loud before you help. Notice the urge to earn safety.",
+    controller: "This week: leave one small thing uncontrolled on purpose. Track the body anxiety, not the story.",
+    performer: "This week: tell one safe person a true ‘off-brand’ detail. Watch the shame spike and pass.",
+    avoider: "This week: stay 3 minutes longer in one uncomfortable conversation or feeling. No fixing.",
+    golden: "This week: pick one admired trait and take a 10% action as if it’s already yours."
+  };
+
+  const next = document.createElement('div');
+  next.className = 'theme';
+  next.innerHTML = `<strong>First integration move</strong><p>${nextStep[top]}</p>`;
+  themesEl.appendChild(next);
+
+  const payload = [
+    'Shadow Click Quiz results',
+    `Loudest: ${themes[top].name} (${scores[top]})`,
+    `Second: ${themes[second].name} (${scores[second]})`,
+    'Scores: ' + ranked.map(k => `${k}=${scores[k]}`).join(', '),
+    `Suggested move: ${nextStep[top]}`
+  ].join('\n');
+  document.getElementById('copyBox').value = payload;
+}
+
+document.getElementById('copyBtn').onclick = async () => {
+  const text = document.getElementById('copyBox').value;
+  try {
+    await navigator.clipboard.writeText(text);
+    document.getElementById('copyBtn').textContent = 'Copied';
+  } catch {
+    document.getElementById('copyBox').select();
+  }
+};
+
+document.getElementById('retryBtn').onclick = () => {
+  i = 0;
+  Object.keys(scores).forEach(k => scores[k] = 0);
+  resultCard.classList.add('hidden');
+  quizCard.classList.remove('hidden');
+  render();
+};
+</script>
+</body>
+</html>

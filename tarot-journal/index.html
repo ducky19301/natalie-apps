@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Natalie’s Daily Deck</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;0,700;1,400;1,500&family=Outfit:wght@300;400;500;600&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+  <div class="stars" aria-hidden="true"></div>
+
+  <aside class="sidebar" id="sidebar" aria-label="Date navigation">
+    <div class="sidebar-brand">
+      <span class="sidebar-sigil">✦</span>
+      <span>Daily Deck</span>
+    </div>
+    <nav class="date-list" id="dateList"></nav>
+    <a class="pdf-link sidebar-pdf" href="Natalie-Tarot-Journal.pdf" download>
+      ⬇ PDF journal
+    </a>
+  </aside>
+
+  <main class="stage">
+    <header class="topbar">
+      <button type="button" class="icon-btn sidebar-toggle" id="sidebarToggle" aria-label="Toggle sidebar">☰</button>
+      <h1 class="brand">Natalie’s Daily Deck</h1>
+      <a class="pdf-link top-pdf" href="Natalie-Tarot-Journal.pdf" download title="Download PDF">PDF</a>
+    </header>
+
+    <div class="book-wrap">
+      <button type="button" class="nav-btn prev" id="prevBtn" aria-label="Previous page">‹</button>
+
+      <div class="book" id="book" tabindex="0" aria-live="polite">
+        <div class="page-stack" id="pageStack"></div>
+      </div>
+
+      <button type="button" class="nav-btn next" id="nextBtn" aria-label="Next page">›</button>
+    </div>
+
+    <div class="dots" id="dots" role="tablist" aria-label="Pages"></div>
+    <p class="hint">← → or swipe · click edges</p>
+  </main>
+
+  <script src="app.js"></script>
+</body>
+</html>

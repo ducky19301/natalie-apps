@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="theme-color" content="#100e0c">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-title" content="Historic">
+<link rel="manifest" href="../manifest.webmanifest">
+<link rel="apple-touch-icon" href="../icons/icon-180.png">
+<title>Women written out — Historic</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;1,400&family=IM+Fell+English:ital@0;1&family=Source+Sans+3:wght@300;400;500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../assets/topic.css">
+<style>
+
+  .grid { display:grid; grid-template-columns:repeat(auto-fill,minmax(260px,1fr)); gap:1.1rem; width:min(1120px,100%); margin:0 auto; padding:0 1.25rem 3rem; }
+  .card { position:relative; display:flex; flex-direction:column; min-height:300px; border-radius:14px; overflow:hidden; text-decoration:none; color:var(--parchment); background:var(--bg-lift); border:1px solid rgba(166,124,74,0.22); box-shadow:0 16px 40px rgba(0,0,0,0.35); transition:transform .3s ease, border-color .3s; }
+  .card:hover { transform:translateY(-5px); border-color:rgba(201,160,106,0.55); text-decoration:none; }
+  .card-art { height:130px; position:relative; }
+  .card-art::after { content:''; position:absolute; inset:0; background:linear-gradient(to bottom, transparent 40%, rgba(16,14,12,0.85) 100%); }
+  .card-art-ornament { position:absolute; inset:0; display:flex; align-items:center; justify-content:center; font-family:'IM Fell English',Georgia,serif; font-size:2.8rem; color:rgba(255,255,255,0.18); z-index:1; }
+  .card-body { padding:1rem 1.15rem 1.25rem; display:flex; flex-direction:column; gap:0.4rem; flex:1; }
+  .card-meta { font-size:0.65rem; letter-spacing:0.14em; text-transform:uppercase; color:var(--bronze-bright); }
+  .card-title { font-family:'IM Fell English',Georgia,serif; font-size:1.3rem; font-weight:400; }
+  .card-desc { font-size:0.88rem; line-height:1.45; color:rgba(240,230,212,0.55); flex:1; }
+  .card-cta { font-size:0.78rem; color:var(--bronze-bright); margin-top:0.5rem; }
+</style>
+</head>
+<body>
+<nav class="topbar"><a class="brand" href="../index.html">Histor<em>ic</em></a><a class="back-link" href="../index.html">Library</a></nav>
+<header class="hero"><div class="hero-era">Category shelf</div><h1>Women written out</h1><p class="hero-lede">Figures history sidelined — restored here in ink and parchment.</p></header>
+<div class="grid" role="list"><a class="card" href="../stories/queen-nzinga.html" role="listitem" data-cats="africa-diaspora women" data-search="queen nzinga the mbundu ruler who negotiated, fought, and outlasted portuguese conquest politics for decades. scroll chapters · central africa africa-diaspora women central africa · angola region c. 1583–1663 diplomacy and war in ndongo and matamba" aria-label="Queen Nzinga"><div class="card-art" style="background:linear-gradient(155deg, #9a5a42 0%, #5a6a58 50%, #1a120c 100%)"><div class="card-art-ornament">N</div></div><div class="card-body"><div class="card-meta">Scroll chapters · Central Africa</div><h3 class="card-title">Queen Nzinga</h3><p class="card-desc">The Mbundu ruler who negotiated, fought, and outlasted Portuguese conquest politics for decades.</p><div class="card-cta">Open story <span class="arrow" aria-hidden="true">→</span></div></div></a>
+<a class="card" href="../stories/hypatia.html" role="listitem" data-cats="thinkers women science-invention" data-search="hypatia neoplatonist teacher, astronomer, and public intellectual murdered in a city’s religious-political violence. scroll chapters · late antiquity thinkers women science-invention alexandria · roman egypt c. 350–415 ce mathematician of late antique alexandria" aria-label="Hypatia"><div class="card-art" style="background:linear-gradient(150deg, #e8dcc8 0%, #8a9298 45%, #1a1612 100%)"><div class="card-art-ornament">Υ</div></div><div class="card-body"><div class="card-meta">Scroll chapters · Late antiquity</div><h3 class="card-title">Hypatia</h3><p class="card-desc">Neoplatonist teacher, astronomer, and public intellectual murdered in a city’s religious-political violence.</p><div class="card-cta">Open story <span class="arrow" aria-hidden="true">→</span></div></div></a>
+<a class="card" href="../stories/ada-lovelace.html" role="listitem" data-cats="science-invention women thinkers" data-search="ada lovelace byron’s daughter, babbage’s interpreter, and the writer who saw that machines might manipulate symbols — not only numbers. scroll chapters · victorian science science-invention women thinkers london · victorian britain 1815–1852 notes that imagined general computing" aria-label="Ada Lovelace"><div class="card-art" style="background:linear-gradient(145deg, #e8dcc8 0%, #6a7c9c 45%, #1a1612 100%)"><div class="card-art-ornament">A</div></div><div class="card-body"><div class="card-meta">Scroll chapters · Victorian science</div><h3 class="card-title">Ada Lovelace</h3><p class="card-desc">Byron’s daughter, Babbage’s interpreter, and the writer who saw that machines might manipulate symbols — not only numbers.</p><div class="card-cta">Open story <span class="arrow" aria-hidden="true">→</span></div></div></a>
+<a class="card" href="../stories/mary-seacole.html" role="listitem" data-cats="women africa-diaspora science-invention" data-search="mary seacole the jamaican healer who built the british hotel near the crimean front when official nursing gates stayed shut. scroll chapters · victorian atlantic women africa-diaspora science-invention jamaica · panama · crimea · britain 1805–1881 healing on the crimean front" aria-label="Mary Seacole"><div class="card-art" style="background:linear-gradient(145deg, #9a5a42 0%, #c9a06a 40%, #2c3238 100%)"><div class="card-art-ornament">MS</div></div><div class="card-body"><div class="card-meta">Scroll chapters · Victorian Atlantic</div><h3 class="card-title">Mary Seacole</h3><p class="card-desc">The Jamaican healer who built the British Hotel near the Crimean front when official nursing gates stayed shut.</p><div class="card-cta">Open story <span class="arrow" aria-hidden="true">→</span></div></div></a></div>
+<div class="footer-nav"><a href="../index.html">← Full library</a></div>
+<script>if ('serviceWorker' in navigator) { window.addEventListener('load', function(){ navigator.serviceWorker.register('../sw.js').catch(function(){}); }); }</script>
+<script src="../js/monetization.js" defer></script>
+<script src="../js/shell.js" defer></script>
+</body>
+</html>

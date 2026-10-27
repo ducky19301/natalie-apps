@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="theme-color" content="#100e0c">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-title" content="Historic">
+<link rel="manifest" href="../manifest.webmanifest">
+<link rel="apple-touch-icon" href="../icons/icon-180.png">
+<title>Sacred objects &amp; the Ark — Historic</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;1,400&family=IM+Fell+English:ital@0;1&family=Source+Sans+3:wght@300;400;500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../assets/topic.css">
+<style>
+  .grid { display:grid; grid-template-columns:repeat(auto-fill,minmax(260px,1fr)); gap:1.1rem; width:min(1120px,100%); margin:0 auto; padding:0 1.25rem 3rem; }
+  .card { position:relative; display:flex; flex-direction:column; min-height:300px; border-radius:14px; overflow:hidden; text-decoration:none; color:var(--parchment); background:var(--bg-lift); border:1px solid rgba(166,124,74,0.22); box-shadow:0 16px 40px rgba(0,0,0,0.35); transition:transform .3s ease, border-color .3s; }
+  .card:hover { transform:translateY(-5px); border-color:rgba(201,160,106,0.55); text-decoration:none; }
+  .card-art { height:130px; position:relative; }
+  .card-art::after { content:''; position:absolute; inset:0; background:linear-gradient(to bottom, transparent 40%, rgba(16,14,12,0.85) 100%); }
+  .card-art-ornament { position:absolute; inset:0; display:flex; align-items:center; justify-content:center; font-family:'IM Fell English',Georgia,serif; font-size:2.8rem; color:rgba(255,255,255,0.18); z-index:1; }
+  .card-body { padding:1rem 1.15rem 1.25rem; display:flex; flex-direction:column; gap:0.4rem; flex:1; }
+  .card-meta { font-size:0.65rem; letter-spacing:0.14em; text-transform:uppercase; color:var(--bronze-bright); }
+  .card-title { font-family:'IM Fell English',Georgia,serif; font-size:1.3rem; font-weight:400; }
+  .card-desc { font-size:0.88rem; line-height:1.45; color:rgba(240,230,212,0.55); flex:1; }
+  .card-cta { font-size:0.78rem; color:var(--bronze-bright); margin-top:0.5rem; }
+  .hub-note { width:min(920px,100%); margin:0 auto 1.5rem; padding:0 1.25rem; color:rgba(240,230,212,0.55); line-height:1.5; font-size:0.95rem; }
+</style>
+</head>
+<body>
+<nav class="topbar"><a class="brand" href="../index.html">Histor<em>ic</em></a><a class="back-link" href="../index.html">Library</a></nav>
+<header class="hero"><div class="hero-era">Category shelf</div><h1>Sacred objects &amp; the Ark</h1><p class="hero-lede">The Ark of the Covenant across Tanakh narrative, ancient Near Eastern context, archaeology’s silence on the object, Ethiopian tradition, and modern fringe myths.</p></header>
+<p class="hub-note">Adventure fiction is not evidence. Ethiopian claims are described respectfully as living tradition without treating them as archaeologically proven.</p>
+<div class="grid" role="list"><a class="card" href="../stories/ark-of-the-covenant.html" role="listitem" data-cats="sacred-objects religions" data-search="the ark of the covenant the ark is a chest of immense narrative weight in the hebrew bible: throne, weapon, presence. historians distinguish the biblical story, ancient near eastern parallels, t biblical tradition · ancient near east · later claims tanakh narrative · archaeology debates · ethiopia · modern myths sacred-objects religions" aria-label="The Ark of the Covenant"><div class="card-art" style="background:linear-gradient(145deg, #c9a227 0%, #5a6a58 45%, #1a1208 100%)"><div class="card-art-ornament">▣</div></div><div class="card-body"><div class="card-meta">Scroll chapters · Biblical tradition · ancient Near East ·</div><h3 class="card-title">The Ark of the Covenant</h3><p class="card-desc">The Ark is a chest of immense narrative weight in the Hebrew Bible: throne, weapon, presence. Historians distinguish the biblical story, anc</p><div class="card-cta">Open story <span class="arrow" aria-hidden="true">→</span></div></div></a></div>
+<div class="footer-nav"><a href="../index.html">← Full library</a></div>
+<script>if ('serviceWorker' in navigator) { window.addEventListener('load', function(){ navigator.serviceWorker.register('../sw.js').catch(function(){}); }); }</script>
+<script src="../js/monetization.js" defer></script>
+<script src="../js/shell.js" defer></script>
+</body>
+</html>

@@ -1,0 +1,310 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Meditation Frequency Soundboard</title>
+  <style>
+    :root {
+      --bg: #0f1219;
+      --bg-elevated: #171b26;
+      --bg-hover: #1f2533;
+      --border: #2a3142;
+      --text: #e8ecf4;
+      --muted: #9aa3b5;
+      --accent: #7eb8ff;
+      --accent-soft: rgba(126, 184, 255, 0.15);
+      --active: #8fd4a8;
+      --active-soft: rgba(143, 212, 168, 0.18);
+      --stop: #e8a0a0;
+      --radius: 14px;
+      --shadow: 0 8px 32px rgba(0, 0, 0, 0.35);
+    }
+
+    * { box-sizing: border-box; }
+
+    body {
+      margin: 0;
+      min-height: 100vh;
+      font-family: "Segoe UI", system-ui, -apple-system, sans-serif;
+      background:
+        radial-gradient(ellipse at top, #1a2235 0%, var(--bg) 55%),
+        var(--bg);
+      color: var(--text);
+      line-height: 1.45;
+    }
+
+    .wrap {
+      max-width: 880px;
+      margin: 0 auto;
+      padding: 2.5rem 1.25rem 4rem;
+    }
+
+    header {
+      text-align: center;
+      margin-bottom: 2rem;
+    }
+
+    header h1 {
+      margin: 0 0 0.4rem;
+      font-weight: 600;
+      font-size: clamp(1.6rem, 4vw, 2.1rem);
+      letter-spacing: 0.02em;
+    }
+
+    header p {
+      margin: 0;
+      color: var(--muted);
+      font-size: 0.95rem;
+    }
+
+    .controls {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 1rem;
+      align-items: center;
+      justify-content: center;
+      background: var(--bg-elevated);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 1rem 1.25rem;
+      margin-bottom: 2rem;
+      box-shadow: var(--shadow);
+    }
+
+    .now-playing {
+      flex: 1 1 200px;
+      min-width: 0;
+      color: var(--muted);
+      font-size: 0.9rem;
+    }
+
+    .now-playing strong {
+      color: var(--active);
+      font-weight: 600;
+    }
+
+    .btn-stop {
+      appearance: none;
+      border: 1px solid #5a3a3a;
+      background: rgba(232, 160, 160, 0.12);
+      color: var(--stop);
+      padding: 0.55rem 1.1rem;
+      border-radius: 999px;
+      font-size: 0.9rem;
+      cursor: pointer;
+      transition: background 0.15s, transform 0.1s;
+    }
+
+    .btn-stop:hover {
+      background: rgba(232, 160, 160, 0.22);
+    }
+
+    .btn-stop:active { transform: scale(0.97); }
+
+    .volume {
+      display: flex;
+      align-items: center;
+      gap: 0.6rem;
+      color: var(--muted);
+      font-size: 0.85rem;
+    }
+
+    .volume input[type="range"] {
+      width: 120px;
+      accent-color: var(--accent);
+      cursor: pointer;
+    }
+
+    section {
+      margin-bottom: 2rem;
+    }
+
+    section h2 {
+      margin: 0 0 0.85rem;
+      font-size: 1.05rem;
+      font-weight: 600;
+      color: var(--accent);
+      letter-spacing: 0.04em;
+      text-transform: uppercase;
+    }
+
+    section .hint {
+      margin: -0.4rem 0 1rem;
+      color: var(--muted);
+      font-size: 0.82rem;
+    }
+
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+      gap: 0.75rem;
+    }
+
+    .tone {
+      appearance: none;
+      text-align: left;
+      border: 1px solid var(--border);
+      background: var(--bg-elevated);
+      color: var(--text);
+      border-radius: var(--radius);
+      padding: 1rem 1.1rem;
+      cursor: pointer;
+      transition: background 0.15s, border-color 0.15s, box-shadow 0.15s, transform 0.1s;
+      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
+    }
+
+    .tone:hover {
+      background: var(--bg-hover);
+      border-color: #3d4660;
+    }
+
+    .tone:active { transform: scale(0.985); }
+
+    .tone.active {
+      border-color: var(--active);
+      background: var(--active-soft);
+      box-shadow: 0 0 0 1px var(--active), var(--shadow);
+    }
+
+    .tone .hz {
+      display: block;
+      font-size: 1.15rem;
+      font-weight: 600;
+      margin-bottom: 0.25rem;
+    }
+
+    .tone .purpose {
+      display: block;
+      font-size: 0.82rem;
+      color: var(--muted);
+    }
+
+    .tone.active .purpose { color: #c5e6d1; }
+
+    footer {
+      text-align: center;
+      color: var(--muted);
+      font-size: 0.78rem;
+      margin-top: 2.5rem;
+      opacity: 0.85;
+    }
+  </style>
+</head>
+<body>
+  <div class="wrap">
+    <header>
+      <h1>Meditation Frequency Soundboard</h1>
+      <p>Calm tones for focus, rest, and quiet practice. Headphones recommended for binaural beats.</p>
+    </header>
+
+    <div class="controls">
+      <div class="now-playing" id="nowPlaying">Nothing playing</div>
+      <button type="button" class="btn-stop" id="stopBtn">Stop</button>
+      <label class="volume">
+        Volume
+        <input type="range" id="volume" min="0" max="1" step="0.01" value="0.7" />
+      </label>
+    </div>
+
+    <section>
+      <h2>Brainwave (binaural)</h2>
+      <p class="hint">Stereo: left ≈ 200 Hz carrier, right = carrier + beat. Use headphones.</p>
+      <div class="grid" id="brainwaveGrid"></div>
+    </section>
+
+    <section>
+      <h2>Solfeggio / tones</h2>
+      <p class="hint">Gentle pure sine waves with soft fade in and out.</p>
+      <div class="grid" id="solfeggioGrid"></div>
+    </section>
+
+    <footer>Local offline soundboard · WAV files beside this page · soft amplitude ~0.25</footer>
+  </div>
+
+  <script>
+    const brainwaves = [
+      { file: "alpha-10hz.wav", label: "Alpha 10 Hz", purpose: "Relaxed awareness" },
+      { file: "theta-6hz.wav", label: "Theta 6 Hz", purpose: "Deep meditation" },
+      { file: "delta-2hz.wav", label: "Delta 2 Hz", purpose: "Deep rest" },
+      { file: "gamma-40hz.wav", label: "Gamma 40 Hz", purpose: "Insight / peak focus" }
+    ];
+
+    const solfeggio = [
+      { file: "solfeggio-174hz.wav", label: "174 Hz", purpose: "Foundation / calm body" },
+      { file: "solfeggio-396hz.wav", label: "396 Hz", purpose: "Release fear / guilt (lore)" },
+      { file: "solfeggio-417hz.wav", label: "417 Hz", purpose: "Change / clearing (lore)" },
+      { file: "solfeggio-432hz.wav", label: "432 Hz", purpose: "Natural tuning" },
+      { file: "solfeggio-528hz.wav", label: "528 Hz", purpose: "\"Love\" / repair (lore)" },
+      { file: "solfeggio-639hz.wav", label: "639 Hz", purpose: "Connection (lore)" },
+      { file: "solfeggio-741hz.wav", label: "741 Hz", purpose: "Expression / clarity (lore)" },
+      { file: "solfeggio-852hz.wav", label: "852 Hz", purpose: "Intuition (lore)" },
+      { file: "solfeggio-963hz.wav", label: "963 Hz", purpose: "Crown / unity (lore)" }
+    ];
+
+    const audio = new Audio();
+    audio.preload = "none";
+    let currentBtn = null;
+
+    const nowPlaying = document.getElementById("nowPlaying");
+    const stopBtn = document.getElementById("stopBtn");
+    const volume = document.getElementById("volume");
+
+    audio.volume = parseFloat(volume.value);
+
+    function stopTone() {
+      audio.pause();
+      audio.removeAttribute("src");
+      audio.load();
+      if (currentBtn) {
+        currentBtn.classList.remove("active");
+        currentBtn = null;
+      }
+      nowPlaying.innerHTML = "Nothing playing";
+    }
+
+    function playTone(btn, tone) {
+      if (currentBtn === btn && !audio.paused) {
+        stopTone();
+        return;
+      }
+      stopTone();
+      audio.src = tone.file;
+      audio.loop = true;
+      audio.volume = parseFloat(volume.value);
+      audio.play().catch(function (err) {
+        nowPlaying.textContent = "Could not play (browser blocked or missing file)";
+        console.error(err);
+      });
+      currentBtn = btn;
+      btn.classList.add("active");
+      nowPlaying.innerHTML = "Playing: <strong>" + tone.label + "</strong> — " + tone.purpose;
+    }
+
+    function makeButton(tone) {
+      const btn = document.createElement("button");
+      btn.type = "button";
+      btn.className = "tone";
+      btn.innerHTML =
+        '<span class="hz">' + tone.label + "</span>" +
+        '<span class="purpose">' + tone.purpose + "</span>";
+      btn.addEventListener("click", function () {
+        playTone(btn, tone);
+      });
+      return btn;
+    }
+
+    const brainGrid = document.getElementById("brainwaveGrid");
+    const solGrid = document.getElementById("solfeggioGrid");
+    brainwaves.forEach(function (t) { brainGrid.appendChild(makeButton(t)); });
+    solfeggio.forEach(function (t) { solGrid.appendChild(makeButton(t)); });
+
+    stopBtn.addEventListener("click", stopTone);
+    volume.addEventListener("input", function () {
+      audio.volume = parseFloat(volume.value);
+    });
+
+    audio.addEventListener("ended", stopTone);
+  </script>
+</body>
+</html>

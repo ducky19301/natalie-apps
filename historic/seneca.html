@@ -1,0 +1,1137 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="theme-color" content="#100e0c">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-title" content="Historic">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<link rel="manifest" href="manifest.webmanifest">
+<link rel="apple-touch-icon" href="icons/icon-180.png">
+<title>Still Speaking — Seneca &amp; Living Ideas</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;0,700;1,400;1,600&family=IM+Fell+English:ital@0;1&family=Source+Sans+3:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --parchment: #f0e6d4;
+    --parchment-deep: #e0d0b4;
+    --ink: #1e1a16;
+    --ink-soft: #3d3428;
+    --ink-faint: #6e6050;
+    --bronze: #a67c4a;
+    --bronze-bright: #c9a06a;
+    --bronze-deep: #7a5530;
+    --stone: #6a6e72;
+    --stone-cool: #8a9298;
+    --stone-pale: #c8ced4;
+    --slate: #2c3238;
+    --gold: #b8923a;
+    --gold-soft: #d4b56a;
+    --terracotta: #9a5a42;
+    --sage: #5a6a58;
+    --shadow: rgba(20, 16, 12, 0.5);
+    --vignette: rgba(24, 20, 16, 0.5);
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  html, body {
+    height: 100%;
+    background: #121014;
+    color: var(--ink);
+    font-family: 'Source Sans 3', system-ui, sans-serif;
+    overflow: hidden;
+    -webkit-font-smoothing: antialiased;
+  }
+
+  .app {
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 12px;
+    gap: 10px;
+  }
+
+  .stage-wrap {
+    width: min(100%, 1100px);
+    aspect-ratio: 16 / 9;
+    max-height: calc(100vh - 110px);
+    position: relative;
+    border-radius: 10px;
+    overflow: hidden;
+    box-shadow:
+      0 0 0 1px rgba(166, 124, 74, 0.28),
+      0 24px 64px rgba(0,0,0,0.6),
+      inset 0 0 100px rgba(30, 26, 22, 0.12);
+    background: var(--parchment);
+  }
+
+  .stage { position: absolute; inset: 0; overflow: hidden; }
+
+  .stage::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    z-index: 10;
+    pointer-events: none;
+    background:
+      radial-gradient(ellipse at center, transparent 42%, var(--vignette) 100%),
+      url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.035'/%3E%3C/svg%3E");
+    mix-blend-mode: multiply;
+  }
+
+  .scene {
+    position: absolute;
+    inset: 0;
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.95s ease, transform 1.15s ease;
+    transform: scale(1.025);
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-end;
+    padding: clamp(1.1rem, 3.8vw, 2.4rem);
+  }
+
+  .scene.active {
+    opacity: 1;
+    pointer-events: auto;
+    transform: scale(1);
+    z-index: 2;
+  }
+
+  .scene.leaving {
+    opacity: 0;
+    transform: scale(0.975);
+    z-index: 1;
+  }
+
+  .scene-bg { position: absolute; inset: 0; z-index: 0; }
+
+  .scene-content {
+    position: relative;
+    z-index: 3;
+    max-width: min(520px, 90%);
+  }
+
+  .scene-year {
+    font-family: 'Cormorant Garamond', Georgia, serif;
+    font-size: clamp(0.72rem, 1.4vw, 0.9rem);
+    letter-spacing: 0.3em;
+    text-transform: uppercase;
+    color: var(--bronze);
+    margin-bottom: 0.4rem;
+    opacity: 0;
+    transform: translateY(12px);
+  }
+
+  .scene-title {
+    font-family: 'IM Fell English', 'Cormorant Garamond', Georgia, serif;
+    font-size: clamp(1.45rem, 3.6vw, 2.45rem);
+    font-weight: 400;
+    line-height: 1.12;
+    color: var(--ink);
+    margin-bottom: 0.55rem;
+    opacity: 0;
+    transform: translateY(16px);
+  }
+
+  .scene-body {
+    font-size: clamp(0.82rem, 1.5vw, 1.02rem);
+    line-height: 1.55;
+    color: var(--ink-soft);
+    font-weight: 400;
+    opacity: 0;
+    transform: translateY(16px);
+  }
+
+  .scene-body .still {
+    display: block;
+    margin-top: 0.55rem;
+    padding-top: 0.45rem;
+    border-top: 1px solid rgba(166, 124, 74, 0.35);
+    font-size: 0.92em;
+    color: var(--bronze-deep);
+    font-style: italic;
+    font-family: 'Cormorant Garamond', Georgia, serif;
+  }
+
+  .scene.active .scene-year { animation: riseIn 0.7s 0.22s ease forwards; }
+  .scene.active .scene-title { animation: riseIn 0.8s 0.42s ease forwards; }
+  .scene.active .scene-body { animation: riseIn 0.8s 0.65s ease forwards; }
+
+  @keyframes riseIn {
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  /* ——— SCENE 0: Title ——— */
+  .s0 .scene-bg {
+    background:
+      radial-gradient(ellipse at 28% 35%, #f6edd8 0%, transparent 50%),
+      radial-gradient(ellipse at 75% 65%, #d4c4a4 0%, transparent 48%),
+      linear-gradient(155deg, #f2e8d4 0%, #d8c8a8 50%, #b8a888 100%);
+  }
+
+  .title-card {
+    position: absolute;
+    inset: 0;
+    z-index: 3;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    padding: 2rem;
+  }
+
+  .title-eyebrow {
+    font-family: 'Cormorant Garamond', serif;
+    letter-spacing: 0.38em;
+    text-transform: uppercase;
+    font-size: clamp(0.68rem, 1.35vw, 0.82rem);
+    color: var(--ink-faint);
+    opacity: 0;
+    animation: riseIn 1s 0.25s ease forwards;
+  }
+
+  .title-main {
+    font-family: 'IM Fell English', Georgia, serif;
+    font-size: clamp(2.1rem, 5.8vw, 4rem);
+    color: var(--ink);
+    line-height: 1.05;
+    margin-top: 0.35rem;
+    opacity: 0;
+    animation: riseIn 1.1s 0.5s ease forwards;
+  }
+
+  .title-ornament {
+    width: 20px;
+    height: 1px;
+    background: linear-gradient(90deg, transparent, var(--bronze), transparent);
+    margin: 1.1rem 0;
+    opacity: 0;
+    animation: fadeWide 1.4s 0.85s ease forwards;
+  }
+
+  @keyframes fadeWide {
+    from { opacity: 0; width: 20px; }
+    to { opacity: 1; width: 110px; }
+  }
+
+  .title-sub {
+    font-family: 'Cormorant Garamond', serif;
+    font-style: italic;
+    font-size: clamp(1rem, 2.15vw, 1.35rem);
+    color: var(--ink-soft);
+    max-width: 28ch;
+    opacity: 0;
+    animation: riseIn 1s 1.05s ease forwards;
+  }
+
+  .title-cast {
+    margin-top: 1.4rem;
+    font-size: clamp(0.65rem, 1.2vw, 0.78rem);
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--ink-faint);
+    opacity: 0;
+    animation: riseIn 1s 1.4s ease forwards;
+  }
+
+  .title-hint {
+    position: absolute;
+    bottom: 1.4rem;
+    font-size: 0.72rem;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--ink-faint);
+    opacity: 0;
+    animation: pulseHint 2.6s 2s ease infinite;
+  }
+
+  @keyframes pulseHint {
+    0%, 100% { opacity: 0.3; }
+    50% { opacity: 0.85; }
+  }
+
+  .float-glyph {
+    position: absolute;
+    font-family: 'IM Fell English', Georgia, serif;
+    color: rgba(122, 85, 48, 0.12);
+    font-size: clamp(3rem, 8vw, 6rem);
+    pointer-events: none;
+    opacity: 0;
+    animation: driftGlyph 22s ease-in-out infinite;
+  }
+
+  .float-glyph.g1 { top: 12%; left: 8%; animation-delay: 0s; }
+  .float-glyph.g2 { top: 18%; right: 10%; animation-delay: -7s; font-size: clamp(2.2rem, 5vw, 4rem); }
+  .float-glyph.g3 { bottom: 22%; left: 14%; animation-delay: -12s; font-size: clamp(2rem, 4.5vw, 3.5rem); }
+
+  @keyframes driftGlyph {
+    0%, 100% { opacity: 0.15; transform: translateY(0) rotate(-4deg); }
+    50% { opacity: 0.28; transform: translateY(-18px) rotate(3deg); }
+  }
+
+  /* Shared art panel */
+  .art-panel {
+    position: absolute;
+    right: 5%;
+    top: 12%;
+    width: min(280px, 34vw);
+    height: min(300px, 52%);
+    z-index: 2;
+    opacity: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .scene.active .art-panel {
+    animation: artIn 1.2s 0.35s ease forwards;
+  }
+
+  @keyframes artIn {
+    from { opacity: 0; transform: translateX(24px) scale(0.96); }
+    to { opacity: 1; transform: translateX(0) scale(1); }
+  }
+
+  .art-panel svg { width: 100%; height: 100%; overflow: visible; }
+
+  /* ——— SCENE 1: Seneca ——— */
+  .s1 .scene-bg {
+    background:
+      radial-gradient(ellipse at 70% 30%, rgba(166,124,74,0.18) 0%, transparent 45%),
+      linear-gradient(145deg, #ebe0cc 0%, #d4c4a8 55%, #b8a890 100%);
+  }
+
+  .scroll-lines {
+    stroke: var(--bronze-deep);
+    stroke-width: 1.2;
+    fill: none;
+    stroke-linecap: round;
+    stroke-dasharray: 120;
+    stroke-dashoffset: 120;
+  }
+
+  .s1.active .scroll-lines {
+    animation: drawLine 2.2s 0.6s ease forwards;
+  }
+
+  @keyframes drawLine {
+    to { stroke-dashoffset: 0; }
+  }
+
+  .ink-drop {
+    fill: var(--ink);
+    opacity: 0;
+  }
+
+  .s1.active .ink-drop {
+    animation: dropIn 0.6s 1.8s ease forwards;
+  }
+
+  @keyframes dropIn {
+    from { opacity: 0; transform: translateY(-8px); }
+    to { opacity: 0.55; transform: translateY(0); }
+  }
+
+  /* ——— SCENE 2: Epictetus ——— */
+  .s2 .scene-bg {
+    background:
+      radial-gradient(ellipse at 65% 40%, rgba(106,110,114,0.2) 0%, transparent 50%),
+      linear-gradient(160deg, #e8e0d0 0%, #c8c4bc 50%, #a8a49c 100%);
+  }
+
+  .chain-link {
+    stroke: var(--stone);
+    stroke-width: 2.5;
+    fill: none;
+    opacity: 0;
+  }
+
+  .s2.active .chain-link {
+    animation: fadeLinks 0.8s ease forwards;
+  }
+
+  .s2.active .chain-link:nth-child(1) { animation-delay: 0.5s; }
+  .s2.active .chain-link:nth-child(2) { animation-delay: 0.7s; }
+  .s2.active .chain-link:nth-child(3) { animation-delay: 0.9s; }
+  .s2.active .chain-link:nth-child(4) { animation-delay: 1.1s; }
+
+  @keyframes fadeLinks {
+    to { opacity: 0.7; }
+  }
+
+  .open-hand {
+    fill: none;
+    stroke: var(--bronze-deep);
+    stroke-width: 2;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+    stroke-dasharray: 200;
+    stroke-dashoffset: 200;
+  }
+
+  .s2.active .open-hand {
+    animation: drawLine 1.8s 1.2s ease forwards;
+  }
+
+  .control-label {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 11px;
+    letter-spacing: 0.12em;
+    fill: var(--ink-faint);
+    opacity: 0;
+  }
+
+  .s2.active .control-label {
+    animation: riseIn 0.8s 2s ease forwards;
+  }
+
+  /* ——— SCENE 3: Confucius ——— */
+  .s3 .scene-bg {
+    background:
+      radial-gradient(ellipse at 72% 28%, rgba(90,106,88,0.15) 0%, transparent 45%),
+      linear-gradient(150deg, #ece4d2 0%, #d0c4a8 50%, #a89878 100%);
+  }
+
+  .bamboo {
+    fill: var(--sage);
+    opacity: 0;
+    transform-origin: bottom center;
+  }
+
+  .s3.active .bamboo {
+    animation: growBamboo 1.4s ease forwards;
+  }
+
+  .s3.active .b1 { animation-delay: 0.4s; }
+  .s3.active .b2 { animation-delay: 0.65s; }
+  .s3.active .b3 { animation-delay: 0.9s; }
+
+  @keyframes growBamboo {
+    from { opacity: 0; transform: scaleY(0.2); }
+    to { opacity: 0.85; transform: scaleY(1); }
+  }
+
+  .scroll-unfurl {
+    fill: var(--parchment);
+    stroke: var(--bronze-deep);
+    stroke-width: 1.5;
+    opacity: 0;
+  }
+
+  .s3.active .scroll-unfurl {
+    animation: unfurl 1.2s 1.1s ease forwards;
+  }
+
+  @keyframes unfurl {
+    from { opacity: 0; transform: scaleX(0.3); }
+    to { opacity: 1; transform: scaleX(1); }
+  }
+
+  /* ——— SCENE 4: Wollstonecraft ——— */
+  .s4 .scene-bg {
+    background:
+      radial-gradient(ellipse at 68% 35%, rgba(154,90,66,0.14) 0%, transparent 48%),
+      linear-gradient(155deg, #f0e4d4 0%, #dcc8b0 55%, #c0a890 100%);
+  }
+
+  .quill {
+    stroke: var(--ink);
+    stroke-width: 2;
+    fill: none;
+    stroke-linecap: round;
+    stroke-dasharray: 180;
+    stroke-dashoffset: 180;
+  }
+
+  .s4.active .quill {
+    animation: drawLine 1.6s 0.5s ease forwards;
+  }
+
+  .feather {
+    fill: var(--stone-pale);
+    stroke: var(--stone);
+    stroke-width: 1;
+    opacity: 0;
+  }
+
+  .s4.active .feather {
+    animation: riseIn 0.9s 0.9s ease forwards;
+  }
+
+  .rights-ring {
+    fill: none;
+    stroke: var(--terracotta);
+    stroke-width: 1.5;
+    stroke-dasharray: 4 3;
+    opacity: 0;
+  }
+
+  .s4.active .rights-ring {
+    animation: spinIn 1.4s 1.3s ease forwards;
+  }
+
+  @keyframes spinIn {
+    from { opacity: 0; transform: rotate(-20deg) scale(0.8); }
+    to { opacity: 0.7; transform: rotate(0) scale(1); }
+  }
+
+  /* ——— SCENE 5: Ibn al-Haytham ——— */
+  .s5 .scene-bg {
+    background:
+      radial-gradient(ellipse at 70% 40%, rgba(138,146,152,0.25) 0%, transparent 50%),
+      linear-gradient(160deg, #e4e0d8 0%, #c4c0b8 45%, #8a9098 100%);
+  }
+
+  .camera-box {
+    fill: var(--slate);
+    opacity: 0;
+  }
+
+  .s5.active .camera-box {
+    animation: riseIn 0.9s 0.4s ease forwards;
+  }
+
+  .light-ray {
+    stroke: var(--gold-soft);
+    stroke-width: 1.5;
+    fill: none;
+    opacity: 0;
+    stroke-dasharray: 8 4;
+  }
+
+  .s5.active .light-ray {
+    animation: rayPulse 2.5s 1s ease-in-out infinite;
+  }
+
+  .s5.active .r1 { animation-delay: 1s; }
+  .s5.active .r2 { animation-delay: 1.2s; }
+  .s5.active .r3 { animation-delay: 1.4s; }
+
+  @keyframes rayPulse {
+    0%, 100% { opacity: 0.25; }
+    50% { opacity: 0.85; }
+  }
+
+  .eye-iris {
+    fill: var(--bronze);
+    opacity: 0;
+  }
+
+  .s5.active .eye-iris {
+    animation: riseIn 0.7s 1.6s ease forwards;
+  }
+
+  /* ——— SCENE 6: Closing ——— */
+  .s6 .scene-bg {
+    background:
+      radial-gradient(ellipse at 50% 40%, #f4ead8 0%, transparent 55%),
+      linear-gradient(170deg, #e8dcc8 0%, #c8b898 60%, #9a8a70 100%);
+  }
+
+  .closing-card {
+    position: absolute;
+    inset: 0;
+    z-index: 3;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    padding: 2rem;
+  }
+
+  .closing-names {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 0.55rem 1.2rem;
+    max-width: 520px;
+    margin-bottom: 1.5rem;
+    opacity: 0;
+  }
+
+  .s6.active .closing-names {
+    animation: riseIn 1s 0.3s ease forwards;
+  }
+
+  .closing-names span {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: clamp(0.75rem, 1.5vw, 0.95rem);
+    letter-spacing: 0.08em;
+    color: var(--ink-soft);
+    border-bottom: 1px solid rgba(166,124,74,0.4);
+    padding-bottom: 2px;
+  }
+
+  .closing-title {
+    font-family: 'IM Fell English', Georgia, serif;
+    font-size: clamp(1.6rem, 4vw, 2.6rem);
+    color: var(--ink);
+    margin-bottom: 0.6rem;
+    opacity: 0;
+  }
+
+  .s6.active .closing-title {
+    animation: riseIn 1s 0.7s ease forwards;
+  }
+
+  .closing-body {
+    font-family: 'Cormorant Garamond', serif;
+    font-style: italic;
+    font-size: clamp(0.95rem, 2vw, 1.2rem);
+    color: var(--ink-soft);
+    max-width: 36ch;
+    line-height: 1.45;
+    opacity: 0;
+  }
+
+  .s6.active .closing-body {
+    animation: riseIn 1s 1.05s ease forwards;
+  }
+
+  .closing-note {
+    margin-top: 1.4rem;
+    font-size: 0.72rem;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--ink-faint);
+    opacity: 0;
+  }
+
+  .s6.active .closing-note {
+    animation: riseIn 1s 1.5s ease forwards;
+  }
+
+  /* Controls */
+  .controls {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: center;
+    gap: 8px 10px;
+    width: min(100%, 1100px);
+    padding: 0 4px;
+  }
+
+  .btn {
+    font-family: 'Source Sans 3', system-ui, sans-serif;
+    font-size: 0.8rem;
+    font-weight: 500;
+    letter-spacing: 0.04em;
+    padding: 0.45rem 0.85rem;
+    border-radius: 6px;
+    border: 1px solid rgba(166, 124, 74, 0.35);
+    background: rgba(240, 230, 212, 0.08);
+    color: #e8dcc8;
+    cursor: pointer;
+    transition: background 0.2s, border-color 0.2s, color 0.2s;
+  }
+
+  .btn:hover:not(:disabled) {
+    background: rgba(166, 124, 74, 0.22);
+    border-color: var(--bronze-bright);
+  }
+
+  .btn:disabled {
+    opacity: 0.35;
+    cursor: not-allowed;
+  }
+
+  .btn.primary {
+    background: linear-gradient(135deg, rgba(166,124,74,0.45), rgba(122,85,48,0.55));
+    border-color: var(--bronze);
+    color: #f8f0e4;
+    min-width: 6.5rem;
+  }
+
+  .btn.primary:hover:not(:disabled) {
+    background: linear-gradient(135deg, rgba(201,160,106,0.55), rgba(166,124,74,0.6));
+  }
+
+  .dots {
+    display: flex;
+    gap: 6px;
+    align-items: center;
+    padding: 0 4px;
+  }
+
+  .dot {
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    border: 1px solid rgba(166, 124, 74, 0.5);
+    background: transparent;
+    padding: 0;
+    cursor: pointer;
+    transition: transform 0.2s, background 0.2s;
+  }
+
+  .dot:hover { transform: scale(1.25); }
+  .dot.active { background: var(--bronze-bright); border-color: var(--bronze-bright); }
+  .dot.played { background: rgba(166, 124, 74, 0.45); }
+
+  .progress-track {
+    flex: 1 1 120px;
+    min-width: 80px;
+    max-width: 220px;
+    height: 4px;
+    border-radius: 2px;
+    background: rgba(232, 220, 200, 0.12);
+    cursor: pointer;
+    overflow: hidden;
+  }
+
+  .progress-fill {
+    height: 100%;
+    width: 0%;
+    background: linear-gradient(90deg, var(--bronze-deep), var(--bronze-bright));
+    border-radius: 2px;
+    transition: width 0.05s linear;
+  }
+
+  .scene-label {
+    font-size: 0.72rem;
+    letter-spacing: 0.08em;
+    color: rgba(232, 220, 200, 0.55);
+    min-width: 3.2rem;
+    text-align: right;
+  }
+
+  .kbd-hint {
+    font-size: 0.68rem;
+    letter-spacing: 0.06em;
+    color: rgba(232, 220, 200, 0.35);
+    text-align: center;
+  }
+
+  @media (max-width: 640px) {
+    .art-panel {
+      width: min(140px, 38vw);
+      height: min(160px, 36%);
+      top: 8%;
+      right: 3%;
+      opacity: 0.85;
+    }
+    .scene-content { max-width: 100%; }
+    .btn { padding: 0.4rem 0.65rem; font-size: 0.75rem; }
+    .kbd-hint { display: none; }
+  }
+
+  .historic-back {
+    position: fixed;
+    top: 10px;
+    left: 10px;
+    z-index: 100;
+    font-family: 'Source Sans 3', system-ui, sans-serif;
+    font-size: 0.75rem;
+    letter-spacing: 0.06em;
+    text-decoration: none;
+    color: #e8dcc8;
+    background: rgba(16,14,12,0.72);
+    border: 1px solid rgba(166,124,74,0.4);
+    padding: 0.4rem 0.75rem;
+    border-radius: 6px;
+    backdrop-filter: blur(6px);
+    transition: background 0.2s, border-color 0.2s;
+  }
+  .historic-back:hover {
+    background: rgba(166,124,74,0.35);
+    border-color: #c9a06a;
+  }
+  @media (max-width: 640px) {
+    .historic-back { top: 6px; left: 6px; font-size: 0.7rem; padding: 0.35rem 0.6rem; }
+  }
+
+  /* iOS / touch polish — large targets, no hover-only UI */
+  .btn, .historic-back, .hub-back, .dot {
+    min-height: 44px;
+    min-width: 44px;
+    touch-action: manipulation;
+    -webkit-tap-highlight-color: transparent;
+  }
+  .dot { min-width: 44px; }
+  @media (hover: none) {
+    .btn:hover:not(:disabled),
+    .btn.primary:hover:not(:disabled),
+    .historic-back:hover,
+    .hub-back:hover,
+    .dot:hover { transform: none; }
+    .btn:active:not(:disabled),
+    .historic-back:active,
+    .hub-back:active { opacity: 0.9; }
+  }
+
+</style>
+</head>
+<body>
+<a class="historic-back" href="index.html">← Library</a>
+
+  <div class="app">
+    <div class="stage-wrap" role="region" aria-label="Animated film stage">
+      <div class="stage">
+
+        <!-- SCENE 0: Title -->
+        <section class="scene s0 active" data-scene="0" aria-label="Title">
+          <div class="scene-bg"></div>
+          <div class="float-glyph g1" aria-hidden="true">Σ</div>
+          <div class="float-glyph g2" aria-hidden="true">仁</div>
+          <div class="float-glyph g3" aria-hidden="true">ع</div>
+          <div class="title-card">
+            <div class="title-eyebrow">An interactive film</div>
+            <h1 class="title-main">Still Speaking</h1>
+            <div class="title-ornament"></div>
+            <p class="title-sub">Ideas that outlived the minds that made them</p>
+            <p class="title-cast">Seneca · Epictetus · Confucius · Wollstonecraft · Ibn al-Haytham</p>
+            <p class="title-hint">Press Play to begin</p>
+          </div>
+        </section>
+
+        <!-- SCENE 1: Seneca -->
+        <section class="scene s1" data-scene="1" aria-label="Seneca">
+          <div class="scene-bg"></div>
+          <div class="art-panel" aria-hidden="true">
+            <svg viewBox="0 0 200 220">
+              <defs>
+                <linearGradient id="scrollGrad" x1="0" y1="0" x2="0" y2="1">
+                  <stop offset="0%" stop-color="#f4ead8"/>
+                  <stop offset="100%" stop-color="#d4c4a0"/>
+                </linearGradient>
+              </defs>
+              <rect x="40" y="30" width="120" height="160" rx="4" fill="url(#scrollGrad)" stroke="#7a5530" stroke-width="1.5"/>
+              <rect x="36" y="26" width="128" height="12" rx="3" fill="#a67c4a" opacity="0.7"/>
+              <rect x="36" y="182" width="128" height="12" rx="3" fill="#a67c4a" opacity="0.7"/>
+              <path class="scroll-lines" d="M58,60 H142"/>
+              <path class="scroll-lines" d="M58,78 H130"/>
+              <path class="scroll-lines" d="M58,96 H138"/>
+              <path class="scroll-lines" d="M58,114 H120"/>
+              <path class="scroll-lines" d="M58,132 H134"/>
+              <path class="scroll-lines" d="M58,150 H110"/>
+              <circle class="ink-drop" cx="155" cy="168" r="6"/>
+              <circle class="ink-drop" cx="162" cy="175" r="3.5"/>
+            </svg>
+          </div>
+          <div class="scene-content">
+            <div class="scene-year">c. 4 BCE – 65 CE · Rome</div>
+            <h2 class="scene-title">Seneca the Younger</h2>
+            <p class="scene-body">
+              Statesman, tutor to Nero, and the Stoic whose letters still circulate as practical philosophy. He wrote on anger, adversity, and the scarcity of time — then was ordered to die by the emperor he once advised.
+              <span class="still">Still here: essays on managing emotion and using time well echo in modern self-help and leadership writing; Stoic ideas he helped popularize later informed cognitive approaches to distress.</span>
+            </p>
+          </div>
+        </section>
+
+        <!-- SCENE 2: Epictetus -->
+        <section class="scene s2" data-scene="2" aria-label="Epictetus">
+          <div class="scene-bg"></div>
+          <div class="art-panel" aria-hidden="true">
+            <svg viewBox="0 0 200 220">
+              <!-- broken chain -->
+              <ellipse class="chain-link" cx="55" cy="50" rx="14" ry="8" transform="rotate(-25 55 50)"/>
+              <ellipse class="chain-link" cx="72" cy="68" rx="14" ry="8" transform="rotate(20 72 68)"/>
+              <ellipse class="chain-link" cx="55" cy="88" rx="14" ry="8" transform="rotate(-15 55 88)"/>
+              <ellipse class="chain-link" cx="70" cy="108" rx="14" ry="8" transform="rotate(30 70 108)"/>
+              <!-- open hand / control -->
+              <path class="open-hand" d="M110,160 C110,140 118,125 130,120 C138,116 148,122 150,132 L155,155 C158,168 150,175 140,172 L130,168 L125,180 C122,188 112,186 112,176 Z"/>
+              <path class="open-hand" d="M130,120 L128,95 C127,85 135,80 140,88 L145,110"/>
+              <circle cx="145" cy="55" r="22" fill="none" stroke="#a67c4a" stroke-width="1.5" opacity="0.5" stroke-dasharray="3 2"/>
+              <text class="control-label" x="145" y="58" text-anchor="middle">OURS</text>
+              <text class="control-label" x="60" y="145" text-anchor="middle">NOT OURS</text>
+            </svg>
+          </div>
+          <div class="scene-content">
+            <div class="scene-year">c. 50 – 135 CE · Stoic bridge</div>
+            <h2 class="scene-title">Epictetus</h2>
+            <p class="scene-body">
+              Born enslaved, later a teacher whose students preserved the <em>Enchiridion</em>. He sharpened a rule Seneca’s school lived by: some things are up to us — judgments, choices — and some are not.
+              <span class="still">Still here: “We are disturbed not by events, but by our judgments about them” (paraphrase of Enchiridion 5) became a cornerstone of REBT and CBT — therapies used worldwide today.</span>
+            </p>
+          </div>
+        </section>
+
+        <!-- SCENE 3: Confucius -->
+        <section class="scene s3" data-scene="3" aria-label="Confucius">
+          <div class="scene-bg"></div>
+          <div class="art-panel" aria-hidden="true">
+            <svg viewBox="0 0 200 220">
+              <rect class="bamboo b1" x="42" y="40" width="14" height="150" rx="3"/>
+              <rect class="bamboo b1" x="40" y="70" width="18" height="4" fill="#4a5a48"/>
+              <rect class="bamboo b1" x="40" y="110" width="18" height="4" fill="#4a5a48"/>
+              <rect class="bamboo b2" x="78" y="55" width="12" height="135" rx="3"/>
+              <rect class="bamboo b2" x="76" y="90" width="16" height="3.5" fill="#4a5a48"/>
+              <rect class="bamboo b2" x="76" y="130" width="16" height="3.5" fill="#4a5a48"/>
+              <rect class="bamboo b3" x="110" y="30" width="16" height="160" rx="3"/>
+              <rect class="bamboo b3" x="108" y="65" width="20" height="4" fill="#4a5a48"/>
+              <rect class="bamboo b3" x="108" y="105" width="20" height="4" fill="#4a5a48"/>
+              <rect class="bamboo b3" x="108" y="145" width="20" height="4" fill="#4a5a48"/>
+              <g class="scroll-unfurl" style="transform-origin: 160px 100px;">
+                <rect x="140" y="70" width="48" height="70" rx="2" fill="#f0e6d4" stroke="#7a5530"/>
+                <line x1="148" y1="88" x2="180" y2="88" stroke="#7a5530" stroke-width="1"/>
+                <line x1="148" y1="100" x2="175" y2="100" stroke="#7a5530" stroke-width="1"/>
+                <line x1="148" y1="112" x2="178" y2="112" stroke="#7a5530" stroke-width="1"/>
+              </g>
+            </svg>
+          </div>
+          <div class="scene-content">
+            <div class="scene-year">551 – 479 BCE · China</div>
+            <h2 class="scene-title">Confucius</h2>
+            <p class="scene-body">
+              Teacher and editor of rites and poetry whose sayings were gathered in the <em>Analects</em>. He tied personal virtue (<em>ren</em>, humaneness) to learning, family roles, and good government — character as the root of public order.
+              <span class="still">Still here: exam-based civil service ideals, respect for teachers, and ethics of duty and relationship still shape East Asian education and public life — and influence global debates on character education.</span>
+            </p>
+          </div>
+        </section>
+
+        <!-- SCENE 4: Wollstonecraft -->
+        <section class="scene s4" data-scene="4" aria-label="Mary Wollstonecraft">
+          <div class="scene-bg"></div>
+          <div class="art-panel" aria-hidden="true">
+            <svg viewBox="0 0 200 220">
+              <ellipse class="feather" cx="130" cy="55" rx="28" ry="12" transform="rotate(-35 130 55)"/>
+              <path class="quill" d="M145,48 Q100,100 70,175"/>
+              <circle cx="68" cy="178" r="4" fill="#1e1a16" opacity="0.5"/>
+              <circle class="rights-ring" cx="95" cy="110" r="48" style="transform-origin: 95px 110px;"/>
+              <circle class="rights-ring" cx="95" cy="110" r="32" style="transform-origin: 95px 110px;"/>
+              <text x="95" y="108" text-anchor="middle" font-family="Georgia" font-size="10" fill="#9a5a42" opacity="0.7" letter-spacing="1">REASON</text>
+              <text x="95" y="122" text-anchor="middle" font-family="Georgia" font-size="9" fill="#6e6050" opacity="0.6">EQUAL</text>
+            </svg>
+          </div>
+          <div class="scene-content">
+            <div class="scene-year">1759 – 1797 · Britain</div>
+            <h2 class="scene-title">Mary Wollstonecraft</h2>
+            <p class="scene-body">
+              Writer and philosopher who answered Rousseau’s limited schooling for girls with a sharper claim: women are rational moral agents. In <em>A Vindication of the Rights of Woman</em> (1792) she demanded serious education and civic standing — not ornament.
+              <span class="still">Still here: coeducation, women’s suffrage movements, and modern human-rights arguments for equal schooling all draw on the line she drew between reason, virtue, and equal opportunity.</span>
+            </p>
+          </div>
+        </section>
+
+        <!-- SCENE 5: Ibn al-Haytham -->
+        <section class="scene s5" data-scene="5" aria-label="Ibn al-Haytham">
+          <div class="scene-bg"></div>
+          <div class="art-panel" aria-hidden="true">
+            <svg viewBox="0 0 200 220">
+              <!-- sun / light source -->
+              <circle cx="40" cy="50" r="18" fill="#d4b56a" opacity="0.85"/>
+              <circle cx="40" cy="50" r="26" fill="none" stroke="#d4b56a" stroke-width="1" opacity="0.35"/>
+              <line class="light-ray r1" x1="58" y1="55" x2="118" y2="95"/>
+              <line class="light-ray r2" x1="55" y1="62" x2="118" y2="108"/>
+              <line class="light-ray r3" x1="52" y1="68" x2="118" y2="120"/>
+              <!-- camera obscura box -->
+              <rect class="camera-box" x="118" y="80" width="55" height="55" rx="2"/>
+              <rect class="camera-box" x="118" y="80" width="55" height="55" rx="2" fill="none" stroke="#c8ced4" stroke-width="1.5"/>
+              <circle cx="118" cy="107" r="4" fill="#1e1a16"/>
+              <!-- inverted image hint -->
+              <circle class="eye-iris" cx="155" cy="115" r="10"/>
+              <circle class="eye-iris" cx="155" cy="115" r="4" fill="#1e1a16"/>
+              <text x="145" y="160" text-anchor="middle" font-family="Georgia" font-size="9" fill="#6e6050" opacity="0.7">TEST · OBSERVE</text>
+            </svg>
+          </div>
+          <div class="scene-content">
+            <div class="scene-year">c. 965 – 1040 · Cairo</div>
+            <h2 class="scene-title">Ibn al-Haytham</h2>
+            <p class="scene-body">
+              Known in Latin as Alhazen, he wrote the seven-volume <em>Book of Optics</em>. He rejected the old idea that eyes emit rays, argued light enters the eye, described the camera obscura, and insisted on controlled experiments — not authority alone.
+              <span class="still">Still here: intromission vision theory, optical science behind lenses and cameras, and the habit of testing hypotheses experimentally — a deep root of the modern scientific method.</span>
+            </p>
+          </div>
+        </section>
+
+        <!-- SCENE 6: Closing -->
+        <section class="scene s6" data-scene="6" aria-label="Closing">
+          <div class="scene-bg"></div>
+          <div class="closing-card">
+            <div class="closing-names">
+              <span>Seneca</span>
+              <span>Epictetus</span>
+              <span>Confucius</span>
+              <span>Wollstonecraft</span>
+              <span>Ibn al-Haytham</span>
+            </div>
+            <h2 class="closing-title">Living minds</h2>
+            <p class="closing-body">They are gone. Their arguments — about time, judgment, virtue, equality, and evidence — still rearrange how we think.</p>
+            <p class="closing-note">History is not finished speaking</p>
+          </div>
+        </section>
+
+      </div>
+    </div>
+
+    <div class="controls" role="toolbar" aria-label="Playback controls">
+      <button class="btn" id="btnPrev" aria-label="Previous scene" title="Previous (←)">‹ Prev</button>
+      <button class="btn primary" id="btnPlay" aria-label="Play or pause" title="Play/Pause (Space)">▶ Play</button>
+      <button class="btn" id="btnNext" aria-label="Next scene" title="Next (→)">Next ›</button>
+      <div class="dots" id="dots" role="tablist" aria-label="Scenes"></div>
+      <div class="progress-track" id="progressTrack" title="Scrub scene progress" role="slider" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0" tabindex="0">
+        <div class="progress-fill" id="progressFill"></div>
+      </div>
+      <span class="scene-label" id="sceneLabel">1 / 7</span>
+    </div>
+    <p class="kbd-hint">Space play/pause · ← → scenes · click dots to jump</p>
+  </div>
+
+<script>
+(function () {
+  const SCENES = 7;
+  const DURATIONS = [5200, 9500, 9000, 9000, 9500, 9500, 8500];
+  const titles = [
+    'Still Speaking',
+    'Seneca',
+    'Epictetus',
+    'Confucius',
+    'Wollstonecraft',
+    'Ibn al-Haytham',
+    'Living minds'
+  ];
+
+  let current = 0;
+  let playing = false;
+  let raf = null;
+  let sceneStart = 0;
+  let elapsedInScene = 0;
+
+  const scenes = [...document.querySelectorAll('.scene')];
+  const btnPlay = document.getElementById('btnPlay');
+  const btnPrev = document.getElementById('btnPrev');
+  const btnNext = document.getElementById('btnNext');
+  const dotsEl = document.getElementById('dots');
+  const progressFill = document.getElementById('progressFill');
+  const progressTrack = document.getElementById('progressTrack');
+  const sceneLabel = document.getElementById('sceneLabel');
+
+  for (let i = 0; i < SCENES; i++) {
+    const d = document.createElement('button');
+    d.className = 'dot' + (i === 0 ? ' active' : '');
+    d.setAttribute('role', 'tab');
+    d.setAttribute('aria-label', 'Scene ' + (i + 1) + ': ' + titles[i]);
+    d.dataset.index = i;
+    d.addEventListener('click', () => goTo(i, true));
+    dotsEl.appendChild(d);
+  }
+  const dots = [...dotsEl.querySelectorAll('.dot')];
+
+  function goTo(index, userJump) {
+    if (index < 0 || index >= SCENES) return;
+    const prev = current;
+    if (prev === index && !userJump) return;
+
+    scenes[prev].classList.remove('active');
+    if (prev !== index) scenes[prev].classList.add('leaving');
+    setTimeout(() => scenes[prev].classList.remove('leaving'), 950);
+
+    current = index;
+    const el = scenes[current];
+    el.classList.remove('active');
+    void el.offsetWidth;
+    el.classList.add('active');
+
+    dots.forEach((d, i) => {
+      d.classList.toggle('active', i === current);
+      d.classList.toggle('played', i < current);
+    });
+
+    sceneLabel.textContent = (current + 1) + ' / ' + SCENES;
+    btnPrev.disabled = current === 0;
+    btnNext.disabled = current === SCENES - 1;
+
+    elapsedInScene = 0;
+    sceneStart = performance.now();
+    updateProgress(0);
+  }
+
+  function updateProgress(pct) {
+    progressFill.style.width = pct + '%';
+    progressTrack.setAttribute('aria-valuenow', Math.round(pct));
+  }
+
+  function tick(now) {
+    if (!playing) return;
+    const dur = DURATIONS[current];
+    elapsedInScene = now - sceneStart;
+    const pct = Math.min(100, (elapsedInScene / dur) * 100);
+    updateProgress(pct);
+
+    if (elapsedInScene >= dur) {
+      if (current < SCENES - 1) {
+        goTo(current + 1, false);
+        sceneStart = performance.now();
+      } else {
+        pause();
+        updateProgress(100);
+        return;
+      }
+    }
+    raf = requestAnimationFrame(tick);
+  }
+
+  function play() {
+    playing = true;
+    btnPlay.innerHTML = '❚❚ Pause';
+    btnPlay.setAttribute('aria-label', 'Pause');
+    sceneStart = performance.now() - elapsedInScene;
+    raf = requestAnimationFrame(tick);
+  }
+
+  function pause() {
+    playing = false;
+    btnPlay.innerHTML = '▶ Play';
+    btnPlay.setAttribute('aria-label', 'Play');
+    if (raf) cancelAnimationFrame(raf);
+    raf = null;
+  }
+
+  function togglePlay() {
+    if (playing) pause();
+    else {
+      if (current === SCENES - 1 && elapsedInScene >= DURATIONS[current] - 50) {
+        goTo(0, true);
+      }
+      play();
+    }
+  }
+
+  btnPlay.addEventListener('click', togglePlay);
+  btnPrev.addEventListener('click', () => goTo(current - 1, true));
+  btnNext.addEventListener('click', () => goTo(current + 1, true));
+
+  progressTrack.addEventListener('click', (e) => {
+    const rect = progressTrack.getBoundingClientRect();
+    const pct = Math.max(0, Math.min(1, (e.clientX - rect.left) / rect.width));
+    elapsedInScene = pct * DURATIONS[current];
+    sceneStart = performance.now() - elapsedInScene;
+    updateProgress(pct * 100);
+  });
+
+  document.addEventListener('keydown', (e) => {
+    if (e.code === 'Space') {
+      e.preventDefault();
+      togglePlay();
+    } else if (e.key === 'ArrowRight') {
+      e.preventDefault();
+      goTo(current + 1, true);
+    } else if (e.key === 'ArrowLeft') {
+      e.preventDefault();
+      goTo(current - 1, true);
+    } else if (e.key === 'Home') {
+      goTo(0, true);
+    } else if (e.key === 'End') {
+      goTo(SCENES - 1, true);
+    }
+  });
+
+  goTo(0, true);
+  pause();
+})();
+</script>
+<script src="js/monetization.js" defer></script>
+<script src="js/shell.js" defer></script>
+</body>
+</html>

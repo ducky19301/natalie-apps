@@ -1,0 +1,153 @@
+:root {
+  --bg: #100e0c;
+  --bg-lift: #1a1612;
+  --parchment: #f0e6d4;
+  --parchment-deep: #e4d4b8;
+  --ink: #1e1a16;
+  --ink-soft: #3d3428;
+  --bronze: #a67c4a;
+  --bronze-bright: #c9a06a;
+  --stone: #8a9298;
+  --sage: #5a6a58;
+  --terracotta: #9a5a42;
+}
+* { box-sizing: border-box; margin: 0; padding: 0; }
+html { scroll-behavior: smooth; }
+body {
+  min-height: 100%;
+  background: var(--bg);
+  color: var(--parchment);
+  font-family: 'Source Sans 3', system-ui, sans-serif;
+  -webkit-font-smoothing: antialiased;
+  background-image:
+    radial-gradient(ellipse at 15% 0%, rgba(166,124,74,0.12) 0%, transparent 45%),
+    radial-gradient(ellipse at 90% 10%, rgba(90,106,88,0.08) 0%, transparent 40%);
+}
+a { color: var(--bronze-bright); text-decoration: none; }
+a:hover { text-decoration: underline; }
+.topbar {
+  position: sticky; top: 0; z-index: 40;
+  display: flex; align-items: center; justify-content: space-between; gap: 1rem;
+  padding: 0.75rem 1.25rem;
+  background: rgba(16,14,12,0.92);
+  backdrop-filter: blur(10px);
+  border-bottom: 1px solid rgba(166,124,74,0.22);
+}
+.topbar .brand {
+  font-family: 'IM Fell English', Georgia, serif;
+  font-size: 1.15rem; color: var(--parchment);
+}
+.topbar .brand em { font-style: italic; color: var(--bronze-bright); }
+.back-link {
+  font-size: 0.78rem; letter-spacing: 0.12em; text-transform: uppercase;
+  color: var(--bronze); border: 1px solid rgba(166,124,74,0.35);
+  padding: 0.4rem 0.75rem; border-radius: 999px; text-decoration: none;
+}
+.back-link:hover { border-color: var(--bronze-bright); text-decoration: none; }
+.hero {
+  width: min(920px, 100%);
+  margin: 0 auto;
+  padding: 2.5rem 1.25rem 1.5rem;
+}
+.hero-era {
+  font-family: 'Cormorant Garamond', Georgia, serif;
+  font-size: 0.8rem; letter-spacing: 0.28em; text-transform: uppercase;
+  color: var(--bronze); margin-bottom: 0.75rem;
+}
+.hero h1 {
+  font-family: 'IM Fell English', Georgia, serif;
+  font-size: clamp(2rem, 5vw, 3.1rem);
+  font-weight: 400; line-height: 1.12; margin-bottom: 0.85rem;
+}
+.hero-place {
+  font-family: 'Cormorant Garamond', Georgia, serif;
+  font-style: italic; font-size: 1.2rem;
+  color: rgba(240,230,212,0.65); margin-bottom: 1.25rem;
+}
+.hero-lede {
+  max-width: 40rem; font-size: 1.05rem; line-height: 1.6;
+  color: rgba(240,230,212,0.78);
+}
+.progress-dots {
+  position: sticky; top: 56px; z-index: 30;
+  display: flex; flex-wrap: wrap; gap: 0.45rem; justify-content: center;
+  padding: 0.65rem 1rem;
+  background: rgba(16,14,12,0.88);
+  border-bottom: 1px solid rgba(166,124,74,0.12);
+}
+.dot {
+  width: 10px; height: 10px; border-radius: 50%;
+  background: rgba(166,124,74,0.25);
+  border: 1px solid rgba(166,124,74,0.45);
+  cursor: pointer; transition: transform 0.2s, background 0.2s;
+}
+.dot:hover, .dot.active { background: var(--bronze-bright); transform: scale(1.25); }
+.dot:focus-visible { outline: 2px solid var(--bronze-bright); outline-offset: 3px; }
+.chapters { width: min(920px, 100%); margin: 0 auto; padding: 1rem 1.25rem 3rem; }
+.chapter {
+  position: relative;
+  margin: 1.5rem 0;
+  padding: 1.75rem 1.5rem 1.85rem;
+  border-radius: 14px;
+  background: linear-gradient(160deg, rgba(240,230,212,0.97), rgba(228,212,184,0.95));
+  color: var(--ink);
+  border: 1px solid rgba(166,124,74,0.28);
+  box-shadow: 0 18px 40px rgba(0,0,0,0.28);
+  opacity: 0; transform: translateY(22px);
+  transition: opacity 0.7s ease, transform 0.7s ease;
+}
+.chapter.in-view { opacity: 1; transform: translateY(0); }
+.chapter-num {
+  font-family: 'Cormorant Garamond', Georgia, serif;
+  font-size: 0.75rem; letter-spacing: 0.24em; text-transform: uppercase;
+  color: var(--bronze); margin-bottom: 0.45rem;
+}
+.chapter h2 {
+  font-family: 'IM Fell English', Georgia, serif;
+  font-size: clamp(1.35rem, 3vw, 1.85rem);
+  font-weight: 400; line-height: 1.2; margin-bottom: 0.85rem; color: var(--ink);
+}
+.chapter p {
+  font-size: 1.02rem; line-height: 1.65; color: var(--ink-soft); margin-bottom: 0.85rem;
+}
+.chapter p:last-child { margin-bottom: 0; }
+.chapter .pull {
+  font-family: 'Cormorant Garamond', Georgia, serif;
+  font-style: italic; font-size: 1.2rem; line-height: 1.45;
+  color: var(--ink); border-left: 3px solid var(--bronze);
+  padding-left: 1rem; margin: 1rem 0;
+}
+.further {
+  width: min(920px, 100%); margin: 0 auto 3rem;
+  padding: 1.5rem 1.25rem;
+  border-top: 1px solid rgba(166,124,74,0.22);
+}
+.further h3 {
+  font-family: 'Cormorant Garamond', Georgia, serif;
+  font-size: 0.8rem; letter-spacing: 0.24em; text-transform: uppercase;
+  color: var(--bronze); margin-bottom: 0.75rem;
+}
+.further p { color: rgba(240,230,212,0.6); line-height: 1.55; font-size: 0.95rem; }
+.footer-nav {
+  width: min(920px, 100%); margin: 0 auto 2.5rem;
+  padding: 0 1.25rem; display: flex; flex-wrap: wrap; gap: 0.75rem; justify-content: space-between;
+}
+.footer-nav a {
+  font-size: 0.85rem; color: var(--bronze-bright);
+  border: 1px solid rgba(166,124,74,0.3); padding: 0.55rem 0.9rem; border-radius: 999px;
+  text-decoration: none;
+}
+.footer-nav a:hover { border-color: var(--bronze-bright); }
+@media (max-width: 560px) {
+  .chapter { padding: 1.35rem 1.1rem; }
+}
+
+/* Narrator / motion helpers (shell also loads story-enhance.css) */
+@media (prefers-reduced-motion: reduce) {
+  html { scroll-behavior: auto; }
+  .chapter {
+    opacity: 1;
+    transform: none;
+    transition: none;
+  }
+}

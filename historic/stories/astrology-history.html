@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="theme-color" content="#100e0c">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-title" content="Historic">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<link rel="manifest" href="../manifest.webmanifest">
+<link rel="apple-touch-icon" href="../icons/icon-180.png">
+<title>Sky Lore &amp; Astrology — A History — Historic</title>
+<meta name="description" content="Societies have long read the sky for timing, kingship, medicine, and meaning. This page traces celestial omen lore into Hellenistic horoscopes, medieval transmission, and">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,600;1,400&family=IM+Fell+English:ital@0;1&family=Source+Sans+3:wght@300;400;500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../assets/topic.css">
+</head>
+<body>
+  <nav class="topbar">
+    <a class="brand" href="../index.html">Histor<em>ic</em></a>
+    <a class="back-link" href="../index.html">Library</a>
+  </nav>
+  <header class="hero">
+    <div class="hero-era">Mesopotamia → Hellenistic → Islamicate &amp; Europe → modern culture</div>
+    <h1>Sky Lore &amp; Astrology — A History</h1>
+    <p class="hero-place">Cultural history · not scientific validation</p>
+    <p class="hero-lede">Societies have long read the sky for timing, kingship, medicine, and meaning. This page traces celestial omen lore into Hellenistic horoscopes, medieval transmission, and modern astrology as culture — without presenting natal charts as science or prophecy.</p>
+    <p style="margin-top:1rem;font-size:0.85rem;color:rgba(240,230,212,0.45)">Shelves: <a href="../categories/sky-lore.html">Sky lore &amp; astrology</a> · <a href="../categories/ages-eras.html">Ages &amp; eras</a></p>
+  </header>
+  <div class="progress-dots" role="navigation" aria-label="Chapters"><button class="dot" type="button" data-target="ch1" aria-label="Chapter 1"></button><button class="dot" type="button" data-target="ch2" aria-label="Chapter 2"></button><button class="dot" type="button" data-target="ch3" aria-label="Chapter 3"></button><button class="dot" type="button" data-target="ch4" aria-label="Chapter 4"></button><button class="dot" type="button" data-target="ch5" aria-label="Chapter 5"></button><button class="dot" type="button" data-target="ch6" aria-label="Chapter 6"></button></div>
+  <main class="chapters"><section class="chapter" id="ch1" data-chapter="1"><div class="chapter-num">Chapter 1 of 6</div><h2>Mesopotamian celestial omens</h2><p>Scholars in Assyria and Babylonia kept meticulous records of lunar eclipses, planetary appearances, and weather — often as omens for the king and the land (Enūma Anu Enlil tradition).</p><p>This was state science of signs, not primarily personal “what’s my sign?” psychology. Mathematical astronomy later grows from the same observational culture.</p></section><section class="chapter" id="ch2" data-chapter="2"><div class="chapter-num">Chapter 2 of 6</div><h2>Hellenistic synthesis</h2><p>In Ptolemaic and Roman Egypt and the wider Hellenistic world, zodiacal natal astrology takes shape: planets in signs and houses as a language of character and fate. Texts like those associated with Nechepso-Petosiris and later Vettius Valens show technical craft.</p><p>Ptolemy’s Tetrabiblos tries to give astrology a natural-philosophical frame — influential for centuries, still not modern empirical science.</p></section><section class="chapter" id="ch3" data-chapter="3"><div class="chapter-num">Chapter 3 of 6</div><h2>Islamicate and European transmission</h2><p>Arabic and Persian scholars translate, critique, and advance both astronomy and astrology (often under one roof historically). Courts hire astrologers; philosophers argue about causation and free will.</p><p>Latin Europe receives this package via Spain and Sicily. Universities teach the math; churches alternately employ and condemn. Kepler casts horoscopes while reforming orbits — a reminder that past geniuses lived before our disciplinary split.</p></section><section class="chapter" id="ch4" data-chapter="4"><div class="chapter-num">Chapter 4 of 6</div><h2>Print, Almanacs, and the public</h2><p>Early modern almanacs bring sky timing to farmers and readers. Scientific societies gradually police a boundary: astronomy stays; judicial astrology is pushed toward the margins of respectability — unevenly and slowly.</p><p>Popular practice continues regardless of academy disdain.</p></section><section class="chapter" id="ch5" data-chapter="5"><div class="chapter-num">Chapter 5 of 6</div><h2>Modern astrology as culture</h2><p>Newspapers, Theosophy, Jungian archetype talk, apps, and meme charts reinvent the craft as identity language and entertainment. Sociological interest is real; controlled tests do not support natal astrology as predictive science.</p><p>Historic’s stance: explain the tradition respectfully; state scholarly consensus clearly; link to astrological ages as interpretive debate, not fact.</p><p class="pull">A cultural system can be rich without being true as physics.</p></section><section class="chapter" id="ch6" data-chapter="6"><div class="chapter-num">Chapter 6 of 6</div><h2>Why it still matters</h2><p>Sky lore shaped calendars, medicine, art, and politics. Studying it is history of knowledge — how humans negotiated uncertainty under the same stars we still see.</p><p>For Age of Aquarius dating disputes, see the dedicated Astrological Ages page.</p></section></main>
+  <aside class="further">
+    <h3>Further reading vibe</h3>
+    <p>Rochberg on Babylonian celestial sciences; Barton / Holden on Hellenistic astrology; Pingree; Campion’s cultural histories; distinguish astronomy’s precession from astrological age claims.</p>
+  </aside>
+  <div class="footer-nav">
+    <a href="../index.html">← All stories</a>
+    <a href="../categories/sky-lore.html">Sky lore shelf →</a>
+  </div>
+<script>
+(function(){
+  var chapters = [].slice.call(document.querySelectorAll('.chapter'));
+  var dots = [].slice.call(document.querySelectorAll('.dot'));
+  var io = new IntersectionObserver(function(entries){
+    entries.forEach(function(e){
+      if (e.isIntersecting) {
+        e.target.classList.add('in-view');
+        var id = e.target.id;
+        dots.forEach(function(d){ d.classList.toggle('active', d.getAttribute('data-target')===id); });
+      }
+    });
+  }, { threshold: 0.45 });
+  chapters.forEach(function(c){ io.observe(c); });
+  if (chapters[0]) chapters[0].classList.add('in-view');
+  dots.forEach(function(d){
+    d.addEventListener('click', function(){
+      var t = document.getElementById(d.getAttribute('data-target'));
+      if (t) t.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    });
+  });
+  if ('serviceWorker' in navigator) {
+    window.addEventListener('load', function(){ navigator.serviceWorker.register('../sw.js').catch(function(){}); });
+  }
+})();
+</script>
+<script src="../js/monetization.js" defer></script>
+<script src="../js/shell.js" defer></script>
+</body>
+</html>

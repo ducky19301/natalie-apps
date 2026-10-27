@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="theme-color" content="#100e0c">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-title" content="Historic">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<link rel="manifest" href="../manifest.webmanifest">
+<link rel="apple-touch-icon" href="../icons/icon-180.png">
+<title>Confucian, Daoist &amp; Buddhist Thought — Historic</title>
+<meta name="description" content="Three large streams — sometimes rivals, sometimes blended — shaped East Asian ethics, metaphysics, and statecraft. This is a doorway essay, not a substitute for their can">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,600;1,400&family=IM+Fell+English:ital@0;1&family=Source+Sans+3:wght@300;400;500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../assets/topic.css">
+</head>
+<body>
+  <nav class="topbar">
+    <a class="brand" href="../index.html">Histor<em>ic</em></a>
+    <a class="back-link" href="../index.html">Library</a>
+  </nav>
+  <header class="hero">
+    <div class="hero-era">Classical China → East Asian exchanges</div>
+    <h1>Confucian, Daoist &amp; Buddhist Thought</h1>
+    <p class="hero-place">Overview · self-cultivation · emptiness · governance</p>
+    <p class="hero-lede">Three large streams — sometimes rivals, sometimes blended — shaped East Asian ethics, metaphysics, and statecraft. This is a doorway essay, not a substitute for their canons.</p>
+    <p style="margin-top:1rem;font-size:0.85rem;color:rgba(240,230,212,0.45)">Shelves: <a href="../categories/philosophy.html">Philosophy</a> · <a href="../categories/religions.html">Religions &amp; traditions</a></p>
+  </header>
+  <div class="progress-dots" role="navigation" aria-label="Chapters"><button class="dot" type="button" data-target="ch1" aria-label="Chapter 1"></button><button class="dot" type="button" data-target="ch2" aria-label="Chapter 2"></button><button class="dot" type="button" data-target="ch3" aria-label="Chapter 3"></button><button class="dot" type="button" data-target="ch4" aria-label="Chapter 4"></button></div>
+  <main class="chapters"><section class="chapter" id="ch1" data-chapter="1"><div class="chapter-num">Chapter 1 of 4</div><h2>Confucian repair of ritual personhood</h2><p>Kongzi (Confucius) and later Mencius/Xunzi argue about human nature, ren (humaneness), and li (ritual propriety) as trainable. Government begins in rectified relationships.</p><p>Imperial exams later institutionalize Confucian texts — power marrying pedagogy.</p></section><section class="chapter" id="ch2" data-chapter="2"><div class="chapter-num">Chapter 2 of 4</div><h2>Daoist ways and unways</h2><p>Daodejing and Zhuangzi praise soft power, uselessness, and skepticism toward forced naming. Daoist communities also build liturgies, alchemy, and local god cults — philosophy and religion intertwined.</p><p>“Going with the Dao” is political critique as much as spa slogan.</p></section><section class="chapter" id="ch3" data-chapter="3"><div class="chapter-num">Chapter 3 of 4</div><h2>Buddhist arrivals and transformations</h2><p>From Indic origins, Buddhist schools enter China via Central Asia, translating emptiness, karma, and monastic discipline into new idioms (Tiantai, Chan/Zen, Pure Land).</p><p>Korean and Japanese receptions further remix. Conflict and coexistence with Confucian elites recur.</p></section><section class="chapter" id="ch4" data-chapter="4"><div class="chapter-num">Chapter 4 of 4</div><h2>Reading them together</h2><p>Neo-Confucians absorb and answer Buddhist metaphysics; modern reformers pick and choose. Avoid treating “Eastern thought” as one calm lake.</p><p>Why it still matters: these vocabularies still structure education, protest, and mindfulness industries worldwide.</p></section></main>
+  <aside class="further">
+    <h3>Further reading vibe</h3>
+    <p>Slingerland on Confucius; Ziporyn on Daoist philosophy; Gethin on Buddhism foundations; on syncretism, Brook or Sharf.</p>
+  </aside>
+  <div class="footer-nav">
+    <a href="../index.html">← All stories</a>
+    <a href="../categories/philosophy.html">Philosophy shelf →</a>
+  </div>
+<script>
+(function(){
+  var chapters = [].slice.call(document.querySelectorAll('.chapter'));
+  var dots = [].slice.call(document.querySelectorAll('.dot'));
+  var io = new IntersectionObserver(function(entries){
+    entries.forEach(function(e){
+      if (e.isIntersecting) {
+        e.target.classList.add('in-view');
+        var id = e.target.id;
+        dots.forEach(function(d){ d.classList.toggle('active', d.getAttribute('data-target')===id); });
+      }
+    });
+  }, { threshold: 0.45 });
+  chapters.forEach(function(c){ io.observe(c); });
+  if (chapters[0]) chapters[0].classList.add('in-view');
+  dots.forEach(function(d){
+    d.addEventListener('click', function(){
+      var t = document.getElementById(d.getAttribute('data-target'));
+      if (t) t.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    });
+  });
+  if ('serviceWorker' in navigator) {
+    window.addEventListener('load', function(){ navigator.serviceWorker.register('../sw.js').catch(function(){}); });
+  }
+})();
+</script>
+<script src="../js/monetization.js" defer></script>
+<script src="../js/shell.js" defer></script>
+</body>
+</html>

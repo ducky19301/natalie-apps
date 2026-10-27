@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="theme-color" content="#100e0c">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-title" content="Historic">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<link rel="manifest" href="../manifest.webmanifest">
+<link rel="apple-touch-icon" href="../icons/icon-180.png">
+<title>Stoicism in Rome — Historic</title>
+<meta name="description" content="Stoicism arrived as a Greek school and became a Roman ethos for senators, enslaved teachers, and one reflective emperor. It offered therapy for fortune’s swings — and cou">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,600;1,400&family=IM+Fell+English:ital@0;1&family=Source+Sans+3:wght@300;400;500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../assets/topic.css">
+</head>
+<body>
+  <nav class="topbar">
+    <a class="brand" href="../index.html">Histor<em>ic</em></a>
+    <a class="back-link" href="../index.html">Library</a>
+  </nav>
+  <header class="hero">
+    <div class="hero-era">Republic → Marcus Aurelius</div>
+    <h1>Stoicism in Rome</h1>
+    <p class="hero-place">Bridge to Seneca · Epictetus · emperor’s notebook</p>
+    <p class="hero-lede">Stoicism arrived as a Greek school and became a Roman ethos for senators, enslaved teachers, and one reflective emperor. It offered therapy for fortune’s swings — and could excuse endurance of injustice as “nature.”</p>
+    <p style="margin-top:1rem;font-size:0.85rem;color:rgba(240,230,212,0.45)">Shelves: <a href="../categories/ancient-rome.html">Ancient Rome</a> · <a href="../categories/philosophy.html">Philosophy</a> · <a href="../categories/thinkers.html">Thinkers</a></p>
+  </header>
+  <div class="progress-dots" role="navigation" aria-label="Chapters"><button class="dot" type="button" data-target="ch1" aria-label="Chapter 1"></button><button class="dot" type="button" data-target="ch2" aria-label="Chapter 2"></button><button class="dot" type="button" data-target="ch3" aria-label="Chapter 3"></button><button class="dot" type="button" data-target="ch4" aria-label="Chapter 4"></button></div>
+  <main class="chapters"><section class="chapter" id="ch1" data-chapter="1"><div class="chapter-num">Chapter 1 of 4</div><h2>Greek roots, Roman soil</h2><p>Zeno’s Stoa taught virtue as the only good, emotions as judgments, and a providential cosmos. Romans like Cato the Younger wore Stoic severity as political brand.</p><p>Panaetius and Posidonius adapted doctrine for Roman elites who would not abandon public life.</p></section><section class="chapter" id="ch2" data-chapter="2"><div class="chapter-num">Chapter 2 of 4</div><h2>Seneca’s contradictions</h2><p>Tutor and minister to Nero, writer of consolations and tragedies — Seneca models both lucid advice and compromised power. Read him as argument, not saint.</p><p>See the interactive Still Speaking film for cross-cultural companions.</p></section><section class="chapter" id="ch3" data-chapter="3"><div class="chapter-num">Chapter 3 of 4</div><h2>Epictetus and the enslaved sage</h2><p>Born enslaved, later a teacher, Epictetus stresses what is “up to us.” His classroom voice is tougher and more spare than Seneca’s wealth-cushioned prose.</p><p>Freedom as inner citadel can liberate — or tell the oppressed to adjust. Hold both readings.</p></section><section class="chapter" id="ch4" data-chapter="4"><div class="chapter-num">Chapter 4 of 4</div><h2>Marcus Aurelius at the edge of war</h2><p>The Meditations are private notes, not a manifesto. An emperor reminding himself to be just while commanding frontier wars is historically charged.</p><p>Why it still matters: Stoicism’s modern revival in business and therapy needs the Roman political context, not only quote cards.</p><p class="pull">A philosophy of control meets an empire of force.</p></section></main>
+  <aside class="further">
+    <h3>Further reading vibe</h3>
+    <p>Long/Sedley for Hellenistic philosophy; Seneca’s Letters; Epictetus’ Discourses; Marcus’ Meditations; modern CBT histories noting Stoic echoes.</p>
+  </aside>
+  <div class="footer-nav">
+    <a href="../index.html">← All stories</a>
+    <a href="../stories/seneca.html">Still Speaking (Seneca) →</a>
+  </div>
+<script>
+(function(){
+  var chapters = [].slice.call(document.querySelectorAll('.chapter'));
+  var dots = [].slice.call(document.querySelectorAll('.dot'));
+  var io = new IntersectionObserver(function(entries){
+    entries.forEach(function(e){
+      if (e.isIntersecting) {
+        e.target.classList.add('in-view');
+        var id = e.target.id;
+        dots.forEach(function(d){ d.classList.toggle('active', d.getAttribute('data-target')===id); });
+      }
+    });
+  }, { threshold: 0.45 });
+  chapters.forEach(function(c){ io.observe(c); });
+  if (chapters[0]) chapters[0].classList.add('in-view');
+  dots.forEach(function(d){
+    d.addEventListener('click', function(){
+      var t = document.getElementById(d.getAttribute('data-target'));
+      if (t) t.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    });
+  });
+  if ('serviceWorker' in navigator) {
+    window.addEventListener('load', function(){ navigator.serviceWorker.register('../sw.js').catch(function(){}); });
+  }
+})();
+</script>
+<script src="../js/monetization.js" defer></script>
+<script src="../js/shell.js" defer></script>
+</body>
+</html>

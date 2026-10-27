@@ -1,0 +1,25 @@
+{
+  "name": "Historic",
+  "short_name": "Historic",
+  "description": "Living histories \u2014 ages, Greece & Rome, philosophy, sky lore, sacred objects, world religions, and lesser-known stories.",
+  "start_url": "./",
+  "scope": "./",
+  "display": "standalone",
+  "orientation": "any",
+  "background_color": "#100e0c",
+  "theme_color": "#100e0c",
+  "icons": [
+    {
+      "src": "icons/icon-180.png",
+      "sizes": "180x180",
+      "type": "image/png",
+      "purpose": "any"
+    },
+    {
+      "src": "icons/icon-512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any"
+    }
+  ]
+}

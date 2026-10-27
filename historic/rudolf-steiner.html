@@ -1,0 +1,1256 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="theme-color" content="#100e0c">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-title" content="Historic">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<link rel="manifest" href="manifest.webmanifest">
+<link rel="apple-touch-icon" href="icons/icon-180.png">
+<title>Rudolf Steiner — Architect of Invisible Worlds</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,600;0,700;1,400;1,600&family=Source+Sans+3:wght@300;400;500;600&family=Syne:wght@500;600;700&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --cream: #f4efe6;
+    --cream-deep: #e6dcc8;
+    --bone: #faf7f1;
+    --ink: #1e2420;
+    --ink-soft: #3a433c;
+    --ink-faint: #6a756c;
+    --copper: #b87333;
+    --copper-bright: #d4924a;
+    --sage: #5e7a62;
+    --sage-deep: #3d5644;
+    --terracotta: #9c5a45;
+    --slate: #4a5560;
+    --sky-mute: #8aa0a8;
+    --shadow: rgba(30, 36, 32, 0.4);
+    --vignette: rgba(30, 36, 32, 0.5);
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  html, body {
+    height: 100%;
+    background: #121816;
+    color: var(--ink);
+    font-family: 'Source Sans 3', system-ui, sans-serif;
+    overflow: hidden;
+    -webkit-font-smoothing: antialiased;
+  }
+
+  .app {
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 12px;
+    gap: 12px;
+  }
+
+  .stage-wrap {
+    width: min(100%, 1100px);
+    aspect-ratio: 16 / 9;
+    max-height: calc(100vh - 100px);
+    position: relative;
+    border-radius: 10px;
+    overflow: hidden;
+    box-shadow:
+      0 0 0 1px rgba(184, 115, 51, 0.28),
+      0 20px 60px rgba(0,0,0,0.55),
+      inset 0 0 80px rgba(30, 36, 32, 0.12);
+    background: var(--cream);
+  }
+
+  .stage {
+    position: absolute;
+    inset: 0;
+    overflow: hidden;
+  }
+
+  .stage::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    z-index: 10;
+    pointer-events: none;
+    background:
+      radial-gradient(ellipse at center, transparent 42%, var(--vignette) 100%),
+      url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.035'/%3E%3C/svg%3E");
+    mix-blend-mode: multiply;
+  }
+
+  .scene {
+    position: absolute;
+    inset: 0;
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.9s ease, transform 1.1s ease;
+    transform: scale(1.03);
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-end;
+    padding: clamp(1.2rem, 4vw, 2.5rem);
+  }
+
+  .scene.active {
+    opacity: 1;
+    pointer-events: auto;
+    transform: scale(1);
+    z-index: 2;
+  }
+
+  .scene.leaving {
+    opacity: 0;
+    transform: scale(0.97);
+    z-index: 1;
+  }
+
+  .scene-bg {
+    position: absolute;
+    inset: 0;
+    z-index: 0;
+  }
+
+  .scene-content {
+    position: relative;
+    z-index: 3;
+    max-width: min(540px, 92%);
+  }
+
+  .scene-year {
+    font-family: 'Syne', sans-serif;
+    font-size: clamp(0.7rem, 1.4vw, 0.85rem);
+    letter-spacing: 0.22em;
+    text-transform: uppercase;
+    color: var(--copper);
+    margin-bottom: 0.45rem;
+    font-weight: 600;
+    opacity: 0;
+    transform: translateY(12px);
+  }
+
+  .scene-title {
+    font-family: 'Cormorant Garamond', Georgia, serif;
+    font-size: clamp(1.55rem, 3.8vw, 2.55rem);
+    font-weight: 600;
+    line-height: 1.15;
+    color: var(--ink);
+    margin-bottom: 0.65rem;
+    opacity: 0;
+    transform: translateY(16px);
+  }
+
+  .scene-body {
+    font-size: clamp(0.85rem, 1.55vw, 1.05rem);
+    line-height: 1.55;
+    color: var(--ink-soft);
+    font-weight: 400;
+    opacity: 0;
+    transform: translateY(16px);
+  }
+
+  .scene.active .scene-year { animation: riseIn 0.7s 0.25s ease forwards; }
+  .scene.active .scene-title { animation: riseIn 0.8s 0.45s ease forwards; }
+  .scene.active .scene-body { animation: riseIn 0.8s 0.7s ease forwards; }
+
+  @keyframes riseIn {
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  /* ——— SCENE 0: Title ——— */
+  .s0 .scene-bg {
+    background:
+      radial-gradient(ellipse at 28% 35%, #faf6ee 0%, transparent 50%),
+      radial-gradient(ellipse at 75% 65%, #d4c9b0 0%, transparent 55%),
+      linear-gradient(165deg, #f2ebe0 0%, #d9d0bc 50%, #c4b9a0 100%);
+  }
+
+  .title-card {
+    position: absolute;
+    inset: 0;
+    z-index: 3;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    padding: 2rem;
+  }
+
+  .goetheanum-silhouette {
+    position: absolute;
+    bottom: 0;
+    left: 50%;
+    transform: translateX(-50%);
+    width: min(90%, 720px);
+    height: 42%;
+    opacity: 0;
+    z-index: 1;
+  }
+
+  .s0.active .goetheanum-silhouette {
+    animation: riseIn 1.6s 0.2s ease forwards;
+  }
+
+  .title-eyebrow {
+    font-family: 'Syne', sans-serif;
+    letter-spacing: 0.32em;
+    text-transform: uppercase;
+    font-size: clamp(0.65rem, 1.3vw, 0.8rem);
+    color: var(--ink-faint);
+    font-weight: 600;
+    opacity: 0;
+    animation: riseIn 1s 0.35s ease forwards;
+  }
+
+  .title-ornament {
+    width: 80px;
+    height: 2px;
+    background: linear-gradient(90deg, transparent, var(--copper), transparent);
+    margin: 0.9rem 0;
+    border-radius: 1px;
+    opacity: 0;
+    animation: fadeWide 1.4s 0.95s ease forwards;
+  }
+
+  @keyframes fadeWide {
+    from { opacity: 0; width: 20px; }
+    to { opacity: 1; width: 110px; }
+  }
+
+  .title-main {
+    font-family: 'Cormorant Garamond', Georgia, serif;
+    font-size: clamp(1.85rem, 5vw, 3.5rem);
+    color: var(--ink);
+    line-height: 1.12;
+    max-width: 16ch;
+    font-weight: 600;
+    opacity: 0;
+    animation: riseIn 1.1s 0.55s ease forwards;
+  }
+
+  .title-sub {
+    font-family: 'Cormorant Garamond', serif;
+    font-style: italic;
+    font-size: clamp(1rem, 2.1vw, 1.3rem);
+    color: var(--ink-soft);
+    opacity: 0;
+    animation: riseIn 1s 1.15s ease forwards;
+  }
+
+  .title-hint {
+    position: absolute;
+    bottom: 1.4rem;
+    font-size: 0.72rem;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--ink-faint);
+    opacity: 0;
+    animation: pulseHint 2.5s 2s ease infinite;
+  }
+
+  @keyframes pulseHint {
+    0%, 100% { opacity: 0.35; }
+    50% { opacity: 0.8; }
+  }
+
+  .geom-orb {
+    position: absolute;
+    border-radius: 50%;
+    border: 1px solid rgba(184, 115, 51, 0.25);
+    pointer-events: none;
+    opacity: 0;
+  }
+
+  .s0.active .geom-orb { animation: orbFade 2s 0.8s ease forwards; }
+
+  @keyframes orbFade {
+    to { opacity: 0.55; }
+  }
+
+  /* ——— SCENE 1: Origins ——— */
+  .s1 .scene-bg {
+    background:
+      radial-gradient(ellipse at 70% 30%, #e8f0e8 0%, transparent 45%),
+      linear-gradient(145deg, #ebe4d4 0%, #cfd8c8 55%, #b8c4b0 100%);
+  }
+
+  .empire-map {
+    position: absolute;
+    right: 4%;
+    top: 10%;
+    width: min(340px, 42vw);
+    height: min(260px, 48%);
+    opacity: 0;
+    z-index: 1;
+  }
+
+  .s1.active .empire-map {
+    animation: sealIn 1.3s 0.35s ease forwards;
+  }
+
+  @keyframes sealIn {
+    from { opacity: 0; transform: translateY(24px) scale(0.96); }
+    to { opacity: 1; transform: translateY(0) scale(1); }
+  }
+
+  .birth-pulse {
+    fill: var(--terracotta);
+    opacity: 0;
+  }
+
+  .s1.active .birth-pulse {
+    animation: birthPulse 1.8s 1.4s ease forwards;
+  }
+
+  @keyframes birthPulse {
+    0% { opacity: 0; r: 0; }
+    40% { opacity: 1; r: 9; }
+    100% { opacity: 0.9; r: 6; }
+  }
+
+  .map-caption {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 13px;
+    fill: var(--ink-soft);
+    opacity: 0;
+  }
+
+  .s1.active .map-caption {
+    animation: riseIn 0.7s 1.8s ease forwards;
+  }
+
+  /* ——— SCENE 2: Goethe ——— */
+  .s2 .scene-bg {
+    background:
+      radial-gradient(ellipse at 20% 40%, #f7f0e4 0%, transparent 50%),
+      linear-gradient(160deg, #eae2d2 0%, #d4c8b0 100%);
+  }
+
+  .book-stack {
+    position: absolute;
+    right: 8%;
+    top: 14%;
+    width: min(280px, 36vw);
+    opacity: 0;
+    z-index: 1;
+  }
+
+  .s2.active .book-stack {
+    animation: sealIn 1.2s 0.4s ease forwards;
+  }
+
+  .leaf-motif {
+    position: absolute;
+    left: 8%;
+    top: 18%;
+    width: min(120px, 16vw);
+    opacity: 0;
+    z-index: 1;
+  }
+
+  .s2.active .leaf-motif {
+    animation: sealIn 1.2s 0.8s ease forwards;
+  }
+
+  /* ——— SCENE 3: Anthroposophy ——— */
+  .s3 .scene-bg {
+    background:
+      radial-gradient(ellipse at 50% 25%, #eef2ef 0%, transparent 55%),
+      linear-gradient(180deg, #e4ddd0 0%, #c8d0c4 100%);
+  }
+
+  .spiral-stage {
+    position: absolute;
+    top: 8%;
+    right: 6%;
+    width: min(300px, 38vw);
+    height: min(280px, 52%);
+    z-index: 1;
+    opacity: 0;
+  }
+
+  .s3.active .spiral-stage {
+    animation: sealIn 1.3s 0.3s ease forwards;
+  }
+
+  .spiral-path {
+    fill: none;
+    stroke: var(--sage);
+    stroke-width: 2;
+    stroke-linecap: round;
+    stroke-dasharray: 1200;
+    stroke-dashoffset: 1200;
+    opacity: 0.7;
+  }
+
+  .s3.active .spiral-path {
+    animation: drawSpiral 2.8s 0.6s ease forwards;
+  }
+
+  @keyframes drawSpiral {
+    to { stroke-dashoffset: 0; }
+  }
+
+  .spiral-center {
+    fill: var(--copper);
+    opacity: 0;
+  }
+
+  .s3.active .spiral-center {
+    animation: riseIn 0.6s 2.8s ease forwards;
+  }
+
+  /* ——— SCENE 4: Waldorf ——— */
+  .s4 .scene-bg {
+    background:
+      radial-gradient(ellipse at 30% 20%, #fff8ec 0%, transparent 45%),
+      linear-gradient(150deg, #efe6d4 0%, #d8c8a8 60%, #c4b090 100%);
+  }
+
+  .schoolhouse {
+    position: absolute;
+    right: 5%;
+    top: 8%;
+    width: min(320px, 40vw);
+    opacity: 0;
+    z-index: 1;
+  }
+
+  .s4.active .schoolhouse {
+    animation: sealIn 1.3s 0.35s ease forwards;
+  }
+
+  .child-dots {
+    position: absolute;
+    right: 10%;
+    bottom: 32%;
+    display: flex;
+    gap: 10px;
+    z-index: 2;
+  }
+
+  .child-dot {
+    width: 14px;
+    height: 14px;
+    border-radius: 50%;
+    background: var(--terracotta);
+    opacity: 0;
+    transform: translateY(10px);
+  }
+
+  .child-dot:nth-child(2) { background: var(--sage); width: 12px; height: 12px; margin-top: 2px; }
+  .child-dot:nth-child(3) { background: var(--copper); width: 13px; height: 13px; }
+  .child-dot:nth-child(4) { background: var(--slate); width: 11px; height: 11px; margin-top: 3px; }
+  .child-dot:nth-child(5) { background: var(--sage-deep); }
+
+  .s4.active .child-dot:nth-child(1) { animation: riseIn 0.5s 1.2s ease forwards; }
+  .s4.active .child-dot:nth-child(2) { animation: riseIn 0.5s 1.4s ease forwards; }
+  .s4.active .child-dot:nth-child(3) { animation: riseIn 0.5s 1.6s ease forwards; }
+  .s4.active .child-dot:nth-child(4) { animation: riseIn 0.5s 1.8s ease forwards; }
+  .s4.active .child-dot:nth-child(5) { animation: riseIn 0.5s 2.0s ease forwards; }
+
+  /* ——— SCENE 5: Biodynamics ——— */
+  .s5 .scene-bg {
+    background:
+      radial-gradient(ellipse at 60% 40%, #e8f0dc 0%, transparent 50%),
+      linear-gradient(170deg, #e2dcc8 0%, #b8c4a0 55%, #9aab88 100%);
+  }
+
+  .field-stage {
+    position: absolute;
+    inset: 6% 4% 30% 40%;
+    z-index: 1;
+    opacity: 0;
+  }
+
+  .s5.active .field-stage {
+    animation: sealIn 1.2s 0.3s ease forwards;
+  }
+
+  .crop-row {
+    fill: none;
+    stroke: var(--sage-deep);
+    stroke-width: 1.5;
+    stroke-dasharray: 400;
+    stroke-dashoffset: 400;
+    opacity: 0.55;
+  }
+
+  .s5.active .crop-row.r1 { animation: drawSpiral 1.8s 0.6s ease forwards; }
+  .s5.active .crop-row.r2 { animation: drawSpiral 1.8s 0.9s ease forwards; }
+  .s5.active .crop-row.r3 { animation: drawSpiral 1.8s 1.2s ease forwards; }
+
+  .plant {
+    opacity: 0;
+  }
+
+  .s5.active .plant.p1 { animation: riseIn 0.6s 1.5s ease forwards; }
+  .s5.active .plant.p2 { animation: riseIn 0.6s 1.7s ease forwards; }
+  .s5.active .plant.p3 { animation: riseIn 0.6s 1.9s ease forwards; }
+  .s5.active .plant.p4 { animation: riseIn 0.6s 2.1s ease forwards; }
+
+  .cosmos-ring {
+    fill: none;
+    stroke: var(--copper);
+    stroke-width: 1;
+    stroke-dasharray: 4 6;
+    opacity: 0;
+  }
+
+  .s5.active .cosmos-ring {
+    animation: riseIn 1s 2.2s ease forwards;
+  }
+
+  /* ——— SCENE 6: Arts / Goetheanum ——— */
+  .s6 .scene-bg {
+    background:
+      radial-gradient(ellipse at 55% 30%, #f0ebe2 0%, transparent 50%),
+      linear-gradient(155deg, #ddd6c6 0%, #b8b0a0 50%, #8a9088 100%);
+  }
+
+  .goetheanum-full {
+    position: absolute;
+    right: 2%;
+    top: 6%;
+    width: min(380px, 48vw);
+    height: min(300px, 58%);
+    opacity: 0;
+    z-index: 1;
+  }
+
+  .s6.active .goetheanum-full {
+    animation: sealIn 1.4s 0.3s ease forwards;
+  }
+
+  .eurythmy-figure {
+    position: absolute;
+    left: 8%;
+    top: 16%;
+    width: min(100px, 14vw);
+    opacity: 0;
+    z-index: 1;
+  }
+
+  .s6.active .eurythmy-figure {
+    animation: eurythmDrift 4s 1s ease-in-out infinite;
+    opacity: 0;
+    animation: eurythmIn 1s 1s ease forwards, eurythmDrift 4s 2s ease-in-out infinite;
+  }
+
+  @keyframes eurythmIn {
+    to { opacity: 0.85; }
+  }
+
+  @keyframes eurythmDrift {
+    0%, 100% { transform: translateY(0) rotate(-2deg); }
+    50% { transform: translateY(-8px) rotate(3deg); }
+  }
+
+  /* ——— SCENE 7: Legacy ——— */
+  .s7 .scene-bg {
+    background:
+      radial-gradient(ellipse at 40% 30%, #f2ebe0 0%, transparent 55%),
+      linear-gradient(165deg, #e8e0d0 0%, #c8c0b0 45%, #a8a898 100%);
+  }
+
+  .legacy-chips {
+    position: absolute;
+    top: 12%;
+    right: 5%;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    z-index: 2;
+    width: min(260px, 36vw);
+  }
+
+  .leg-chip {
+    background: rgba(250, 247, 241, 0.72);
+    border: 1px solid rgba(184, 115, 51, 0.3);
+    border-radius: 8px;
+    padding: 0.65rem 0.9rem;
+    backdrop-filter: blur(4px);
+    opacity: 0;
+    transform: translateX(20px);
+  }
+
+  .leg-chip strong {
+    display: block;
+    font-family: 'Syne', sans-serif;
+    font-size: 0.72rem;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--copper);
+    margin-bottom: 0.2rem;
+  }
+
+  .leg-chip span {
+    font-size: clamp(0.78rem, 1.3vw, 0.9rem);
+    color: var(--ink-soft);
+    line-height: 1.35;
+  }
+
+  .s7.active .leg-chip:nth-child(1) { animation: chipIn 0.7s 0.5s ease forwards; }
+  .s7.active .leg-chip:nth-child(2) { animation: chipIn 0.7s 0.8s ease forwards; }
+  .s7.active .leg-chip:nth-child(3) { animation: chipIn 0.7s 1.1s ease forwards; }
+  .s7.active .leg-chip:nth-child(4) { animation: chipIn 0.7s 1.4s ease forwards; }
+
+  @keyframes chipIn {
+    to { opacity: 1; transform: translateX(0); }
+  }
+
+  .debate-note {
+    position: absolute;
+    top: 12%;
+    left: 5%;
+    max-width: min(280px, 38vw);
+    font-family: 'Cormorant Garamond', serif;
+    font-style: italic;
+    font-size: clamp(0.9rem, 1.6vw, 1.1rem);
+    color: var(--ink-faint);
+    line-height: 1.4;
+    opacity: 0;
+    z-index: 2;
+    border-left: 2px solid rgba(156, 90, 69, 0.45);
+    padding-left: 0.85rem;
+  }
+
+  .s7.active .debate-note {
+    animation: riseIn 0.9s 1.8s ease forwards;
+  }
+
+  /* ——— Controls ——— */
+  .controls {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: center;
+    gap: 8px 10px;
+    width: min(100%, 1100px);
+    padding: 4px 8px;
+  }
+
+  .btn {
+    font-family: 'Syne', sans-serif;
+    font-size: 0.78rem;
+    font-weight: 600;
+    letter-spacing: 0.04em;
+    padding: 0.55rem 0.9rem;
+    border-radius: 6px;
+    border: 1px solid rgba(184, 115, 51, 0.35);
+    background: rgba(244, 239, 230, 0.08);
+    color: var(--cream);
+    cursor: pointer;
+    transition: background 0.2s, transform 0.15s, border-color 0.2s;
+  }
+
+  .btn:hover:not(:disabled) {
+    background: rgba(184, 115, 51, 0.22);
+    border-color: var(--copper-bright);
+    transform: translateY(-1px);
+  }
+
+  .btn.primary {
+    background: linear-gradient(180deg, #d4924a, #b87333);
+    border-color: #a06028;
+    color: #1a1410;
+    min-width: 96px;
+  }
+
+  .btn.primary:hover:not(:disabled) {
+    background: linear-gradient(180deg, #e0a05a, #c8823a);
+  }
+
+  .btn:disabled {
+    opacity: 0.35;
+    cursor: not-allowed;
+    transform: none;
+  }
+
+  .dots {
+    display: flex;
+    gap: 8px;
+    align-items: center;
+    padding: 0 8px;
+  }
+
+  .dot {
+    width: 10px;
+    height: 10px;
+    border-radius: 50%;
+    border: 1.5px solid rgba(184, 115, 51, 0.5);
+    background: transparent;
+    cursor: pointer;
+    padding: 0;
+    transition: background 0.25s, transform 0.2s, border-color 0.2s;
+  }
+
+  .dot:hover { border-color: var(--copper-bright); transform: scale(1.15); }
+  .dot.active {
+    background: var(--copper);
+    border-color: var(--copper-bright);
+    box-shadow: 0 0 8px rgba(184, 115, 51, 0.5);
+  }
+  .dot.played { background: rgba(184, 115, 51, 0.35); }
+
+  .progress-track {
+    flex: 1;
+    min-width: 80px;
+    max-width: 220px;
+    height: 4px;
+    background: rgba(184, 115, 51, 0.15);
+    border-radius: 2px;
+    overflow: hidden;
+    cursor: pointer;
+  }
+
+  .progress-fill {
+    height: 100%;
+    width: 0%;
+    background: linear-gradient(90deg, var(--copper), var(--copper-bright));
+    border-radius: 2px;
+    transition: width 0.15s linear;
+  }
+
+  .scene-label {
+    font-size: 0.7rem;
+    color: rgba(244, 239, 230, 0.55);
+    letter-spacing: 0.08em;
+    min-width: 70px;
+    text-align: center;
+    font-family: 'Syne', sans-serif;
+  }
+
+  .kbd-hint {
+    font-size: 0.65rem;
+    color: rgba(244, 239, 230, 0.35);
+    letter-spacing: 0.04em;
+    width: 100%;
+    text-align: center;
+    margin-top: -4px;
+  }
+
+  @media (max-width: 640px) {
+    .app { padding: 8px; gap: 8px; }
+    .stage-wrap { max-height: calc(100vh - 130px); border-radius: 6px; }
+    .scene { padding: 1rem; }
+    .scene-content { max-width: 100%; }
+    .empire-map { width: 42vw; top: 6%; right: 2%; }
+    .book-stack, .schoolhouse, .goetheanum-full { width: 40vw; top: 5%; }
+    .spiral-stage { width: 36vw; top: 4%; }
+    .field-stage { inset: 4% 2% 38% 35%; }
+    .legacy-chips { width: 42vw; top: 8%; gap: 6px; }
+    .leg-chip { padding: 0.45rem 0.65rem; }
+    .debate-note { display: none; }
+    .child-dots { bottom: 38%; }
+    .kbd-hint { display: none; }
+    .btn { padding: 0.5rem 0.7rem; font-size: 0.72rem; }
+    .eurythmy-figure { display: none; }
+  }
+
+  .hub-back {
+    position: absolute;
+    top: 10px;
+    left: 12px;
+    z-index: 20;
+    font-family: 'Syne', sans-serif;
+    font-size: 0.68rem;
+    font-weight: 600;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    text-decoration: none;
+    color: rgba(244, 239, 230, 0.55);
+    padding: 0.35rem 0.6rem;
+    border-radius: 4px;
+    border: 1px solid rgba(184, 115, 51, 0.25);
+    background: rgba(18, 24, 22, 0.35);
+    transition: color 0.2s, border-color 0.2s, background 0.2s;
+  }
+  .hub-back:hover {
+    color: var(--cream);
+    border-color: var(--copper);
+    background: rgba(18, 24, 22, 0.55);
+  }
+  @media (max-width: 640px) {
+    .hub-back { font-size: 0.6rem; top: 6px; left: 6px; padding: 0.28rem 0.45rem; }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    *, *::before, *::after {
+      animation-duration: 0.01ms !important;
+      animation-iteration-count: 1 !important;
+      transition-duration: 0.01ms !important;
+    }
+    .scene { opacity: 0; transform: none; }
+    .scene.active { opacity: 1; }
+  }
+
+  .historic-back {
+    position: fixed;
+    top: 10px;
+    left: 10px;
+    z-index: 100;
+    font-family: 'Source Sans 3', system-ui, sans-serif;
+    font-size: 0.75rem;
+    letter-spacing: 0.06em;
+    text-decoration: none;
+    color: #e8dcc8;
+    background: rgba(16,14,12,0.72);
+    border: 1px solid rgba(166,124,74,0.4);
+    padding: 0.4rem 0.75rem;
+    border-radius: 6px;
+    backdrop-filter: blur(6px);
+    transition: background 0.2s, border-color 0.2s;
+  }
+  .historic-back:hover {
+    background: rgba(166,124,74,0.35);
+    border-color: #c9a06a;
+  }
+  @media (max-width: 640px) {
+    .historic-back { top: 6px; left: 6px; font-size: 0.7rem; padding: 0.35rem 0.6rem; }
+  }
+
+  /* iOS / touch polish — large targets, no hover-only UI */
+  .btn, .historic-back, .hub-back, .dot {
+    min-height: 44px;
+    min-width: 44px;
+    touch-action: manipulation;
+    -webkit-tap-highlight-color: transparent;
+  }
+  .dot { min-width: 44px; }
+  @media (hover: none) {
+    .btn:hover:not(:disabled),
+    .btn.primary:hover:not(:disabled),
+    .historic-back:hover,
+    .hub-back:hover,
+    .dot:hover { transform: none; }
+    .btn:active:not(:disabled),
+    .historic-back:active,
+    .hub-back:active { opacity: 0.9; }
+  }
+
+</style>
+</head>
+<body>
+<a class="historic-back" href="index.html">← Library</a>
+
+  <div class="app">
+    <a class="hub-back" href="index.html" title="Back to story list">← Stories</a>
+    <div class="stage-wrap" role="region" aria-label="Rudolf Steiner animated history">
+      <div class="stage" id="stage">
+
+        <!-- SCENE 0: Title -->
+        <section class="scene s0 active" data-scene="0" aria-label="Title">
+          <div class="scene-bg"></div>
+          <div class="geom-orb" style="width:180px;height:180px;top:8%;left:6%;"></div>
+          <div class="geom-orb" style="width:110px;height:110px;top:18%;right:10%;border-color:rgba(94,122,98,0.3);"></div>
+          <svg class="goetheanum-silhouette" viewBox="0 0 700 220" preserveAspectRatio="xMidYMax meet" aria-hidden="true">
+            <defs>
+              <linearGradient id="silGrad" x1="0" y1="0" x2="0" y2="1">
+                <stop offset="0%" stop-color="#3d5644" stop-opacity="0.35"/>
+                <stop offset="100%" stop-color="#1e2420" stop-opacity="0.55"/>
+              </linearGradient>
+            </defs>
+            <!-- Organic double-dome silhouette hinting at Goetheanum -->
+            <path d="M40,210 C80,210 100,160 140,140 C180,118 220,90 280,78 C320,70 350,95 380,88 C430,76 470,40 520,48 C560,54 590,90 620,120 C650,150 670,190 680,210 Z" fill="url(#silGrad)"/>
+            <path d="M140,210 C160,170 200,145 250,138 C290,132 310,155 350,148 C400,138 440,100 490,110 C530,118 560,155 590,180 L590,210 Z" fill="rgba(30,36,32,0.25)"/>
+            <ellipse cx="350" cy="215" rx="300" ry="8" fill="rgba(30,36,32,0.12)"/>
+          </svg>
+          <div class="title-card">
+            <div class="title-eyebrow">1861 — 1925 · Central Europe</div>
+            <div class="title-ornament"></div>
+            <h1 class="title-main">Rudolf Steiner: Architect of Invisible Worlds</h1>
+            <div class="title-ornament"></div>
+            <p class="title-sub">The ideas that shaped Waldorf, biodynamics, and a contested modern legacy</p>
+            <p class="title-hint">Press play to begin</p>
+          </div>
+        </section>
+
+        <!-- SCENE 1: Origins -->
+        <section class="scene s1" data-scene="1" aria-label="Origins">
+          <div class="scene-bg"></div>
+          <svg class="empire-map" viewBox="0 0 320 260" aria-hidden="true">
+            <rect x="20" y="20" width="280" height="200" rx="6" fill="rgba(250,247,241,0.55)" stroke="rgba(94,122,98,0.35)" stroke-width="1.5"/>
+            <!-- Simplified Austrian Empire outline suggestion -->
+            <path d="M60,90 C90,60 140,55 180,70 C220,85 250,75 270,95 C285,115 275,150 250,165 C220,185 170,190 130,175 C90,160 55,140 50,115 C48,100 50,95 60,90 Z" fill="rgba(94,122,98,0.18)" stroke="rgba(61,86,68,0.5)" stroke-width="1.5"/>
+            <circle class="birth-pulse" cx="155" cy="155" r="6"/>
+            <circle cx="155" cy="155" r="14" fill="none" stroke="#9c5a45" stroke-width="1" opacity="0.4" stroke-dasharray="2 3"/>
+            <text class="map-caption" x="155" y="185" text-anchor="middle">Kraljevec</text>
+            <text class="map-caption" x="155" y="202" text-anchor="middle" font-size="11" fill="#6a756c">today Donji Kraljevec, Croatia</text>
+            <text class="map-caption" x="160" y="48" text-anchor="middle" font-size="12" letter-spacing="2" fill="#3a433c">AUSTRIAN EMPIRE</text>
+          </svg>
+          <div class="scene-content">
+            <div class="scene-year">25 or 27 February 1861 — 30 March 1925</div>
+            <h2 class="scene-title">Born at the Empire's Edge</h2>
+            <p class="scene-body">Rudolf Steiner was born in Kraljevec (Donji Kraljevec), then in the Austrian Empire, today in Croatia. He died in Dornach, Switzerland, in 1925 — a life spanning the collapse of old Europe and the birth of modern alternatives.</p>
+          </div>
+        </section>
+
+        <!-- SCENE 2: Goethe & Philosophy -->
+        <section class="scene s2" data-scene="2" aria-label="Goethe and Philosophy">
+          <div class="scene-bg"></div>
+          <svg class="leaf-motif" viewBox="0 0 100 140" aria-hidden="true">
+            <!-- Goethean plant study suggestion -->
+            <ellipse cx="50" cy="70" rx="28" ry="55" fill="none" stroke="#5e7a62" stroke-width="1.5"/>
+            <path d="M50,20 Q55,70 50,120" stroke="#3d5644" stroke-width="2" fill="none"/>
+            <path d="M50,45 Q30,55 22,70" stroke="#5e7a62" stroke-width="1.2" fill="none"/>
+            <path d="M50,60 Q72,68 78,82" stroke="#5e7a62" stroke-width="1.2" fill="none"/>
+            <path d="M50,80 Q28,88 24,100" stroke="#5e7a62" stroke-width="1" fill="none"/>
+            <circle cx="50" cy="22" r="4" fill="#b87333" opacity="0.7"/>
+          </svg>
+          <svg class="book-stack" viewBox="0 0 240 200" aria-hidden="true">
+            <ellipse cx="120" cy="185" rx="90" ry="10" fill="rgba(30,36,32,0.1)"/>
+            <rect x="40" y="140" width="160" height="28" rx="2" fill="#5e7a62" stroke="#3d5644"/>
+            <rect x="48" y="110" width="155" height="28" rx="2" fill="#9c5a45" stroke="#7a4030"/>
+            <rect x="55" y="80" width="145" height="28" rx="2" fill="#b87333" stroke="#8a5520"/>
+            <rect x="62" y="50" width="140" height="28" rx="2" fill="#4a5560" stroke="#2a3540"/>
+            <text x="132" y="68" text-anchor="middle" font-family="Georgia" font-size="9" fill="#f4efe6">Goethe · Science</text>
+            <text x="120" y="30" text-anchor="middle" font-family="Georgia" font-size="11" fill="#3a433c" font-style="italic">Weimar, 1880s–90s</text>
+          </svg>
+          <div class="scene-content">
+            <div class="scene-year">Weimar &amp; Berlin · 1880s–1890s</div>
+            <h2 class="scene-title">Editor of Goethe, Then Philosopher</h2>
+            <p class="scene-body">Drawn early to Goethe, Steiner edited the poet’s scientific writings and worked on the Weimar edition of his complete works (roughly 1889–1896). In 1894 he published <em>Die Philosophie der Freiheit</em> (<em>The Philosophy of Freedom</em>), then moved into Berlin’s literary world as editor and lecturer.</p>
+          </div>
+        </section>
+
+        <!-- SCENE 3: Anthroposophy -->
+        <section class="scene s3" data-scene="3" aria-label="Anthroposophy">
+          <div class="scene-bg"></div>
+          <svg class="spiral-stage" viewBox="0 0 280 280" aria-hidden="true">
+            <!-- Geometric organic spiral — disciplined inner path metaphor -->
+            <circle cx="140" cy="140" r="120" fill="none" stroke="rgba(94,122,98,0.15)" stroke-width="1"/>
+            <circle cx="140" cy="140" r="90" fill="none" stroke="rgba(184,115,51,0.12)" stroke-width="1"/>
+            <circle cx="140" cy="140" r="60" fill="none" stroke="rgba(94,122,98,0.2)" stroke-width="1"/>
+            <path class="spiral-path" d="M140,140
+              Q160,140 160,120
+              Q160,90 130,90
+              Q90,90 90,130
+              Q90,180 150,180
+              Q210,180 210,120
+              Q210,50 130,50
+              Q50,50 50,140
+              Q50,230 150,230
+              Q240,230 240,130"/>
+            <circle class="spiral-center" cx="140" cy="140" r="5"/>
+            <text x="140" y="262" text-anchor="middle" font-family="Georgia" font-size="12" fill="#6a756c" font-style="italic">“spiritual science”</text>
+          </svg>
+          <div class="scene-content">
+            <div class="scene-year">c. 1900 — 1912 · Anthroposophical Society</div>
+            <h2 class="scene-title">A Path He Called Anthroposophy</h2>
+            <p class="scene-body">Steiner developed anthroposophy — a spiritual movement claiming that insight into a spiritual world was possible through disciplined inner development and clear thinking, which he termed “spiritual science.” In 1912 he founded the Anthroposophical Society. Presented here historically, not as endorsement or critique of its claims.</p>
+          </div>
+        </section>
+
+        <!-- SCENE 4: Waldorf -->
+        <section class="scene s4" data-scene="4" aria-label="Waldorf Education">
+          <div class="scene-bg"></div>
+          <svg class="schoolhouse" viewBox="0 0 280 220" aria-hidden="true">
+            <!-- Stylized school / factory chimney echo -->
+            <rect x="50" y="90" width="180" height="100" rx="3" fill="#f4efe6" stroke="#3a433c" stroke-width="1.5"/>
+            <path d="M40,95 L140,40 L240,95 Z" fill="#9c5a45" stroke="#7a4030" stroke-width="1.5"/>
+            <rect x="115" y="130" width="36" height="60" fill="#5e7a62" stroke="#3d5644"/>
+            <rect x="70" y="110" width="28" height="28" fill="#8aa0a8" opacity="0.7"/>
+            <rect x="180" y="110" width="28" height="28" fill="#8aa0a8" opacity="0.7"/>
+            <rect x="230" y="50" width="14" height="55" fill="#4a5560"/>
+            <rect x="226" y="42" width="22" height="10" rx="2" fill="#6a756c"/>
+            <text x="140" y="210" text-anchor="middle" font-family="Georgia" font-size="11" fill="#6a756c">Stuttgart, 1919</text>
+          </svg>
+          <div class="child-dots" aria-hidden="true">
+            <div class="child-dot"></div>
+            <div class="child-dot"></div>
+            <div class="child-dot"></div>
+            <div class="child-dot"></div>
+            <div class="child-dot"></div>
+          </div>
+          <div class="scene-content">
+            <div class="scene-year">1919 · Stuttgart</div>
+            <h2 class="scene-title">The First Waldorf School</h2>
+            <p class="scene-body">At the request of factory owner Emil Molt, Steiner helped found a school for workers’ children at the Waldorf-Astoria cigarette factory in Stuttgart. Arts-integrated and developmental in method, Waldorf education grew into one of the world’s most widespread alternative school movements.</p>
+          </div>
+        </section>
+
+        <!-- SCENE 5: Biodynamics -->
+        <section class="scene s5" data-scene="5" aria-label="Biodynamic Agriculture">
+          <div class="scene-bg"></div>
+          <svg class="field-stage" viewBox="0 0 360 240" preserveAspectRatio="xMidYMid meet" aria-hidden="true">
+            <ellipse class="cosmos-ring" cx="180" cy="100" rx="140" ry="70"/>
+            <path class="crop-row r1" d="M30,160 Q100,150 180,158 Q260,166 330,155"/>
+            <path class="crop-row r2" d="M40,180 Q120,172 190,182 Q270,190 320,178"/>
+            <path class="crop-row r3" d="M50,200 Q130,195 200,205 Q280,212 310,198"/>
+            <!-- Plants -->
+            <g class="plant p1" transform="translate(90,140)">
+              <path d="M0,30 Q-8,10 0,-5 Q8,10 0,30" fill="#5e7a62"/>
+              <path d="M0,30 Q-14,15 -18,5" stroke="#3d5644" fill="none" stroke-width="1"/>
+            </g>
+            <g class="plant p2" transform="translate(160,135)">
+              <path d="M0,35 Q-10,12 0,-8 Q10,12 0,35" fill="#3d5644"/>
+            </g>
+            <g class="plant p3" transform="translate(230,145)">
+              <path d="M0,28 Q-7,8 0,-4 Q7,8 0,28" fill="#5e7a62"/>
+            </g>
+            <g class="plant p4" transform="translate(280,138)">
+              <path d="M0,32 Q-9,10 0,-6 Q9,10 0,32" fill="#9c5a45" opacity="0.8"/>
+            </g>
+            <circle cx="180" cy="40" r="8" fill="#d4924a" opacity="0.6" class="plant p1"/>
+            <text x="180" y="230" text-anchor="middle" font-family="Georgia" font-size="12" fill="#3d5644" font-style="italic">farm as living organism · 1920s</text>
+          </svg>
+          <div class="scene-content">
+            <div class="scene-year">1924 lectures · early organic influence</div>
+            <h2 class="scene-title">Biodynamic Agriculture</h2>
+            <p class="scene-body">In the 1920s Steiner gave agricultural lectures that became biodynamic farming — treating the farm as a living whole, with composting, biodiversity, and seasonal rhythms. It ranks among the early influences on modern organic and holistic agriculture.</p>
+          </div>
+        </section>
+
+        <!-- SCENE 6: Arts & Goetheanum -->
+        <section class="scene s6" data-scene="6" aria-label="Arts and Goetheanum">
+          <div class="scene-bg"></div>
+          <svg class="eurythmy-figure" viewBox="0 0 80 140" aria-hidden="true">
+            <circle cx="40" cy="22" r="12" fill="none" stroke="#3a433c" stroke-width="1.5"/>
+            <path d="M40,34 L40,80" stroke="#3a433c" stroke-width="1.5"/>
+            <path d="M40,48 L12,30" stroke="#b87333" stroke-width="2" stroke-linecap="round"/>
+            <path d="M40,48 L68,55" stroke="#5e7a62" stroke-width="2" stroke-linecap="round"/>
+            <path d="M40,80 L22,120" stroke="#3a433c" stroke-width="1.5"/>
+            <path d="M40,80 L58,118" stroke="#3a433c" stroke-width="1.5"/>
+            <path d="M8,28 Q20,10 40,8" fill="none" stroke="#b87333" stroke-width="1" opacity="0.5"/>
+          </svg>
+          <svg class="goetheanum-full" viewBox="0 0 360 280" aria-hidden="true">
+            <defs>
+              <linearGradient id="gothWall" x1="0" y1="0" x2="0" y2="1">
+                <stop offset="0%" stop-color="#e6dcc8"/>
+                <stop offset="100%" stop-color="#a89880"/>
+              </linearGradient>
+            </defs>
+            <!-- Concrete Goetheanum organic massing -->
+            <ellipse cx="180" cy="250" rx="150" ry="12" fill="rgba(30,36,32,0.12)"/>
+            <path d="M50,240
+              C60,200 70,160 100,130
+              C130,100 150,70 180,55
+              C210,70 230,100 260,130
+              C290,160 300,200 310,240
+              Z" fill="url(#gothWall)" stroke="#5a5040" stroke-width="1.5"/>
+            <!-- Twin dome suggestion -->
+            <ellipse cx="145" cy="145" rx="55" ry="40" fill="#d4c8b0" stroke="#6a6050" stroke-width="1"/>
+            <ellipse cx="220" cy="150" rx="48" ry="36" fill="#c8bca8" stroke="#6a6050" stroke-width="1"/>
+            <path d="M100,180 Q180,165 260,185" fill="none" stroke="#8a7a60" stroke-width="1" opacity="0.5"/>
+            <rect x="165" y="195" width="30" height="45" rx="2" fill="#4a5560" opacity="0.7"/>
+            <text x="180" y="270" text-anchor="middle" font-family="Georgia" font-size="12" fill="#3a433c">Goetheanum · Dornach</text>
+          </svg>
+          <div class="scene-content">
+            <div class="scene-year">Dornach · architecture, eurythmy, the arts</div>
+            <h2 class="scene-title">Form in Motion and in Stone</h2>
+            <p class="scene-body">Steiner shaped eurythmy — a movement art linking gesture to speech and music — and designed the Goetheanum in Dornach, Switzerland, as a cultural center. Its organic, sculptural architecture became a landmark of early twentieth-century expressionist form.</p>
+          </div>
+        </section>
+
+        <!-- SCENE 7: Contested legacy & what remains -->
+        <section class="scene s7" data-scene="7" aria-label="Legacy">
+          <div class="scene-bg"></div>
+          <p class="debate-note">His legacy is debated: admirers point to lasting cultural institutions; critics note racial theories in some lectures and the contested status of “spiritual science.” History keeps both threads in view.</p>
+          <div class="legacy-chips">
+            <div class="leg-chip">
+              <strong>Waldorf</strong>
+              <span>Thousands of schools and kindergartens worldwide</span>
+            </div>
+            <div class="leg-chip">
+              <strong>Biodynamics</strong>
+              <span>Still practiced; early root of organic farming</span>
+            </div>
+            <div class="leg-chip">
+              <strong>Arts &amp; place</strong>
+              <span>Eurythmy; the Goetheanum still active in Dornach</span>
+            </div>
+            <div class="leg-chip">
+              <strong>Culture</strong>
+              <span>A lasting strand in alternative education and ecology</span>
+            </div>
+          </div>
+          <div class="scene-content">
+            <div class="scene-year">After 1925 · what remains</div>
+            <h2 class="scene-title">Neither Saint nor Shadow Alone</h2>
+            <p class="scene-body">Steiner’s ideas outlived him in Waldorf schools, biodynamic farms, and corners of alternative culture. The record is mixed and argued over — racial theories in some lectures among the contested parts — yet the practical institutions he inspired remain tangible across the world.</p>
+          </div>
+        </section>
+
+      </div>
+    </div>
+
+    <div class="controls" role="toolbar" aria-label="Playback controls">
+      <button class="btn" id="btnPrev" aria-label="Previous scene" title="Previous (←)">‹ Prev</button>
+      <button class="btn primary" id="btnPlay" aria-label="Play or pause" title="Play/Pause (Space)">▶ Play</button>
+      <button class="btn" id="btnNext" aria-label="Next scene" title="Next (→)">Next ›</button>
+      <div class="dots" id="dots" role="tablist" aria-label="Scenes"></div>
+      <div class="progress-track" id="progressTrack" title="Scene progress" role="slider" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0">
+        <div class="progress-fill" id="progressFill"></div>
+      </div>
+      <span class="scene-label" id="sceneLabel">1 / 8</span>
+    </div>
+    <p class="kbd-hint">Space play/pause · ← → scenes · click dots to jump · scrub the bar</p>
+  </div>
+
+<script>
+(function () {
+  const SCENES = 8;
+  const DURATIONS = [5500, 8500, 9000, 9500, 9000, 9000, 9000, 11000];
+  const titles = [
+    'Title',
+    'Origins',
+    'Goethe & Philosophy',
+    'Anthroposophy',
+    'Waldorf',
+    'Biodynamics',
+    'Arts & Goetheanum',
+    'Legacy'
+  ];
+
+  let current = 0;
+  let playing = false;
+  let raf = null;
+  let sceneStart = 0;
+  let elapsedInScene = 0;
+
+  const scenes = [...document.querySelectorAll('.scene')];
+  const btnPlay = document.getElementById('btnPlay');
+  const btnPrev = document.getElementById('btnPrev');
+  const btnNext = document.getElementById('btnNext');
+  const dotsEl = document.getElementById('dots');
+  const progressFill = document.getElementById('progressFill');
+  const progressTrack = document.getElementById('progressTrack');
+  const sceneLabel = document.getElementById('sceneLabel');
+
+  for (let i = 0; i < SCENES; i++) {
+    const d = document.createElement('button');
+    d.className = 'dot' + (i === 0 ? ' active' : '');
+    d.setAttribute('role', 'tab');
+    d.setAttribute('aria-label', 'Scene ' + (i + 1) + ': ' + titles[i]);
+    d.dataset.index = i;
+    d.addEventListener('click', () => goTo(i, true));
+    dotsEl.appendChild(d);
+  }
+  const dots = [...dotsEl.querySelectorAll('.dot')];
+
+  function goTo(index, userJump) {
+    if (index < 0 || index >= SCENES) return;
+    const prev = current;
+    if (prev === index && !userJump) return;
+
+    scenes[prev].classList.remove('active');
+    if (prev !== index) scenes[prev].classList.add('leaving');
+    setTimeout(() => scenes[prev].classList.remove('leaving'), 900);
+
+    current = index;
+    const el = scenes[current];
+    el.classList.remove('active');
+    void el.offsetWidth;
+    el.classList.add('active');
+
+    dots.forEach((d, i) => {
+      d.classList.toggle('active', i === current);
+      d.classList.toggle('played', i < current);
+    });
+
+    sceneLabel.textContent = (current + 1) + ' / ' + SCENES;
+    btnPrev.disabled = current === 0;
+    btnNext.disabled = current === SCENES - 1;
+
+    elapsedInScene = 0;
+    sceneStart = performance.now();
+    updateProgress(0);
+  }
+
+  function updateProgress(pct) {
+    progressFill.style.width = pct + '%';
+    progressTrack.setAttribute('aria-valuenow', Math.round(pct));
+  }
+
+  function tick(now) {
+    if (!playing) return;
+    const dur = DURATIONS[current];
+    elapsedInScene = now - sceneStart;
+    const pct = Math.min(100, (elapsedInScene / dur) * 100);
+    updateProgress(pct);
+
+    if (elapsedInScene >= dur) {
+      if (current < SCENES - 1) {
+        goTo(current + 1, false);
+        sceneStart = performance.now();
+      } else {
+        pause();
+        updateProgress(100);
+        return;
+      }
+    }
+    raf = requestAnimationFrame(tick);
+  }
+
+  function play() {
+    playing = true;
+    btnPlay.innerHTML = '❚❚ Pause';
+    btnPlay.setAttribute('aria-label', 'Pause');
+    sceneStart = performance.now() - elapsedInScene;
+    raf = requestAnimationFrame(tick);
+  }
+
+  function pause() {
+    playing = false;
+    btnPlay.innerHTML = '▶ Play';
+    btnPlay.setAttribute('aria-label', 'Play');
+    if (raf) cancelAnimationFrame(raf);
+    raf = null;
+  }
+
+  function togglePlay() {
+    if (playing) pause();
+    else {
+      if (current === SCENES - 1 && elapsedInScene >= DURATIONS[current] - 50) {
+        goTo(0, true);
+      }
+      play();
+    }
+  }
+
+  btnPlay.addEventListener('click', togglePlay);
+  btnPrev.addEventListener('click', () => { goTo(current - 1, true); });
+  btnNext.addEventListener('click', () => { goTo(current + 1, true); });
+
+  progressTrack.addEventListener('click', (e) => {
+    const rect = progressTrack.getBoundingClientRect();
+    const pct = Math.max(0, Math.min(1, (e.clientX - rect.left) / rect.width));
+    elapsedInScene = pct * DURATIONS[current];
+    sceneStart = performance.now() - elapsedInScene;
+    updateProgress(pct * 100);
+  });
+
+  document.addEventListener('keydown', (e) => {
+    if (e.code === 'Space') {
+      e.preventDefault();
+      togglePlay();
+    } else if (e.key === 'ArrowRight') {
+      e.preventDefault();
+      goTo(current + 1, true);
+    } else if (e.key === 'ArrowLeft') {
+      e.preventDefault();
+      goTo(current - 1, true);
+    } else if (e.key === 'Home') {
+      goTo(0, true);
+    } else if (e.key === 'End') {
+      goTo(SCENES - 1, true);
+    }
+  });
+
+  goTo(0, true);
+  pause();
+})();
+</script>
+<script src="js/monetization.js" defer></script>
+<script src="js/shell.js" defer></script>
+</body>
+</html>

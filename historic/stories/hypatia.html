@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="theme-color" content="#100e0c">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-title" content="Historic">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<link rel="manifest" href="../manifest.webmanifest">
+<link rel="apple-touch-icon" href="../icons/icon-180.png">
+<title>Hypatia — Historic</title>
+<meta name="description" content="Neoplatonist teacher, astronomer, and public intellectual murdered in a city’s religious-political violence.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,600;1,400&family=IM+Fell+English:ital@0;1&family=Source+Sans+3:wght@300;400;500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../assets/topic.css">
+</head>
+<body>
+  <nav class="topbar">
+    <a class="brand" href="../index.html">Histor<em>ic</em></a>
+    <a class="back-link" href="../index.html">Library</a>
+  </nav>
+  <header class="hero">
+    <div class="hero-era">c. 350–415 CE</div>
+    <h1>Hypatia</h1>
+    <p class="hero-place">Alexandria · Roman Egypt · Mathematician of late antique Alexandria</p>
+    <p class="hero-lede">Hypatia headed a philosophical circle in Alexandria, edited astronomical and mathematical works, and advised officials. Her murder in 415 CE made her a martyr for later ages — sometimes more symbol than the careful scholar the sources describe.</p>
+    <p style="margin-top:1rem;font-size:0.85rem;color:rgba(240,230,212,0.45)">Categories: <a href="../categories/thinkers.html">Thinkers</a> · <a href="../categories/women.html">Women written out</a> · <a href="../categories/science-invention.html">Science &amp; invention</a></p>
+  </header>
+  <div class="progress-dots" role="navigation" aria-label="Chapters"><button class="dot" type="button" data-target="ch1" aria-label="Chapter 1"></button><button class="dot" type="button" data-target="ch2" aria-label="Chapter 2"></button><button class="dot" type="button" data-target="ch3" aria-label="Chapter 3"></button><button class="dot" type="button" data-target="ch4" aria-label="Chapter 4"></button><button class="dot" type="button" data-target="ch5" aria-label="Chapter 5"></button><button class="dot" type="button" data-target="ch6" aria-label="Chapter 6"></button></div>
+  <main class="chapters"><section class="chapter" id="ch1" data-chapter="1"><div class="chapter-num">Chapter 1 of 6</div><h2>Daughter of Theon</h2><p>Trained by her father Theon, a known mathematician associated with the Mouseion tradition, she surpassed him as a teacher of philosophy and exact sciences.</p></section><section class="chapter" id="ch2" data-chapter="2"><div class="chapter-num">Chapter 2 of 6</div><h2>Commentary culture</h2><p>Late antique science often meant careful commentary. Hypatia is linked to work on Diophantus, Apollonius, and Ptolemaic astronomy — the infrastructure of learning.</p></section><section class="chapter" id="ch3" data-chapter="3"><div class="chapter-num">Chapter 3 of 6</div><h2>Public philosopher</h2><p>Students included pagans and Christians. Synesius of Cyrene’s letters show affection and respect. She moved in civic networks, not a cloister.</p></section><section class="chapter" id="ch4" data-chapter="4"><div class="chapter-num">Chapter 4 of 6</div><h2>City on edge</h2><p>Alexandria’s bishop Cyril clashed with the prefect Orestes. Street violence between factions turned philosophical fame into political vulnerability.</p></section><section class="chapter" id="ch5" data-chapter="5"><div class="chapter-num">Chapter 5 of 6</div><h2>The killing</h2><p>A Christian mob seized her, dragged her to a church, and murdered her with tiles or shells — accounts vary in detail, not in horror. Ancient sources blame political hatred clothed in piety.</p></section><section class="chapter" id="ch6" data-chapter="6"><div class="chapter-num">Chapter 6 of 6</div><h2>Why it still matters</h2><p>Hypatia’s afterlife — Enlightenment heroine, feminist icon, cautionary tale — shows how we use the past. The historical woman remains a rare named female scientist of antiquity.</p><p class="pull">Why it still matters — not as nostalgia, but as unfinished argument.</p></section></main>
+  <aside class="further">
+    <h3>Further reading vibe</h3>
+    <p>Maria Dzielska’s Hypatia of Alexandria; Synesius’s letters; Edward Watts on the city’s violence.</p>
+  </aside>
+  <div class="footer-nav">
+    <a href="../index.html">← All stories</a>
+    <a href="../categories/thinkers.html">More in this shelf →</a>
+  </div>
+<script>
+(function(){
+  var chapters = [].slice.call(document.querySelectorAll('.chapter'));
+  var dots = [].slice.call(document.querySelectorAll('.dot'));
+  var io = new IntersectionObserver(function(entries){
+    entries.forEach(function(e){
+      if (e.isIntersecting) {
+        e.target.classList.add('in-view');
+        var id = e.target.id;
+        dots.forEach(function(d){ d.classList.toggle('active', d.getAttribute('data-target')===id); });
+      }
+    });
+  }, { threshold: 0.45 });
+  chapters.forEach(function(c){ io.observe(c); });
+  if (chapters[0]) chapters[0].classList.add('in-view');
+  dots.forEach(function(d){
+    d.addEventListener('click', function(){
+      var t = document.getElementById(d.getAttribute('data-target'));
+      if (t) t.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    });
+  });
+  if ('serviceWorker' in navigator) {
+    window.addEventListener('load', function(){ navigator.serviceWorker.register('../sw.js').catch(function(){}); });
+  }
+})();
+</script>
+<script src="../js/monetization.js" defer></script>
+<script src="../js/shell.js" defer></script>
+</body>
+</html>

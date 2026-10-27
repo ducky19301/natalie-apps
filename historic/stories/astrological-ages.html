@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="theme-color" content="#100e0c">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-title" content="Historic">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<link rel="manifest" href="../manifest.webmanifest">
+<link rel="apple-touch-icon" href="../icons/icon-180.png">
+<title>Astrological Ages — Historic</title>
+<meta name="description" content="Astrological ages map roughly 2,150-year symbolic eras onto the precession of the equinoxes. The sky mechanics are astronomical; the claim that each age has a destined pe">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,600;1,400&family=IM+Fell+English:ital@0;1&family=Source+Sans+3:wght@300;400;500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../assets/topic.css">
+</head>
+<body>
+  <nav class="topbar">
+    <a class="brand" href="../index.html">Histor<em>ic</em></a>
+    <a class="back-link" href="../index.html">Library</a>
+  </nav>
+  <header class="hero">
+    <div class="hero-era">History of ideas · precession</div>
+    <h1>Astrological Ages</h1>
+    <p class="hero-place">Aries · Pisces · Aquarius debates · not scientific periodization</p>
+    <p class="hero-lede">Astrological ages map roughly 2,150-year symbolic eras onto the precession of the equinoxes. The sky mechanics are astronomical; the claim that each age has a destined personality is a tradition of interpretation with modern reinventions.</p>
+    <p style="margin-top:1rem;font-size:0.85rem;color:rgba(240,230,212,0.45)">Shelves: <a href="../categories/sky-lore.html">Sky lore &amp; astrology</a> · <a href="../categories/ages-eras.html">Ages &amp; eras</a></p>
+  </header>
+  <div class="progress-dots" role="navigation" aria-label="Chapters"><button class="dot" type="button" data-target="ch1" aria-label="Chapter 1"></button><button class="dot" type="button" data-target="ch2" aria-label="Chapter 2"></button><button class="dot" type="button" data-target="ch3" aria-label="Chapter 3"></button><button class="dot" type="button" data-target="ch4" aria-label="Chapter 4"></button><button class="dot" type="button" data-target="ch5" aria-label="Chapter 5"></button></div>
+  <main class="chapters"><section class="chapter" id="ch1" data-chapter="1"><div class="chapter-num">Chapter 1 of 5</div><h2>Precession in plain language</h2><p>Earth’s axis wobbles slowly. Over roughly 25,700–26,000 years, the spring-equinox point drifts westward through the zodiacal band. Ancient astronomer-astrologers noticed long before Newton explained gravity.</p><p>Constellation boundaries are modern IAU lines; ancient “signs” and star pictures do not match neatly — one reason age-boundaries blur.</p></section><section class="chapter" id="ch2" data-chapter="2"><div class="chapter-num">Chapter 2 of 5</div><h2>From omens to world-months</h2><p>Mesopotamian celestial omens concerned kings and weather more than personal psychology. Hellenistic astrology later personalized the sky; grand “world ages” flower in late antique, medieval, and especially modern esoteric writing.</p><p>Hindu yuga cycles and Buddhist kalpas are related-but-distinct temporal mythologies — do not collapse them into Western Aquarian talk.</p></section><section class="chapter" id="ch3" data-chapter="3"><div class="chapter-num">Chapter 3 of 5</div><h2>Aries, Pisces, Aquarius as stories</h2><p>Popular histories sometimes pair Age of Aries with martial imagery and Age of Pisces with fish symbolism and Christianity. These are retrospective storytelling, not ancient self-labels.</p><p>Age of Aquarius, popularized in the twentieth century, gathers hopes for equality, electricity, and airy abstraction — a mirror of modern desires.</p></section><section class="chapter" id="ch4" data-chapter="4"><div class="chapter-num">Chapter 4 of 5</div><h2>The dating dispute</h2><p>Because zodiac definitions differ (tropical signs vs sidereal constellations) and because constellation widths are unequal, astrologers place the Aquarian cusp anywhere from the 15th century to the 27th — a spread that alone shows the claim is not a shared empirical clock.</p><p>Scholarly consensus: precession is real; age-personality chronology is tradition and debate within astrology, not astronomy.</p><p class="pull">Disagreement on the start date is a feature of the tradition, not a bug to hide.</p></section><section class="chapter" id="ch5" data-chapter="5"><div class="chapter-num">Chapter 5 of 5</div><h2>How to read this shelf</h2><p>Historic presents sky lore as cultural history — how societies used the heavens for politics, medicine, identity, and hope — without treating horoscopes as scientific fact or prophecy.</p><p>Why it still matters: millions still organize meaning by charts; historians should explain the system without sneering or converting.</p></section></main>
+  <aside class="further">
+    <h3>Further reading vibe</h3>
+    <p>Nicholas Campion’s history of astrology; any standard astronomy text on precession. Compare sidereal vs tropical Aquarius dating among practitioners — as ethnography of a living tradition.</p>
+  </aside>
+  <div class="footer-nav">
+    <a href="../index.html">← All stories</a>
+    <a href="../categories/sky-lore.html">Sky lore shelf →</a>
+  </div>
+<script>
+(function(){
+  var chapters = [].slice.call(document.querySelectorAll('.chapter'));
+  var dots = [].slice.call(document.querySelectorAll('.dot'));
+  var io = new IntersectionObserver(function(entries){
+    entries.forEach(function(e){
+      if (e.isIntersecting) {
+        e.target.classList.add('in-view');
+        var id = e.target.id;
+        dots.forEach(function(d){ d.classList.toggle('active', d.getAttribute('data-target')===id); });
+      }
+    });
+  }, { threshold: 0.45 });
+  chapters.forEach(function(c){ io.observe(c); });
+  if (chapters[0]) chapters[0].classList.add('in-view');
+  dots.forEach(function(d){
+    d.addEventListener('click', function(){
+      var t = document.getElementById(d.getAttribute('data-target'));
+      if (t) t.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    });
+  });
+  if ('serviceWorker' in navigator) {
+    window.addEventListener('load', function(){ navigator.serviceWorker.register('../sw.js').catch(function(){}); });
+  }
+})();
+</script>
+<script src="../js/monetization.js" defer></script>
+<script src="../js/shell.js" defer></script>
+</body>
+</html>

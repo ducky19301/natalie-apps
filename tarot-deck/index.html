@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+  <meta name="theme-color" content="#0b0a16" />
+  <meta name="description" content="A beautiful interactive Rider-Waite-Smith tarot deck — shuffle, draw, and reflect." />
+  <title>Tarot Deck · Daily Draw</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,500;0,600;0,700;1,500&family=Outfit:wght@300;400;500;600&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="styles.css?v=7" />
+</head>
+<body>
+  <div class="stars" aria-hidden="true"></div>
+  <div class="app">
+    <header class="header">
+      <p class="eyebrow">Rider–Waite–Smith</p>
+      <h1>Tarot Deck</h1>
+      <p class="tagline">Shuffle · Draw · Sit with what arrives</p>
+    </header>
+
+    <nav class="controls" aria-label="Deck controls">
+      <div class="mode-toggle" role="group" aria-label="Draw mode">
+        <button type="button" class="mode-btn active" data-mode="one" id="modeOne">One card</button>
+        <button type="button" class="mode-btn" data-mode="three" id="modeThree">3-card spread</button>
+      </div>
+      <div class="action-row">
+        <button type="button" class="btn btn-ghost" id="shuffleBtn">
+          <span class="btn-icon" aria-hidden="true">✦</span> Shuffle
+        </button>
+        <button type="button" class="btn btn-gold" id="drawBtn">
+          <span class="btn-icon" aria-hidden="true">☽</span> Draw
+        </button>
+        <button type="button" class="btn btn-ghost hidden" id="drawAgainBtn">
+          Draw again
+        </button>
+      </div>
+      <p class="status" id="status" role="status" aria-live="polite"></p>
+    </nav>
+
+    <main class="stage" id="stage">
+      <div class="deck-pile" id="deckPile" aria-hidden="true">
+        <div class="deck-card"></div>
+        <div class="deck-card"></div>
+        <div class="deck-card"></div>
+      </div>
+
+      <section class="spread spread-one" id="spreadOne" hidden>
+        <div class="card-slot" data-slot="0">
+          <div class="card" tabindex="0" role="button" aria-label="Flip card">
+            <div class="card-inner">
+              <div class="card-face card-back"></div>
+              <div class="card-face card-front">
+                <img alt="" decoding="async" />
+                <div class="card-fallback" hidden></div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section class="spread spread-three" id="spreadThree" hidden>
+        <div class="spread-labels">
+          <span>Present</span>
+          <span>Block</span>
+          <span>Invitation</span>
+        </div>
+        <div class="spread-row">
+          <div class="card-slot" data-slot="0">
+            <div class="card" tabindex="0" role="button" aria-label="Flip Present card">
+              <div class="card-inner">
+                <div class="card-face card-back"></div>
+                <div class="card-face card-front">
+                  <img alt="" decoding="async" />
+                  <div class="card-fallback" hidden></div>
+                </div>
+              </div>
+            </div>
+            <p class="slot-label">Present</p>
+          </div>
+          <div class="card-slot" data-slot="1">
+            <div class="card" tabindex="0" role="button" aria-label="Flip Block card">
+              <div class="card-inner">
+                <div class="card-face card-back"></div>
+                <div class="card-face card-front">
+                  <img alt="" decoding="async" />
+                  <div class="card-fallback" hidden></div>
+                </div>
+              </div>
+            </div>
+            <p class="slot-label">Block</p>
+          </div>
+          <div class="card-slot" data-slot="2">
+            <div class="card" tabindex="0" role="button" aria-label="Flip Invitation card">
+              <div class="card-inner">
+                <div class="card-face card-back"></div>
+                <div class="card-face card-front">
+                  <img alt="" decoding="async" />
+                  <div class="card-fallback" hidden></div>
+                </div>
+              </div>
+            </div>
+            <p class="slot-label">Invitation</p>
+          </div>
+        </div>
+      </section>
+    </main>
+
+    <section class="readings" id="readings" aria-live="polite"></section>
+
+    <footer class="footer">
+      <p>Public-domain Rider–Waite–Smith artwork · For reflection, not prediction</p>
+    </footer>
+  </div>
+
+  <script src="app.js?v=7"></script>
+</body>
+</html>

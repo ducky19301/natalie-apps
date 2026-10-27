@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="theme-color" content="#100e0c">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-title" content="Historic">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<link rel="manifest" href="../manifest.webmanifest">
+<link rel="apple-touch-icon" href="../icons/icon-180.png">
+<title>Library of Celsus — Historic</title>
+<meta name="description" content="Tomb, library, and billboard of elite culture — rebuilt facade, empty shelves, enduring lesson in architecture as status.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,600;1,400&family=IM+Fell+English:ital@0;1&family=Source+Sans+3:wght@300;400;500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../assets/topic.css">
+</head>
+<body>
+  <nav class="topbar">
+    <a class="brand" href="../index.html">Histor<em>ic</em></a>
+    <a class="back-link" href="../index.html">Library</a>
+  </nav>
+  <header class="hero">
+    <div class="hero-era">Completed c. 117–135 CE</div>
+    <h1>Library of Celsus</h1>
+    <p class="hero-place">Ephesus · Roman Asia Minor (Türkiye) · A Roman facade for memory in Ephesus</p>
+    <p class="hero-lede">The Library of Celsus in Ephesus was a funerary monument for senator Tiberius Julius Celsus Polemaeanus and a working library of thousands of scrolls. Its two-story facade — reconstructed in the 1970s — is among the ancient world’s most photographed stages.</p>
+    <p style="margin-top:1rem;font-size:0.85rem;color:rgba(240,230,212,0.45)">Categories: <a href="../categories/thinkers.html">Thinkers</a> · <a href="../categories/science-invention.html">Science &amp; invention</a></p>
+  </header>
+  <div class="progress-dots" role="navigation" aria-label="Chapters"><button class="dot" type="button" data-target="ch1" aria-label="Chapter 1"></button><button class="dot" type="button" data-target="ch2" aria-label="Chapter 2"></button><button class="dot" type="button" data-target="ch3" aria-label="Chapter 3"></button><button class="dot" type="button" data-target="ch4" aria-label="Chapter 4"></button><button class="dot" type="button" data-target="ch5" aria-label="Chapter 5"></button><button class="dot" type="button" data-target="ch6" aria-label="Chapter 6"></button></div>
+  <main class="chapters"><section class="chapter" id="ch1" data-chapter="1"><div class="chapter-num">Chapter 1 of 6</div><h2>Gift of a son</h2><p>Gaius Julius Aquila built the library in his father’s honor. Combining tomb and public library turned private memory into civic benefaction — euergetism in stone.</p></section><section class="chapter" id="ch2" data-chapter="2"><div class="chapter-num">Chapter 2 of 6</div><h2>How it worked</h2><p>Niches held scroll cases; a basement protected against humidity. Capacity estimates often cite around 12,000 scrolls — modest beside Alexandria, impressive for a provincial capital.</p></section><section class="chapter" id="ch3" data-chapter="3"><div class="chapter-num">Chapter 3 of 6</div><h2>Facade as rhetoric</h2><p>Paired columns, niches with personified Wisdom, Knowledge, Virtue, and Enlightened Judgment — architecture preaching Roman-Greek paideia.</p></section><section class="chapter" id="ch4" data-chapter="4"><div class="chapter-num">Chapter 4 of 6</div><h2>Fire and silence</h2><p>Later earthquakes and war emptied the collection. The building’s rear wall once abutted the city; destruction layers tell Ephesus’s long decline.</p></section><section class="chapter" id="ch5" data-chapter="5"><div class="chapter-num">Chapter 5 of 6</div><h2>Modern rebuild</h2><p>Austrian archaeologists re-erected the facade from fallen pieces. Tourists see a complete front; the reading rooms remain imagined.</p></section><section class="chapter" id="ch6" data-chapter="6"><div class="chapter-num">Chapter 6 of 6</div><h2>Why it still matters</h2><p>Celsus shows libraries as prestige machines — and how ruins become national tourism. Knowledge needs funding, climate control, and peace; stone alone is not enough.</p><p class="pull">Why it still matters — not as nostalgia, but as unfinished argument.</p></section></main>
+  <aside class="further">
+    <h3>Further reading vibe</h3>
+    <p>Österreichisches Archäologisches Institut Ephesus publications; on-site museum labels; compare with Timbuktu’s living manuscript culture.</p>
+  </aside>
+  <div class="footer-nav">
+    <a href="../index.html">← All stories</a>
+    <a href="../categories/thinkers.html">More in this shelf →</a>
+  </div>
+<script>
+(function(){
+  var chapters = [].slice.call(document.querySelectorAll('.chapter'));
+  var dots = [].slice.call(document.querySelectorAll('.dot'));
+  var io = new IntersectionObserver(function(entries){
+    entries.forEach(function(e){
+      if (e.isIntersecting) {
+        e.target.classList.add('in-view');
+        var id = e.target.id;
+        dots.forEach(function(d){ d.classList.toggle('active', d.getAttribute('data-target')===id); });
+      }
+    });
+  }, { threshold: 0.45 });
+  chapters.forEach(function(c){ io.observe(c); });
+  if (chapters[0]) chapters[0].classList.add('in-view');
+  dots.forEach(function(d){
+    d.addEventListener('click', function(){
+      var t = document.getElementById(d.getAttribute('data-target'));
+      if (t) t.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    });
+  });
+  if ('serviceWorker' in navigator) {
+    window.addEventListener('load', function(){ navigator.serviceWorker.register('../sw.js').catch(function(){}); });
+  }
+})();
+</script>
+<script src="../js/monetization.js" defer></script>
+<script src="../js/shell.js" defer></script>
+</body>
+</html>

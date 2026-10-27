@@ -1,0 +1,4 @@
+.venv/
+.tmp_reversed/
+__pycache__/
+*.pyc

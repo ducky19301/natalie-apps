@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Alpha 10 Hz — loop</title>
+<style>
+  body { margin:0; min-height:100vh; display:grid; place-items:center;
+    background:#0f1115; color:#e8e6e3; font-family:system-ui,sans-serif; }
+  .card { text-align:center; padding:2rem; max-width:420px; }
+  h1 { font-weight:500; font-size:1.35rem; margin:0 0 .4rem; }
+  p { opacity:.7; margin:0 0 1.25rem; line-height:1.4; }
+  audio { width:min(360px,90vw); }
+  button { margin-top:1rem; padding:.7rem 1.2rem; border:0; border-radius:999px;
+    background:#7c9cff; color:#0f1115; font-weight:600; cursor:pointer; }
+</style>
+</head>
+<body>
+  <div class="card">
+    <h1>Alpha 10 Hz</h1>
+    <p>10-minute binaural loop — calm focus. Press play if it doesn’t start on its own.</p>
+    <audio id="a" controls loop src="alpha-10hz-loop.mp3"></audio>
+    <div><button type="button" onclick="document.getElementById('a').play()">Play / resume</button></div>
+  </div>
+  <script>
+    const a = document.getElementById('a');
+    a.play().catch(() => {});
+  </script>
+</body>
+</html>
